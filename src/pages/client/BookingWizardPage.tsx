@@ -1,21 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useBookings } from '../../context/BookingContext';
 import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
-import { Input } from '../../components/common/Input';
 import { HealthcareTexture } from '../../components/common/HealthcareTexture';
+import { LocationPicker } from '../../components/domain/LocationPicker';
+import type { LocationData } from '../../components/domain/LocationPicker';
+import { SavedPatientSelector } from '../../components/domain/SavedPatientSelector';
 import {
   CheckCircle2,
   ArrowLeft,
   ArrowRight,
-  MapPin,
   Clock,
   ShieldCheck,
-  AlertCircle
+  Moon,
+  Sparkles,
+  Loader2
 } from 'lucide-react';
 import { clsx } from 'clsx';
-import type { Service } from '../../types';
+import type { Service, PatientProfile } from '../../types';
 
 export const BookingWizardPage: React.FC = () => {
   const navigate = useNavigate();
@@ -37,24 +40,34 @@ export const BookingWizardPage: React.FC = () => {
     'Hygiene & bathing support'
   ]);
 
-  // Step 3: Patient Profile
-  const [patientFirstName, setPatientFirstName] = useState('Kamla');
-  const [patientLastName, setPatientLastName] = useState('Mehta');
-  const [patientRelationship, setPatientRelationship] = useState('parent');
-  const [patientAge, setPatientAge] = useState('68');
-  const [patientGender, setPatientGender] = useState<'male' | 'female' | 'other'>('female');
-  const [medicalConditions, setMedicalConditions] = useState('Post-op total knee replacement (TKR), Type-2 Diabetes');
-  const [mobilityStatus, setMobilityStatus] = useState<'independent' | 'assisted' | 'wheelchair' | 'bedridden'>('assisted');
-  const [emergencyName, setEmergencyName] = useState('Rahul Mehta');
+  // Step 3: Patient Profile (Integrated SavedPatientSelector)
+  const [patient, setPatient] = useState<PatientProfile>({
+    id: 'pat-001',
+    clientId: 'clt-001',
+    firstName: 'Kamla',
+    lastName: 'Mehta',
+    relationship: 'parent',
+    dateOfBirth: '1958-05-14',
+    gender: 'female',
+    medicalNotes: 'Post-op total knee replacement (TKR), Type-2 Diabetes',
+    mobilityStatus: 'assisted',
+    createdAt: new Date().toISOString()
+  });
 
-  // Step 4: Location & Access
-  const [addressType, setAddressType] = useState('Home Apartment');
-  const [addressLine1, setAddressLine1] = useState('Flat 402, Sterling Residency');
-  const [addressLine2, setAddressLine2] = useState('100 Feet Road, Indiranagar');
-  const [landmark, setLandmark] = useState('Opposite Toit Brewpub, Gate 2');
-  const [city, setCity] = useState('Bangalore');
-  const [pincode, setPincode] = useState('560038');
-  const [accessNotes, setAccessNotes] = useState('Elevator active 24/7. Visitor parking inside gate.');
+  // Step 4: Location & Access (Integrated LocationPicker)
+  const [locationData, setLocationData] = useState<LocationData>({
+    addressType: 'Home Apartment',
+    line1: 'Flat 402, Sterling Residency',
+    line2: '100 Feet Road, Indiranagar',
+    landmark: 'Opposite Toit Pub, Gate 2',
+    city: 'Bangalore',
+    state: 'Karnataka',
+    pincode: '560038',
+    accessNotes: 'Elevator active 24/7. Visitor parking inside gate.',
+    latitude: 12.9716,
+    longitude: 77.5946,
+    isVerified: true
+  });
 
   // Step 5: Date & Recurrence
   const [scheduleType, setScheduleType] = useState<'single' | 'range' | 'recurring'>('range');
@@ -62,96 +75,25 @@ export const BookingWizardPage: React.FC = () => {
   const [endDate, setEndDate] = useState('2026-03-27');
   const [recurringDays, setRecurringDays] = useState<string[]>(['Mon', 'Wed', 'Fri']);
 
-  // Step 6: Time & Shift Type
-  const [shiftType, setShiftType] = useState('Day Shift (12 Hours)');
-  const [timeSlot, setTimeSlot] = useState('08:00 AM - 08:00 PM');
-  const [durationHours, setDurationHours] = useState(12);
+  // Step 6: Time & Shift Type (Night Rollover Calculation)
+  const [shiftType, setShiftType] = useState('Night Shift (10 PM - 8 AM)');
+  const [timeSlot, setTimeSlot] = useState('10:00 PM - 08:00 AM');
+  const [durationHours, setDurationHours] = useState(10);
 
   // Step 7: Staff Preferences
   const [preferredRole, setPreferredRole] = useState('B.Sc Registered Nurse');
   const [preferredGender, setPreferredGender] = useState<'no_preference' | 'female' | 'male'>('female');
-  const [minExperience, setMinExperience] = useState('3+ Years');
-  const [languages, setLanguages] = useState<string[]>(['English', 'Hindi', 'Kannada']);
+  const languages = ['English', 'Hindi', 'Kannada'];
 
   // Step 8: Special Requirements
   const [specialInstructions, setSpecialInstructions] = useState(
     'Patient needs gentle handling for left leg movement. Require strict aseptic dressing for surgical incision.'
   );
-  const [medicalEquipment, setMedicalEquipment] = useState<string[]>(['Air Mattress', 'Walker', 'BP Monitor']);
 
-  // Persist draft in sessionStorage
-  useEffect(() => {
-    const savedState = sessionStorage.getItem('healthcare_b2c_booking_draft_v3');
-    if (savedState) {
-      try {
-        const parsed = JSON.parse(savedState);
-        if (parsed.step) setStep(parsed.step);
-        if (parsed.patientFirstName) setPatientFirstName(parsed.patientFirstName);
-        if (parsed.patientLastName) setPatientLastName(parsed.patientLastName);
-        if (parsed.addressLine1) setAddressLine1(parsed.addressLine1);
-        if (parsed.startDate) setStartDate(parsed.startDate);
-        if (parsed.shiftType) setShiftType(parsed.shiftType);
-      } catch (e) {
-        console.warn('Failed to parse saved wizard state', e);
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    sessionStorage.setItem(
-      'healthcare_b2c_booking_draft_v3',
-      JSON.stringify({
-        step,
-        patientFirstName,
-        patientLastName,
-        addressLine1,
-        startDate,
-        shiftType
-      })
-    );
-  }, [step, patientFirstName, patientLastName, addressLine1, startDate, shiftType]);
-
-  const stepsList = [
-    '1. Service',
-    '2. Tasks',
-    '3. Patient',
-    '4. Location',
-    '5. Dates',
-    '6. Shift',
-    '7. Staff Prefs',
-    '8. Instructions',
-    '9. Pricing',
-    '10. Review'
-  ];
-
-  const availableTasksList = [
-    'Sterile wound dressing & aseptic care',
-    'Vital signs monitoring & digital logging',
-    'Medication timely administration (Oral / Injections)',
-    'IV / IM injection & drip management',
-    'Bathing, oral hygiene & sponge bath',
-    'Bed transfers, mobility & positioning',
-    'Ryle tube / PEG tube feeding assistance',
-    'Catheter & urinary bag care',
-    'Night supervision & bed alarm monitor',
-    'Bedsore prevention & position rotation'
-  ];
-
-  const handleTaskToggle = (task: string) => {
-    if (selectedTasks.includes(task)) {
-      setSelectedTasks(selectedTasks.filter((t) => t !== task));
-    } else {
-      setSelectedTasks([...selectedTasks, task]);
-    }
-  };
-
-  const handleLanguageToggle = (lang: string) => {
-    if (languages.includes(lang)) {
-      setLanguages(languages.filter((l) => l !== lang));
-    } else {
-      setLanguages([...languages, lang]);
-    }
-  };
+  // Step 10: Post-Submission Interactive Simulation State
+  const [submitting, setSubmitting] = useState(false);
+  const [assignmentState, setAssignmentState] = useState<'reviewing' | 'finding' | 'assigned'>('reviewing');
+  const [assignedStaff, setAssignedStaff] = useState<any>(null);
 
   // Pricing Calculations
   const calculateDaysCount = () => {
@@ -163,41 +105,67 @@ export const BookingWizardPage: React.FC = () => {
   };
 
   const daysCount = calculateDaysCount();
+  const isNightShift = shiftType.toLowerCase().includes('night');
   const baseRatePerDay = selectedService.pricing.basePrice * (durationHours > 8 ? durationHours : 1);
   const subtotalBeforeNight = baseRatePerDay * daysCount;
-  const isNightShift = shiftType.toLowerCase().includes('night');
   const nightSurcharge = isNightShift ? Math.round(subtotalBeforeNight * 0.2) : 0;
   const subtotal = subtotalBeforeNight + nightSurcharge;
   const gst = Math.round(subtotal * 0.18);
   const grandTotal = subtotal + gst;
 
+  // Night Shift Date Rollover Calculator Display
+  const calculateNightRollover = () => {
+    const nextDay = new Date(startDate);
+    nextDay.setDate(nextDay.getDate() + 1);
+    const nextDayStr = nextDay.toISOString().split('T')[0];
+    return { nextDayStr };
+  };
+  const { nextDayStr } = calculateNightRollover();
+
+  const handleTaskToggle = (task: string) => {
+    if (selectedTasks.includes(task)) {
+      setSelectedTasks(selectedTasks.filter((t) => t !== task));
+    } else {
+      setSelectedTasks([...selectedTasks, task]);
+    }
+  };
+
   const handleConfirmSubmit = () => {
+    setSubmitting(true);
+    setAssignmentState('reviewing');
+
+    setTimeout(() => {
+      setAssignmentState('finding');
+    }, 1500);
+
+    setTimeout(() => {
+      setAssignmentState('assigned');
+      setAssignedStaff({
+        displayName: 'Priya Sharma, RN',
+        qualification: 'B.Sc Nursing (KNC Reg #88419)',
+        experienceYears: 6,
+        photo: 'https://images.unsplash.com/photo-1594824813566-88855ce78905?w=300&q=80',
+        employeeId: 'EMP-1042'
+      });
+    }, 3500);
+  };
+
+  const handleFinalRedirect = () => {
     sessionStorage.removeItem('healthcare_b2c_booking_draft_v3');
     const newBooking = createBooking({
       service: selectedService,
-      patient: {
-        id: `pat-${Date.now()}`,
-        clientId: 'clt-001',
-        firstName: patientFirstName,
-        lastName: patientLastName,
-        relationship: patientRelationship as any,
-        dateOfBirth: `${2026 - parseInt(patientAge || '65')}-01-01`,
-        gender: patientGender,
-        medicalNotes: medicalConditions,
-        mobilityStatus,
-        createdAt: new Date().toISOString()
-      },
+      patient,
       address: {
         id: `addr-${Date.now()}`,
-        label: addressType,
-        line1: addressLine1,
-        line2: addressLine2,
-        landmark,
-        city,
-        state: 'Karnataka',
-        pincode,
-        latitude: 12.9716,
-        longitude: 77.5946
+        label: locationData.addressType,
+        line1: locationData.line1,
+        line2: locationData.line2,
+        landmark: locationData.landmark,
+        city: locationData.city,
+        state: locationData.state,
+        pincode: locationData.pincode,
+        latitude: locationData.latitude || 12.9716,
+        longitude: locationData.longitude || 77.5946
       },
       scheduledDate: startDate,
       scheduledTimeSlot: timeSlot,
@@ -221,32 +189,43 @@ export const BookingWizardPage: React.FC = () => {
     navigate(`/client/bookings/${newBooking.id}`);
   };
 
-  const minDateString = new Date().toISOString().split('T')[0];
+  const stepsList = [
+    '1. Service',
+    '2. Tasks',
+    '3. Patient',
+    '4. Location',
+    '5. Dates',
+    '6. Shift',
+    '7. Staff Prefs',
+    '8. Instructions',
+    '9. Pricing',
+    '10. Review'
+  ];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 text-left relative">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 text-left relative bg-white">
       <HealthcareTexture type="care-pathway" opacity={0.03} />
 
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-border-default pb-4 gap-3 relative z-10">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-border-default pb-4 gap-3">
         <div>
-          <span className="text-xs font-extrabold text-brand-teal uppercase tracking-widest">
-            In-House Managed Workforce Portal
+          <span className="text-xs font-extrabold text-brand-teal uppercase tracking-widest flex items-center gap-1.5">
+            <Sparkles className="w-4 h-4 text-brand-teal" /> Guided Care Concierge Experience
           </span>
-          <h1 className="text-2xl font-extrabold text-text-primary">Service & Care Requirement Wizard</h1>
+          <h1 className="text-2xl font-extrabold text-text-primary">Schedule Managed Clinical Home Care</h1>
           <p className="text-xs text-text-muted mt-0.5">
-            Specify your patient's exact clinical needs. Our Operations Desk will assign qualified internal staff.
+            Specify your patient's exact clinical needs. Our Operations Desk assigns qualified in-house staff.
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-xs font-bold text-text-secondary bg-canvas-tertiary px-3 py-1.5 rounded-full border border-border-default">
+          <span className="text-xs font-bold text-text-secondary bg-canvas-tertiary px-3.5 py-1.5 rounded-full border border-border-default">
             Step {step} of 10
           </span>
         </div>
       </div>
 
       {/* Stepper Progress Bar */}
-      <div className="grid grid-cols-5 md:grid-cols-10 gap-1.5 relative z-10">
+      <div className="grid grid-cols-5 md:grid-cols-10 gap-1.5">
         {stepsList.map((label, idx) => {
           const stepNum = idx + 1;
           const isActive = step === stepNum;
@@ -280,17 +259,17 @@ export const BookingWizardPage: React.FC = () => {
         })}
       </div>
 
-      {/* Main Grid Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 relative z-10">
-        {/* Step Content */}
+      {/* Main Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        {/* Step Interactive Decision Card */}
         <div className="lg:col-span-8 space-y-6">
           <Card className="p-6 space-y-6 border-border-default shadow-subtle bg-white">
-            {/* STEP 1: Select Service */}
+            {/* STEP 1: Service */}
             {step === 1 && (
-              <div className="space-y-5">
+              <div className="space-y-4">
                 <div>
                   <h2 className="text-lg font-extrabold text-text-primary">Step 1: Select Primary Health Service</h2>
-                  <p className="text-xs text-text-muted">Choose from our managed internal clinical & attendant services catalog.</p>
+                  <p className="text-xs text-text-muted">Select from our internal clinical & attendant care catalog.</p>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {services.map((srv) => {
@@ -324,7 +303,7 @@ export const BookingWizardPage: React.FC = () => {
               </div>
             )}
 
-            {/* STEP 2: Care Requirements & Tasks */}
+            {/* STEP 2: Tasks */}
             {step === 2 && (
               <div className="space-y-5">
                 <div>
@@ -362,10 +341,21 @@ export const BookingWizardPage: React.FC = () => {
 
                 <div className="space-y-2 pt-2">
                   <label className="text-xs font-bold text-text-secondary uppercase tracking-wider">
-                    Select Required Tasks & Duties
+                    Required Tasks & Procedures
                   </label>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                    {availableTasksList.map((task) => {
+                    {[
+                      'Sterile wound dressing & aseptic care',
+                      'Vital signs monitoring & digital logging',
+                      'Medication timely administration (Oral / Injections)',
+                      'IV / IM injection & drip management',
+                      'Bathing, oral hygiene & sponge bath',
+                      'Bed transfers, mobility & positioning',
+                      'Ryle tube / PEG tube feeding assistance',
+                      'Catheter & urinary bag care',
+                      'Night supervision & bed alarm monitor',
+                      'Bedsore prevention & position rotation'
+                    ].map((task) => {
                       const isChecked = selectedTasks.includes(task);
                       return (
                         <div
@@ -397,161 +387,21 @@ export const BookingWizardPage: React.FC = () => {
 
             {/* STEP 3: Patient Profile */}
             {step === 3 && (
-              <div className="space-y-5">
-                <div>
-                  <h2 className="text-lg font-extrabold text-text-primary">Step 3: Patient Details & Medical History</h2>
-                  <p className="text-xs text-text-muted">Information required to ensure safe medical delivery.</p>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <Input
-                    label="Patient First Name"
-                    value={patientFirstName}
-                    onChange={(e) => setPatientFirstName(e.target.value)}
-                  />
-                  <Input
-                    label="Patient Last Name"
-                    value={patientLastName}
-                    onChange={(e) => setPatientLastName(e.target.value)}
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-bold text-text-secondary uppercase tracking-wider">Relationship</label>
-                    <select
-                      value={patientRelationship}
-                      onChange={(e) => setPatientRelationship(e.target.value)}
-                      className="w-full h-11 px-3 text-sm bg-white border border-border-default rounded-xl focus:border-brand-teal focus:outline-none"
-                    >
-                      <option value="parent">Parent (Mother / Father)</option>
-                      <option value="self">Myself</option>
-                      <option value="spouse">Spouse</option>
-                      <option value="child">Child</option>
-                      <option value="sibling">Sibling</option>
-                      <option value="other">Other Relative</option>
-                    </select>
-                  </div>
-                  <Input
-                    label="Age (Years)"
-                    type="number"
-                    value={patientAge}
-                    onChange={(e) => setPatientAge(e.target.value)}
-                  />
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-bold text-text-secondary uppercase tracking-wider">Gender</label>
-                    <select
-                      value={patientGender}
-                      onChange={(e) => setPatientGender(e.target.value as any)}
-                      className="w-full h-11 px-3 text-sm bg-white border border-border-default rounded-xl focus:border-brand-teal focus:outline-none"
-                    >
-                      <option value="female">Female</option>
-                      <option value="male">Male</option>
-                      <option value="other">Other</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-bold text-text-secondary uppercase tracking-wider">Mobility Status</label>
-                    <select
-                      value={mobilityStatus}
-                      onChange={(e) => setMobilityStatus(e.target.value as any)}
-                      className="w-full h-11 px-3 text-sm bg-white border border-border-default rounded-xl focus:border-brand-teal focus:outline-none"
-                    >
-                      <option value="assisted">Assisted Walking (Needs Support)</option>
-                      <option value="independent">Fully Independent</option>
-                      <option value="wheelchair">Wheelchair Bound</option>
-                      <option value="bedridden">Bedridden / Total Assistance</option>
-                    </select>
-                  </div>
-                  <Input
-                    label="Emergency Contact Name"
-                    value={emergencyName}
-                    onChange={(e) => setEmergencyName(e.target.value)}
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-text-secondary uppercase tracking-wider">
-                    Medical Diagnosis & Clinical Notes
-                  </label>
-                  <textarea
-                    rows={2}
-                    value={medicalConditions}
-                    onChange={(e) => setMedicalConditions(e.target.value)}
-                    className="w-full p-3 text-sm bg-white border border-border-default rounded-xl focus:border-brand-teal focus:outline-none"
-                    placeholder="List surgeries, chronic conditions, allergies, or precautions..."
-                  />
-                </div>
-              </div>
+              <SavedPatientSelector
+                selectedPatientId={patient.id}
+                onSelectPatient={(selected) => setPatient(selected)}
+              />
             )}
 
             {/* STEP 4: Location & Access */}
             {step === 4 && (
-              <div className="space-y-5">
-                <div>
-                  <h2 className="text-lg font-extrabold text-text-primary">Step 4: Care Location & Access Instructions</h2>
-                  <p className="text-xs text-text-muted">Help our staff reach your location promptly.</p>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-bold text-text-secondary uppercase tracking-wider">Location Type</label>
-                    <select
-                      value={addressType}
-                      onChange={(e) => setAddressType(e.target.value)}
-                      className="w-full h-11 px-3 text-sm bg-white border border-border-default rounded-xl focus:border-brand-teal focus:outline-none"
-                    >
-                      <option value="Home Apartment">Home / Apartment</option>
-                      <option value="Independent Villa">Independent Villa / House</option>
-                      <option value="Hospital Room">Hospital Ward / Room</option>
-                      <option value="Assisted Living">Assisted Living Facility</option>
-                    </select>
-                  </div>
-                  <Input
-                    label="House / Flat No. & Building Name"
-                    value={addressLine1}
-                    onChange={(e) => setAddressLine1(e.target.value)}
-                    leftIcon={<MapPin className="w-4 h-4 text-text-muted" />}
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <Input
-                    label="Street Address & Area"
-                    value={addressLine2}
-                    onChange={(e) => setAddressLine2(e.target.value)}
-                  />
-                  <Input
-                    label="Landmark / Major Intersection"
-                    value={landmark}
-                    onChange={(e) => setLandmark(e.target.value)}
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <Input label="City" value={city} onChange={(e) => setCity(e.target.value)} />
-                  <Input label="Pincode" value={pincode} onChange={(e) => setPincode(e.target.value)} />
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-text-secondary uppercase tracking-wider">
-                    Access / Entry Instructions
-                  </label>
-                  <textarea
-                    rows={2}
-                    value={accessNotes}
-                    onChange={(e) => setAccessNotes(e.target.value)}
-                    className="w-full p-3 text-sm bg-white border border-border-default rounded-xl focus:border-brand-teal focus:outline-none"
-                    placeholder="Elevator availability, visitor entry rules, parking details..."
-                  />
-                </div>
-              </div>
+              <LocationPicker
+                value={locationData}
+                onChange={(updated) => setLocationData(updated)}
+              />
             )}
 
-            {/* STEP 5: Date & Recurrence */}
+            {/* STEP 5: Dates */}
             {step === 5 && (
               <div className="space-y-5">
                 <div>
@@ -583,29 +433,40 @@ export const BookingWizardPage: React.FC = () => {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <Input
-                    type="date"
-                    label="Start Date"
-                    min={minDateString}
-                    value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}
-                  />
-                  {scheduleType !== 'single' && (
-                    <Input
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-text-secondary uppercase tracking-wider">Start Date</label>
+                    <input
                       type="date"
-                      label="End Date"
-                      min={startDate}
-                      value={endDate}
-                      onChange={(e) => setEndDate(e.target.value)}
+                      value={startDate}
+                      onChange={(e) => setStartDate(e.target.value)}
+                      className="w-full h-11 px-3 text-sm bg-white border border-border-default rounded-xl focus:border-brand-teal focus:outline-none"
                     />
+                  </div>
+
+                  {scheduleType !== 'single' && (
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-bold text-text-secondary uppercase tracking-wider">End Date</label>
+                      <input
+                        type="date"
+                        value={endDate}
+                        min={startDate}
+                        onChange={(e) => setEndDate(e.target.value)}
+                        className="w-full h-11 px-3 text-sm bg-white border border-border-default rounded-xl focus:border-brand-teal focus:outline-none"
+                      />
+                    </div>
                   )}
                 </div>
 
                 {scheduleType === 'recurring' && (
                   <div className="space-y-2">
-                    <label className="text-xs font-bold text-text-secondary uppercase tracking-wider">
-                      Select Days Of Week
-                    </label>
+                    <div className="flex justify-between items-center">
+                      <label className="text-xs font-bold text-text-secondary uppercase tracking-wider">
+                        Select Weekdays
+                      </label>
+                      <span className="text-xs font-extrabold text-brand-teal">
+                        {daysCount} Shifts Total
+                      </span>
+                    </div>
                     <div className="flex flex-wrap gap-2">
                       {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => {
                         const isSelected = recurringDays.includes(day);
@@ -634,21 +495,20 @@ export const BookingWizardPage: React.FC = () => {
               </div>
             )}
 
-            {/* STEP 6: Time & Shift Type */}
+            {/* STEP 6: Shift (With Night Rollover UX) */}
             {step === 6 && (
               <div className="space-y-5">
                 <div>
-                  <h2 className="text-lg font-extrabold text-text-primary">Step 6: Timing & Shift Type</h2>
-                  <p className="text-xs text-text-muted">Select shift duration and care hours.</p>
+                  <h2 className="text-lg font-extrabold text-text-primary">Step 6: Shift Timing & Night Care UX</h2>
+                  <p className="text-xs text-text-muted">Choose your shift timing. Night shifts calculate date rollover automatically.</p>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {[
+                    { label: 'Night Shift (10 PM - 8 AM)', time: '10:00 PM - 08:00 AM', hours: 10, isNight: true },
                     { label: 'Day Shift (12 Hours)', time: '08:00 AM - 08:00 PM', hours: 12 },
-                    { label: 'Night Shift (10 PM - 8 AM)', time: '10:00 PM - 08:00 AM', hours: 10 },
                     { label: 'Half Day (6 Hours)', time: '08:00 AM - 02:00 PM', hours: 6 },
-                    { label: '24-Hour Live-in Care', time: 'Round the Clock (24h)', hours: 24 },
-                    { label: 'Short Visit (2 Hours)', time: '10:00 AM - 12:00 PM', hours: 2 }
+                    { label: '24-Hour Live-in Care', time: 'Round the Clock (24h)', hours: 24 }
                   ].map((s) => (
                     <div
                       key={s.label}
@@ -658,22 +518,36 @@ export const BookingWizardPage: React.FC = () => {
                         setDurationHours(s.hours);
                       }}
                       className={clsx(
-                        'p-4 rounded-xl border cursor-pointer transition-all flex items-center justify-between',
+                        'p-4 rounded-2xl border cursor-pointer transition-all flex items-center justify-between',
                         shiftType === s.label
                           ? 'border-brand-teal bg-canvas-teal ring-2 ring-brand-teal/20'
                           : 'border-border-default bg-white hover:border-border-hover'
                       )}
                     >
                       <div>
-                        <span className="font-extrabold text-text-primary text-xs block">{s.label}</span>
-                        <span className="text-[11px] text-text-muted flex items-center gap-1 mt-0.5">
+                        <span className="font-extrabold text-text-primary text-xs flex items-center gap-1.5">
+                          {s.isNight && <Moon className="w-4 h-4 text-amber-500" />} {s.label}
+                        </span>
+                        <span className="text-[11px] text-text-muted flex items-center gap-1 mt-1">
                           <Clock className="w-3 h-3 text-brand-teal" /> {s.time}
                         </span>
                       </div>
-                      {shiftType === s.label && <CheckCircle2 className="w-4 h-4 text-brand-teal" />}
+                      {shiftType === s.label && <CheckCircle2 className="w-5 h-5 text-brand-teal" />}
                     </div>
                   ))}
                 </div>
+
+                {/* Night Shift Rollover Card */}
+                {isNightShift && (
+                  <div className="p-4 bg-amber-50 rounded-2xl border border-amber-200 text-xs text-amber-900 space-y-1">
+                    <span className="font-extrabold block flex items-center gap-1.5">
+                      <Moon className="w-4 h-4 text-amber-600" /> Overnight Shift Schedule
+                    </span>
+                    <p className="font-medium">
+                      Shift Start: <span className="font-bold">{startDate} 10:00 PM</span> → Shift End: <span className="font-bold">{nextDayStr} 08:00 AM</span> (Duration: 10 Hours)
+                    </p>
+                  </div>
+                )}
               </div>
             )}
 
@@ -719,49 +593,21 @@ export const BookingWizardPage: React.FC = () => {
 
                   <div className="space-y-1.5">
                     <label className="text-xs font-bold text-text-secondary uppercase tracking-wider">
-                      Minimum Experience Level
+                      Languages Spoken
                     </label>
-                    <select
-                      value={minExperience}
-                      onChange={(e) => setMinExperience(e.target.value)}
-                      className="w-full h-11 px-3 text-sm bg-white border border-border-default rounded-xl focus:border-brand-teal focus:outline-none"
-                    >
-                      <option value="1+ Years">1+ Years Experience</option>
-                      <option value="3+ Years">3+ Years Experience (Recommended)</option>
-                      <option value="5+ Years">5+ Years Senior Experience</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-text-secondary uppercase tracking-wider">
-                    Languages Spoken By Staff
-                  </label>
-                  <div className="flex flex-wrap gap-2">
-                    {['English', 'Hindi', 'Kannada', 'Tamil', 'Telugu', 'Malayalam'].map((lang) => {
-                      const isSelected = languages.includes(lang);
-                      return (
-                        <button
-                          key={lang}
-                          type="button"
-                          onClick={() => handleLanguageToggle(lang)}
-                          className={clsx(
-                            'px-3 py-1.5 rounded-full text-xs font-bold border cursor-pointer transition-all',
-                            isSelected
-                              ? 'bg-brand-teal text-white border-brand-teal'
-                              : 'bg-canvas-secondary border-border-default text-text-secondary'
-                          )}
-                        >
+                    <div className="flex flex-wrap gap-2 pt-1">
+                      {['English', 'Hindi', 'Kannada', 'Tamil'].map((lang) => (
+                        <span key={lang} className="px-3 py-1 rounded-full text-xs font-bold bg-canvas-teal text-brand-teal border border-teal-200">
                           {lang}
-                        </button>
-                      );
-                    })}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
             )}
 
-            {/* STEP 8: Special Instructions */}
+            {/* STEP 8: Instructions */}
             {step === 8 && (
               <div className="space-y-5">
                 <div>
@@ -771,7 +617,7 @@ export const BookingWizardPage: React.FC = () => {
 
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold text-text-secondary uppercase tracking-wider">
-                    Specific Care Notes & Instructions
+                    Care Notes for Assigned Nurse
                   </label>
                   <textarea
                     rows={4}
@@ -781,39 +627,10 @@ export const BookingWizardPage: React.FC = () => {
                     placeholder="Enter any special requests, diet instructions, or patient behavioral tips..."
                   />
                 </div>
-
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-text-secondary uppercase tracking-wider">
-                    Medical Equipment Available At Site
-                  </label>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                    {['Air Mattress', 'Walker / Cane', 'Wheelchair', 'BP Monitor', 'Pulse Oximeter', 'Suction Machine'].map((eq) => {
-                      const isSelected = medicalEquipment.includes(eq);
-                      return (
-                        <button
-                          key={eq}
-                          type="button"
-                          onClick={() => {
-                            if (isSelected) setMedicalEquipment(medicalEquipment.filter((m) => m !== eq));
-                            else setMedicalEquipment([...medicalEquipment, eq]);
-                          }}
-                          className={clsx(
-                            'p-2.5 rounded-xl border text-xs font-semibold text-center cursor-pointer transition-all',
-                            isSelected
-                              ? 'bg-canvas-teal border-brand-teal text-brand-teal font-bold'
-                              : 'bg-white border-border-default text-text-secondary'
-                          )}
-                        >
-                          {eq}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
               </div>
             )}
 
-            {/* STEP 9: Price Estimate Breakdown */}
+            {/* STEP 9: Price Breakdown */}
             {step === 9 && (
               <div className="space-y-5">
                 <div>
@@ -827,12 +644,12 @@ export const BookingWizardPage: React.FC = () => {
                     <span>₹{subtotalBeforeNight}</span>
                   </div>
                   <div className="flex justify-between text-text-secondary">
-                    <span>Duration & Recurrence</span>
+                    <span>Duration & Shifts</span>
                     <span>{daysCount} Day(s) × {durationHours} Hours</span>
                   </div>
                   {isNightShift && (
                     <div className="flex justify-between text-amber-700 font-semibold">
-                      <span>Night Shift Surcharge (+20%)</span>
+                      <span>Night Shift Adjustment (+20%)</span>
                       <span>₹{nightSurcharge}</span>
                     </div>
                   )}
@@ -841,105 +658,147 @@ export const BookingWizardPage: React.FC = () => {
                     <span>₹{gst}</span>
                   </div>
                   <div className="flex justify-between font-extrabold text-brand-teal text-base border-t border-border-default pt-2">
-                    <span>Total Estimated Amount</span>
+                    <span>Estimated Total Amount</span>
                     <span>₹{grandTotal}</span>
                   </div>
                 </div>
 
-                <div className="p-3.5 bg-emerald-50 rounded-xl border border-emerald-200 flex items-start gap-2 text-xs text-emerald-800">
-                  <ShieldCheck className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-                  <span>
-                    No hidden dispatch fees. Payment is authorized after Operations Desk confirms staff assignment.
-                  </span>
-                </div>
+                <p className="text-[11px] text-text-muted italic">
+                  * Final amount verified by Operations Desk. No hidden fees or cash demands at home.
+                </p>
               </div>
             )}
 
-            {/* STEP 10: Review & Submit */}
+            {/* STEP 10: Review & Post-Submission Interactive Tracker */}
             {step === 10 && (
-              <div className="space-y-5">
-                <div>
-                  <h2 className="text-lg font-extrabold text-text-primary">Step 10: Review & Request Submission</h2>
-                  <p className="text-xs text-text-muted">Review your booking summary before submitting to Operations.</p>
-                </div>
+              <div className="space-y-6">
+                {!submitting ? (
+                  <div className="space-y-5">
+                    <div>
+                      <h2 className="text-lg font-extrabold text-text-primary">Step 10: Review & Send Request</h2>
+                      <p className="text-xs text-text-muted">Review your booking details before submitting to Operations.</p>
+                    </div>
 
-                <div className="bg-canvas-teal p-4 rounded-2xl border border-teal-200 flex items-start gap-3">
-                  <AlertCircle className="w-5 h-5 text-brand-teal shrink-0 mt-0.5" />
-                  <div className="text-xs text-teal-900 space-y-0.5">
-                    <span className="font-extrabold block">In-House Staff Allocation Model</span>
-                    <span>
-                      Your request will be routed to our Central Dispatch Desk. System recommends staff by skill & proximity, and Operations confirms assignment within 15 minutes.
-                    </span>
-                  </div>
-                </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                      <div className="p-4 bg-canvas-secondary rounded-xl border border-border-default space-y-2">
+                        <span className="font-bold text-text-primary block border-b border-border-light pb-1">
+                          Service & Patient
+                        </span>
+                        <p className="font-extrabold text-text-primary">{selectedService.name}</p>
+                        <p className="text-text-muted">Patient: {patient.firstName} {patient.lastName} ({patient.relationship})</p>
+                      </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-                  <div className="p-4 bg-canvas-secondary rounded-xl border border-border-default space-y-2">
-                    <span className="font-bold text-text-primary block text-xs border-b border-border-light pb-1">
-                      Service & Tasks
-                    </span>
-                    <p className="font-extrabold text-text-primary">{selectedService.name}</p>
-                    <p className="text-text-muted">{selectedTasks.slice(0, 3).join(', ')}...</p>
+                      <div className="p-4 bg-canvas-secondary rounded-xl border border-border-default space-y-2">
+                        <span className="font-bold text-text-primary block border-b border-border-light pb-1">
+                          Location & Schedule
+                        </span>
+                        <p className="font-semibold text-text-primary">{locationData.line1}, {locationData.city}</p>
+                        <p className="text-text-muted">{startDate} • {shiftType}</p>
+                      </div>
+                    </div>
                   </div>
-                  <div className="p-4 bg-canvas-secondary rounded-xl border border-border-default space-y-2">
-                    <span className="font-bold text-text-primary block text-xs border-b border-border-light pb-1">
-                      Patient Details
-                    </span>
-                    <p className="font-extrabold text-text-primary">{patientFirstName} {patientLastName} ({patientAge} yrs)</p>
-                    <p className="text-text-muted">{medicalConditions}</p>
-                  </div>
-                </div>
+                ) : (
+                  /* Post-Submission Animated Operations Tracker (Section 26 & 27) */
+                  <div className="p-6 bg-canvas-teal rounded-3xl border border-teal-200 text-center space-y-6">
+                    <div className="w-16 h-16 rounded-full bg-brand-teal text-white flex items-center justify-center mx-auto shadow-lg animate-pulse">
+                      {assignmentState === 'assigned' ? <CheckCircle2 className="w-8 h-8" /> : <Loader2 className="w-8 h-8 animate-spin" />}
+                    </div>
 
-                <div className="p-4 bg-canvas-secondary rounded-xl border border-border-default space-y-2 text-xs">
-                  <span className="font-bold text-text-primary block text-xs border-b border-border-light pb-1">
-                    Location & Schedule
-                  </span>
-                  <p className="font-semibold text-text-primary">{addressLine1}, {addressLine2}, {city}</p>
-                  <p className="text-text-muted">{startDate} • {shiftType}</p>
-                </div>
+                    <div className="space-y-1">
+                      <h3 className="text-xl font-extrabold text-teal-950">
+                        {assignmentState === 'assigned' ? 'Staff Successfully Assigned!' : 'Your Request is with Operations'}
+                      </h3>
+                      <p className="text-xs text-teal-800">
+                        {assignmentState === 'assigned'
+                          ? 'Your care team is confirmed for dispatch.'
+                          : 'Matching rule engine is selecting available internal staff...'}
+                      </p>
+                    </div>
+
+                    {/* Timeline Progression */}
+                    <div className="flex justify-between items-center max-w-md mx-auto text-[11px] font-bold">
+                      <span className="text-emerald-700">Request Received ✓</span>
+                      <span className={assignmentState !== 'reviewing' ? 'text-emerald-700' : 'text-teal-900'}>Reviewing ✓</span>
+                      <span className={assignmentState === 'assigned' ? 'text-emerald-700' : 'text-brand-teal animate-pulse'}>
+                        {assignmentState === 'assigned' ? 'Staff Assigned ✓' : 'Finding Staff...'}
+                      </span>
+                    </div>
+
+                    {/* Assigned Staff Reveal Card (Section 27 "Premium Moment") */}
+                    {assignedStaff && (
+                      <div className="p-4 bg-white rounded-2xl border border-teal-300 shadow-subtle flex items-center justify-between text-left animate-in zoom-in duration-300">
+                        <div className="flex items-center gap-3">
+                          <img src={assignedStaff.photo} alt="" className="w-12 h-12 rounded-xl object-cover border border-teal-200" />
+                          <div>
+                            <span className="font-extrabold text-text-primary text-sm flex items-center gap-1">
+                              {assignedStaff.displayName} <ShieldCheck className="w-4 h-4 text-brand-teal" />
+                            </span>
+                            <span className="text-xs text-text-muted block">{assignedStaff.qualification}</span>
+                            <span className="text-[10px] font-mono font-bold text-brand-teal">Staff ID: {assignedStaff.employeeId}</span>
+                          </div>
+                        </div>
+                        <span className="text-xs font-extrabold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
+                          CONFIRMED
+                        </span>
+                      </div>
+                    )}
+
+                    {assignedStaff && (
+                      <Button
+                        onClick={handleFinalRedirect}
+                        variant="primary"
+                        className="bg-brand-teal hover:bg-brand-teal-hover text-white font-bold px-8 py-3 rounded-xl cursor-pointer"
+                      >
+                        View Active Care Booking Detail
+                      </Button>
+                    )}
+                  </div>
+                )}
               </div>
             )}
 
             {/* Stepper Footer Controls */}
-            <div className="flex justify-between items-center border-t border-border-default pt-4">
-              <Button
-                variant="secondary"
-                onClick={() => step > 1 && setStep(step - 1)}
-                disabled={step === 1}
-                leftIcon={<ArrowLeft className="w-4 h-4" />}
-                className="cursor-pointer"
-              >
-                Back
-              </Button>
+            {!submitting && (
+              <div className="flex justify-between items-center border-t border-border-default pt-4">
+                <Button
+                  variant="secondary"
+                  onClick={() => step > 1 && setStep(step - 1)}
+                  disabled={step === 1}
+                  leftIcon={<ArrowLeft className="w-4 h-4" />}
+                  className="cursor-pointer"
+                >
+                  Back
+                </Button>
 
-              {step < 10 ? (
-                <Button
-                  variant="primary"
-                  onClick={() => setStep(step + 1)}
-                  rightIcon={<ArrowRight className="w-4 h-4" />}
-                  className="bg-brand-teal hover:bg-brand-teal-hover text-white font-bold cursor-pointer"
-                >
-                  Continue to Step {step + 1}
-                </Button>
-              ) : (
-                <Button
-                  variant="primary"
-                  onClick={handleConfirmSubmit}
-                  leftIcon={<CheckCircle2 className="w-4 h-4" />}
-                  className="bg-brand-teal hover:bg-brand-teal-hover text-white font-bold px-6 cursor-pointer"
-                >
-                  Submit Care Request
-                </Button>
-              )}
-            </div>
+                {step < 10 ? (
+                  <Button
+                    variant="primary"
+                    onClick={() => setStep(step + 1)}
+                    rightIcon={<ArrowRight className="w-4 h-4" />}
+                    className="bg-brand-teal hover:bg-brand-teal-hover text-white font-bold cursor-pointer"
+                  >
+                    Continue to Step {step + 1}
+                  </Button>
+                ) : (
+                  <Button
+                    variant="primary"
+                    onClick={handleConfirmSubmit}
+                    leftIcon={<CheckCircle2 className="w-4 h-4" />}
+                    className="bg-brand-teal hover:bg-brand-teal-hover text-white font-bold px-8 py-3 cursor-pointer shadow-subtle text-sm"
+                  >
+                    Submit Care Request
+                  </Button>
+                )}
+              </div>
+            )}
           </Card>
         </div>
 
-        {/* Persistent Desktop Summary Sidebar */}
+        {/* Live Persistent Desktop Booking Summary Sidebar (Section 23 & 24) */}
         <div className="lg:col-span-4">
-          <div className="bg-white p-5 rounded-2xl border border-border-default shadow-subtle space-y-4 sticky top-6">
-            <h3 className="font-extrabold text-text-primary text-sm border-b border-border-light pb-2">
-              Requirement Summary
+          <div className="bg-white p-5 rounded-2xl border border-border-default shadow-subtle space-y-4 sticky top-6 text-left">
+            <h3 className="font-extrabold text-text-primary text-sm border-b border-border-light pb-2 uppercase tracking-wider">
+              Live Care Request Summary
             </h3>
 
             <div className="space-y-3 text-xs">
@@ -949,31 +808,30 @@ export const BookingWizardPage: React.FC = () => {
               </div>
               <div className="flex justify-between">
                 <span className="text-text-muted font-medium">Patient:</span>
-                <span className="font-bold text-text-primary">{patientFirstName} {patientLastName}</span>
+                <span className="font-bold text-text-primary">{patient.firstName} {patient.lastName}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-text-muted font-medium">Location:</span>
+                <span className="font-semibold text-text-primary text-right">{locationData.city} ({locationData.addressType})</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-text-muted font-medium">Start Date:</span>
                 <span className="font-bold text-text-primary">{startDate}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-text-muted font-medium">Shift Type:</span>
-                <span className="font-bold text-brand-teal text-right">{shiftType}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-text-muted font-medium">Fulfillment:</span>
-                <span className="font-extrabold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-                  Operations Dispatch
-                </span>
+                <span className="text-text-muted font-medium">Shift:</span>
+                <span className="font-bold text-brand-teal">{shiftType}</span>
               </div>
 
+              {/* Itemized Price Presentation (Section 24) */}
               <div className="border-t border-border-default pt-3 space-y-1.5">
                 <div className="flex justify-between text-text-secondary">
-                  <span>Base Rate ({daysCount} d)</span>
+                  <span>Base Service ({daysCount} d)</span>
                   <span>₹{subtotalBeforeNight}</span>
                 </div>
                 {isNightShift && (
                   <div className="flex justify-between text-amber-700 font-semibold">
-                    <span>Night Surcharge</span>
+                    <span>Night Shift Adjustment</span>
                     <span>₹{nightSurcharge}</span>
                   </div>
                 )}
@@ -981,16 +839,16 @@ export const BookingWizardPage: React.FC = () => {
                   <span>GST (18%)</span>
                   <span>₹{gst}</span>
                 </div>
-                <div className="flex justify-between font-extrabold text-text-primary text-sm pt-1 border-t border-border-light">
+                <div className="flex justify-between font-extrabold text-text-primary text-sm pt-2 border-t border-border-light">
                   <span>Estimated Total</span>
-                  <span className="text-brand-teal">₹{grandTotal}</span>
+                  <span className="text-brand-teal text-base">₹{grandTotal}</span>
                 </div>
               </div>
             </div>
 
             <div className="bg-canvas-teal p-3 rounded-xl border border-teal-200 flex items-center gap-2 text-[11px] text-teal-800 font-semibold">
               <ShieldCheck className="w-4 h-4 text-brand-teal shrink-0" />
-              <span>Assigned staff background checked & KYC verified.</span>
+              <span>Assigned staff background checked & council verified.</span>
             </div>
           </div>
         </div>

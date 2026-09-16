@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { DemoRoleSwitcher } from '../common/DemoRoleSwitcher';
+import { CommandMenu } from '../common/CommandMenu';
 import {
   LayoutDashboard,
   ShieldCheck,
@@ -17,63 +18,67 @@ import {
   Building2,
   Sliders,
   DollarSign,
-  Activity
+  Activity,
+  Command
 } from 'lucide-react';
 import { clsx } from 'clsx';
 
 export const AdminLayout: React.FC = () => {
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [commandMenuOpen, setCommandMenuOpen] = useState(false);
 
   const adminMenu = [
-    { label: 'Dashboard', path: '/admin/dashboard', icon: <LayoutDashboard className="w-5 h-5" /> },
-    { label: 'KYC Verification', path: '/admin/kyc', icon: <ShieldCheck className="w-5 h-5" />, badge: '1 New' },
-    { label: 'Staff Directory', path: '/admin/professionals', icon: <Users className="w-5 h-5" /> },
-    { label: 'Bookings & Ops', path: '/admin/bookings', icon: <CalendarCheck className="w-5 h-5" /> },
-    { label: 'Matching & Dispatch', path: '/admin/matching', icon: <Activity className="w-5 h-5" /> },
-    { label: 'Clients', path: '/admin/clients', icon: <Users className="w-5 h-5" /> },
-    { label: 'Hospitals & Orgs', path: '/admin/organizations', icon: <Building2 className="w-5 h-5" /> },
-    { label: 'Payments', path: '/admin/payments', icon: <CreditCard className="w-5 h-5" /> },
-    { label: 'Payouts', path: '/admin/payouts', icon: <DollarSign className="w-5 h-5" /> },
-    { label: 'Support Desk', path: '/admin/support', icon: <MessageSquare className="w-5 h-5" /> },
-    { label: 'Services & Pricing', path: '/admin/services', icon: <Sliders className="w-5 h-5" /> },
-    { label: 'Reports & Audit', path: '/admin/reports', icon: <FileText className="w-5 h-5" /> },
-    { label: 'Platform Settings', path: '/admin/settings', icon: <Settings className="w-5 h-5" /> }
+    { label: 'Dashboard', path: '/admin/dashboard', icon: <LayoutDashboard className="w-4 h-4" /> },
+    { label: 'KYC Verification', path: '/admin/kyc', icon: <ShieldCheck className="w-4 h-4" />, badge: '1 New' },
+    { label: 'Staff Directory', path: '/admin/professionals', icon: <Users className="w-4 h-4" /> },
+    { label: 'Bookings & Ops', path: '/admin/bookings', icon: <CalendarCheck className="w-4 h-4" /> },
+    { label: 'Matching & Dispatch', path: '/admin/matching', icon: <Activity className="w-4 h-4" /> },
+    { label: 'Clients', path: '/admin/clients', icon: <Users className="w-4 h-4" /> },
+    { label: 'Hospitals & Orgs', path: '/admin/organizations', icon: <Building2 className="w-4 h-4" /> },
+    { label: 'Payments', path: '/admin/payments', icon: <CreditCard className="w-4 h-4" /> },
+    { label: 'Payouts', path: '/admin/payouts', icon: <DollarSign className="w-4 h-4" /> },
+    { label: 'Support Desk', path: '/admin/support', icon: <MessageSquare className="w-4 h-4" /> },
+    { label: 'Services & Pricing', path: '/admin/services', icon: <Sliders className="w-4 h-4" /> },
+    { label: 'Reports & Audit', path: '/admin/reports', icon: <FileText className="w-4 h-4" /> },
+    { label: 'Platform Settings', path: '/admin/settings', icon: <Settings className="w-4 h-4" /> }
   ];
 
   return (
     <div className="min-h-screen flex flex-col bg-canvas-secondary text-text-primary">
       <DemoRoleSwitcher />
 
+      <CommandMenu isOpen={commandMenuOpen} onClose={() => setCommandMenuOpen(false)} />
+
       <div className="flex-1 flex overflow-hidden">
-        {/* Left Sidebar */}
+        {/* Left Sidebar — 100% Light Theme Rebuild */}
         <aside
           className={clsx(
-            'bg-slate-900 text-slate-300 w-64 shrink-0 transition-all duration-300 z-30 flex flex-col',
+            'bg-white border-r border-border-default text-text-secondary w-64 shrink-0 transition-all duration-300 z-30 flex flex-col shadow-subtle',
             !sidebarOpen && '-ml-64 lg:ml-0'
           )}
         >
           {/* Sidebar Brand Header */}
-          <div className="h-16 px-6 flex items-center justify-between border-b border-slate-800">
+          <div className="h-16 px-6 flex items-center justify-between border-b border-border-default">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-brand-teal flex items-center justify-center text-white">
+              <div className="w-9 h-9 rounded-xl bg-brand-teal flex items-center justify-center text-white shadow-xs">
                 <Activity className="w-5 h-5" />
               </div>
-              <div className="flex flex-col">
-                <span className="text-base font-extrabold text-white leading-tight">CommandCenter</span>
-                <span className="text-[10px] text-teal-400 font-bold tracking-widest uppercase">Ops Portal</span>
+              <div className="flex flex-col text-left">
+                <span className="text-base font-extrabold text-text-primary leading-tight">Care Ops OS</span>
+                <span className="text-[10px] text-brand-teal font-extrabold tracking-widest uppercase">Command Center</span>
               </div>
             </div>
             <button
               onClick={() => setSidebarOpen(false)}
-              className="lg:hidden text-slate-400 hover:text-white"
+              className="lg:hidden text-text-muted hover:text-text-primary"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
 
           {/* Navigation Links */}
-          <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
+          <nav className="flex-1 p-3 space-y-1 overflow-y-auto text-left">
             {adminMenu.map((item) => {
               const isActive = location.pathname === item.path;
               return (
@@ -81,10 +86,10 @@ export const AdminLayout: React.FC = () => {
                   key={item.path}
                   to={item.path}
                   className={clsx(
-                    'flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-colors',
+                    'flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all',
                     isActive
-                      ? 'bg-brand-teal text-white shadow-xs'
-                      : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                      ? 'bg-canvas-teal text-brand-teal font-extrabold border border-teal-200 shadow-xs'
+                      : 'text-text-secondary hover:bg-canvas-secondary hover:text-text-primary'
                   )}
                 >
                   <div className="flex items-center gap-3">
@@ -102,31 +107,36 @@ export const AdminLayout: React.FC = () => {
           </nav>
 
           {/* Admin Footer Badge */}
-          <div className="p-4 border-t border-slate-800 text-[11px] text-slate-400">
-            <p className="font-semibold text-slate-200">Ops Lead: Deepak Kumar</p>
-            <p className="text-[10px] text-slate-500">CareConnect System v2.4</p>
+          <div className="p-4 border-t border-border-default text-[11px] text-text-muted text-left bg-canvas-secondary">
+            <p className="font-extrabold text-text-primary">Ops Lead: Deepak Kumar</p>
+            <p className="text-[10px] text-brand-teal font-bold">Care Operating System v3.0</p>
           </div>
         </aside>
 
         {/* Main Operational Area */}
         <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
           {/* Top Bar */}
-          <header className="bg-white border-b border-border-default h-16 px-6 flex items-center justify-between gap-4 shrink-0">
+          <header className="bg-white border-b border-border-default h-16 px-6 flex items-center justify-between gap-4 shrink-0 shadow-subtle">
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setSidebarOpen(!sidebarOpen)}
-                className="p-2 text-text-muted hover:text-text-primary rounded-lg hover:bg-canvas-tertiary"
+                className="p-2 text-text-muted hover:text-text-primary rounded-lg hover:bg-canvas-tertiary cursor-pointer"
               >
                 <Menu className="w-5 h-5" />
               </button>
-              <div className="relative hidden sm:block w-72">
-                <Search className="w-4 h-4 absolute left-3 top-3 text-text-muted" />
-                <input
-                  type="text"
-                  placeholder="Search bookings, pros, clients..."
-                  className="w-full h-9 pl-9 pr-4 text-xs bg-canvas-secondary border border-border-default rounded-lg focus:outline-none focus:border-brand-teal"
-                />
-              </div>
+
+              {/* Ctrl+K Command Menu Search Trigger */}
+              <button
+                onClick={() => setCommandMenuOpen(true)}
+                className="hidden sm:flex items-center justify-between w-80 h-9 px-3 text-xs bg-canvas-secondary border border-border-default rounded-xl text-text-muted hover:border-brand-teal transition-all cursor-pointer"
+              >
+                <span className="flex items-center gap-2">
+                  <Search className="w-4 h-4 text-brand-teal" /> Search bookings, staff, orgs...
+                </span>
+                <kbd className="flex items-center gap-0.5 bg-white px-2 py-0.5 rounded border text-[10px] font-mono text-text-primary font-bold shadow-2xs">
+                  <Command className="w-3 h-3" /> K
+                </kbd>
+              </button>
             </div>
 
             <div className="flex items-center gap-3">
@@ -136,19 +146,19 @@ export const AdminLayout: React.FC = () => {
               </Link>
               <div className="h-6 w-px bg-border-default" />
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-slate-900 text-white font-bold text-xs flex items-center justify-center">
+                <div className="w-8 h-8 rounded-full bg-brand-teal text-white font-bold text-xs flex items-center justify-center shadow-xs">
                   DK
                 </div>
                 <div className="hidden md:flex flex-col text-left">
-                  <span className="text-xs font-bold text-text-primary leading-none">Deepak Ops</span>
-                  <span className="text-[10px] text-text-muted mt-0.5">Super Admin</span>
+                  <span className="text-xs font-extrabold text-text-primary leading-tight">Deepak Kumar</span>
+                  <span className="text-[10px] text-brand-teal font-bold uppercase">Central Dispatch Lead</span>
                 </div>
               </div>
             </div>
           </header>
 
-          {/* View Container */}
-          <main className="flex-1 overflow-y-auto p-6 lg:p-8">
+          {/* Page Content Outlet */}
+          <main className="flex-1 overflow-y-auto p-6 bg-canvas-secondary">
             <Outlet />
           </main>
         </div>

@@ -164,12 +164,15 @@ export const AdminMatchingPage: React.FC = () => {
                   {availablePros.map((pro: ProfessionalProfile, index: number) => {
                     const matchScore = 98 - index * 4;
                     const isAlreadyAssigned = selectedBooking.professionalId === pro.id;
+                    const hasConflict = index === 2; // Simulate shift conflict for 3rd pro
 
                     return (
                       <div
                         key={pro.id}
                         className={`p-4 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all ${
-                          isAlreadyAssigned
+                          hasConflict
+                            ? 'bg-amber-50/70 border-amber-300'
+                            : isAlreadyAssigned
                             ? 'bg-canvas-teal border-brand-teal'
                             : 'bg-white border-border-default hover:border-border-hover'
                         }`}
@@ -186,19 +189,35 @@ export const AdminMatchingPage: React.FC = () => {
                               <span className="text-[10px] font-extrabold text-brand-teal bg-canvas-teal px-2 py-0.5 rounded border border-teal-200">
                                 Staff ID: {pro.employeeId || `EMP-${1000 + index}`}
                               </span>
-                              <span className="text-[10px] font-extrabold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-                                {matchScore}% Match
-                              </span>
+                              {!hasConflict && (
+                                <span className="text-[10px] font-extrabold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                                  {matchScore}% System Recommended
+                                </span>
+                              )}
+                              {hasConflict && (
+                                <span className="text-[10px] font-extrabold text-amber-900 bg-amber-100 px-2 py-0.5 rounded border border-amber-300">
+                                  ⚠️ 2h Shift Conflict
+                                </span>
+                              )}
                             </div>
                             <p className="text-xs text-text-secondary mt-0.5">
                               {pro.qualification} • {pro.experienceYears} yrs exp • {pro.specializations.slice(0, 2).join(', ')}
                             </p>
+                            {hasConflict && (
+                              <p className="text-[11px] text-amber-800 font-bold mt-1">
+                                Conflict: Already assigned to BKG-2026-9941 ({selectedBooking.scheduledDate} 08:00 AM - 02:00 PM).
+                              </p>
+                            )}
                           </div>
                         </div>
 
                         {isAlreadyAssigned ? (
                           <span className="text-xs font-extrabold text-emerald-700 bg-emerald-100 px-3 py-1.5 rounded-xl border border-emerald-300 flex items-center gap-1 shrink-0">
                             <CheckCircle2 className="w-4 h-4 text-emerald-600" /> Currently Assigned
+                          </span>
+                        ) : hasConflict ? (
+                          <span className="text-xs font-bold text-amber-800 bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-300 shrink-0">
+                            Conflict Flagged
                           </span>
                         ) : (
                           <Button

@@ -6,6 +6,7 @@ import { useBookings } from '../../context/BookingContext';
 import { Button } from '../../components/common/Button';
 import { KYCStatusBadge } from '../../components/common/Badge';
 import type { ProfessionalProfile, ProfessionalDocument } from '../../types';
+import { clsx } from 'clsx';
 
 export const AdminProfessionalsPage: React.FC = () => {
   const { professionals } = useBookings();
@@ -13,6 +14,7 @@ export const AdminProfessionalsPage: React.FC = () => {
   const [search, setSearch] = useState('');
   const [employmentFilter, setEmploymentFilter] = useState<string>('all');
   const [selectedPro, setSelectedPro] = useState<ProfessionalProfile | null>(null);
+  const [drawerTab, setDrawerTab] = useState<'overview' | 'availability' | 'assignments' | 'credentials' | 'documents' | 'leave' | 'attendance' | 'performance'>('overview');
 
   const filtered = pros.filter((p: ProfessionalProfile) => {
     const matchesSearch = p.displayName.toLowerCase().includes(search.toLowerCase()) || 
@@ -32,6 +34,17 @@ export const AdminProfessionalsPage: React.FC = () => {
       return p;
     }));
   };
+
+  const tabsList = [
+    { id: 'overview', label: 'Overview' },
+    { id: 'availability', label: 'Availability' },
+    { id: 'assignments', label: 'Assignments' },
+    { id: 'credentials', label: 'Credentials' },
+    { id: 'documents', label: 'Documents' },
+    { id: 'leave', label: 'Leave' },
+    { id: 'attendance', label: 'Attendance' },
+    { id: 'performance', label: 'Performance' }
+  ];
 
   return (
     <div className="space-y-6 text-left">
@@ -168,70 +181,112 @@ export const AdminProfessionalsPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Staff Profile Drawer */}
+      {/* 8-Tab Detailed Staff Profile Drawer (Section 32 UI) */}
       {selectedPro && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex justify-end">
-          <div className="w-full max-w-xl bg-white h-full p-6 shadow-2xl overflow-y-auto space-y-6 text-left">
-            <div className="flex justify-between items-center border-b border-border-default pb-4">
+          <div className="w-full max-w-2xl bg-white h-full p-6 shadow-2xl overflow-y-auto space-y-5 text-left">
+            <div className="flex justify-between items-center border-b border-border-default pb-3">
               <h2 className="text-lg font-extrabold text-text-primary flex items-center gap-2">
-                <Stethoscope className="w-5 h-5 text-brand-teal" /> Employee Master File
+                <Stethoscope className="w-5 h-5 text-brand-teal" /> Staff Member Master File
               </h2>
-              <button onClick={() => setSelectedPro(null)} className="text-text-muted hover:text-text-primary cursor-pointer">
+              <button onClick={() => setSelectedPro(null)} className="text-text-muted hover:text-text-primary cursor-pointer font-bold">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="flex items-center gap-4">
-              <img src={selectedPro.profilePhoto} alt={selectedPro.displayName} className="w-16 h-16 rounded-2xl object-cover border-2 border-brand-teal" />
+            {/* Header Header Info */}
+            <div className="flex items-center gap-4 bg-canvas-secondary p-4 rounded-2xl border border-border-default">
+              <img src={selectedPro.profilePhoto} alt={selectedPro.displayName} className="w-14 h-14 rounded-2xl object-cover border-2 border-brand-teal" />
               <div>
-                <h3 className="text-xl font-extrabold text-text-primary">{selectedPro.displayName}</h3>
+                <h3 className="text-lg font-extrabold text-text-primary">{selectedPro.displayName}</h3>
                 <p className="text-xs text-text-muted">{selectedPro.qualification} • Staff ID: {selectedPro.employeeId || 'EMP-1001'}</p>
                 <div className="mt-1 flex items-center gap-2">
                   <KYCStatusBadge status={selectedPro.kycStatus} />
-                  <span className="text-[10px] font-extrabold uppercase bg-canvas-secondary border px-2 py-0.5 rounded">
+                  <span className="text-[10px] font-extrabold uppercase bg-white border border-border-default px-2 py-0.5 rounded">
                     {selectedPro.employmentType || 'Full Time Internal'}
                   </span>
                 </div>
               </div>
             </div>
 
-            <div className="space-y-3 bg-canvas-secondary p-4 rounded-xl border border-border-default text-xs">
-              <div className="flex justify-between">
-                <span className="text-text-muted">Nursing License Registration:</span>
-                <span className="font-mono font-bold text-brand-teal">{selectedPro.registrationNumber}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-text-muted">Base Hourly Pay:</span>
-                <span className="font-bold text-text-primary">₹{selectedPro.hourlyRate}/hr</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-text-muted">Completed Care Visits:</span>
-                <span className="font-bold text-text-primary">{selectedPro.totalVisits} shifts</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-text-muted">Base Location:</span>
-                <span className="font-medium text-text-primary">{selectedPro.location?.addressName || 'Indiranagar, Bangalore'}</span>
-              </div>
+            {/* 8-Tab Navigation Bar */}
+            <div className="flex items-center gap-1 border-b border-border-default overflow-x-auto pb-1 scrollbar-none">
+              {tabsList.map((t) => (
+                <button
+                  key={t.id}
+                  type="button"
+                  onClick={() => setDrawerTab(t.id as any)}
+                  className={clsx(
+                    'px-3 py-2 text-xs font-bold transition-all border-b-2 shrink-0 cursor-pointer',
+                    drawerTab === t.id
+                      ? 'border-brand-teal text-brand-teal'
+                      : 'border-transparent text-text-muted hover:text-text-primary'
+                  )}
+                >
+                  {t.label}
+                </button>
+              ))}
             </div>
 
-            <div>
-              <h4 className="text-xs font-bold text-text-primary mb-2">Verified Documents & Licenses</h4>
-              <div className="space-y-2">
-                {selectedPro.documents.map((doc: ProfessionalDocument) => (
-                  <div key={doc.id} className="p-3 bg-white border border-border-default rounded-xl flex justify-between items-center text-xs">
-                    <div>
-                      <span className="font-bold text-text-primary">{doc.type.toUpperCase()}</span>
-                      <span className="block text-[10px] text-text-muted">Uploaded {doc.uploadedAt}</span>
-                    </div>
-                    <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded text-[10px] font-bold">
-                      {doc.verificationStatus.toUpperCase()}
-                    </span>
+            {/* Tab Contents */}
+            <div className="space-y-4 text-xs">
+              {drawerTab === 'overview' && (
+                <div className="space-y-3 bg-canvas-secondary p-4 rounded-2xl border border-border-default">
+                  <div className="flex justify-between"><span className="text-text-muted">License Registration:</span><span className="font-mono font-bold text-brand-teal">{selectedPro.registrationNumber}</span></div>
+                  <div className="flex justify-between"><span className="text-text-muted">Hourly Pay Rate:</span><span className="font-bold text-text-primary">₹{selectedPro.hourlyRate}/hr</span></div>
+                  <div className="flex justify-between"><span className="text-text-muted">Total Completed Shifts:</span><span className="font-bold text-text-primary">{selectedPro.totalVisits} shifts</span></div>
+                  <div className="flex justify-between"><span className="text-text-muted">Service Radius:</span><span className="font-medium text-text-primary">{selectedPro.serviceRadius} km ({selectedPro.location?.addressName || 'Indiranagar'})</span></div>
+                </div>
+              )}
+
+              {drawerTab === 'availability' && (
+                <div className="space-y-2">
+                  <span className="font-bold text-text-primary block uppercase text-[10px]">Weekly Shift Availability</span>
+                  <div className="grid grid-cols-2 gap-2">
+                    {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map((d) => (
+                      <div key={d} className="p-2.5 bg-canvas-secondary rounded-xl border border-border-default flex justify-between">
+                        <span className="font-semibold text-text-primary">{d}</span>
+                        <span className="font-bold text-emerald-700">08:00 - 20:00</span>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+                </div>
+              )}
+
+              {drawerTab === 'assignments' && (
+                <div className="space-y-2">
+                  <span className="font-bold text-text-primary block uppercase text-[10px]">Active Shift Assignments</span>
+                  <div className="p-3 bg-canvas-teal rounded-xl border border-teal-200 space-y-1">
+                    <span className="font-extrabold text-brand-teal block">Post-Operative Care (BKG-2026-8819)</span>
+                    <span className="text-text-muted block">Rahul Mehta • Flat 402 Indiranagar • 20 Mar 08:00 AM</span>
+                  </div>
+                </div>
+              )}
+
+              {drawerTab === 'documents' && (
+                <div className="space-y-2">
+                  {selectedPro.documents.map((doc: ProfessionalDocument) => (
+                    <div key={doc.id} className="p-3 bg-white border border-border-default rounded-xl flex justify-between items-center">
+                      <div>
+                        <span className="font-bold text-text-primary block">{doc.type.toUpperCase()}</span>
+                        <span className="text-[10px] text-text-muted">Uploaded {doc.uploadedAt}</span>
+                      </div>
+                      <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded text-[10px] font-bold">
+                        {doc.verificationStatus.toUpperCase()}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {['credentials', 'leave', 'attendance', 'performance'].includes(drawerTab) && (
+                <div className="p-6 bg-canvas-secondary rounded-2xl border border-border-default text-center text-text-muted">
+                  Compliance and operational records logged for {drawerTab.toUpperCase()}.
+                </div>
+              )}
             </div>
 
-            <div className="pt-4 border-t border-border-default flex gap-3">
+            <div className="pt-3 border-t border-border-default flex gap-3">
               <Button
                 onClick={() => {
                   toggleProStatus(selectedPro.id);
@@ -239,7 +294,7 @@ export const AdminProfessionalsPage: React.FC = () => {
                 }}
                 className="w-full bg-brand-teal hover:bg-brand-teal-hover text-white font-bold py-2.5 text-xs rounded-xl cursor-pointer"
               >
-                Update Staff Duty Status
+                Update Duty Status
               </Button>
             </div>
           </div>
