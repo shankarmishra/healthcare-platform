@@ -1,0 +1,148 @@
+/**
+ * Healthcare Staffing & Home Care Platform
+ * Master Application Routing & Context Providers
+ * Source of Truth: docs/03-Information-Architecture.md, docs/06-Screen-Specification.md (62 Screens)
+ */
+
+import React from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import { BookingProvider } from './context/BookingContext';
+import { NotificationProvider } from './context/NotificationContext';
+
+// Layouts
+import { PublicLayout } from './components/layout/PublicLayout';
+import { ProLayout } from './components/layout/ProLayout';
+import { AdminLayout } from './components/layout/AdminLayout';
+import { OrgLayout } from './components/layout/OrgLayout';
+
+// Public & Client Pages
+import { HomePage } from './pages/public/HomePage';
+import { ServicesPage } from './pages/public/ServicesPage';
+import { SearchPage } from './pages/client/SearchPage';
+import { ProProfileViewPage } from './pages/client/ProProfileViewPage';
+import { BookingWizardPage } from './pages/client/BookingWizardPage';
+import { MyBookingsPage } from './pages/client/MyBookingsPage';
+import { BookingDetailPage } from './pages/client/BookingDetailPage';
+import { ClientSupportPage } from './pages/client/ClientSupportPage';
+import { ClientProfilePage } from './pages/client/ClientProfilePage';
+import { ClientNotificationsPage } from './pages/client/ClientNotificationsPage';
+
+// Professional Pages
+import { ProDashboardPage } from './pages/pro/ProDashboardPage';
+import { ProJobsPage } from './pages/pro/ProJobsPage';
+import { ProSchedulePage } from './pages/pro/ProSchedulePage';
+import { ProEarningsPage } from './pages/pro/ProEarningsPage';
+import { ProKYCPage } from './pages/pro/ProKYCPage';
+import { ProProfileEditPage } from './pages/pro/ProProfileEditPage';
+import { ProReviewsPage } from './pages/pro/ProReviewsPage';
+import { ProNotificationsPage } from './pages/pro/ProNotificationsPage';
+import { ProSupportPage } from './pages/pro/ProSupportPage';
+
+// Admin Operations Command Center Pages
+import { AdminDashboardPage } from './pages/admin/AdminDashboardPage';
+import { AdminProfessionalsPage } from './pages/admin/AdminProfessionalsPage';
+import { AdminKYCQueuePage } from './pages/admin/AdminKYCQueuePage';
+import { AdminClientsPage } from './pages/admin/AdminClientsPage';
+import { AdminOrganizationsPage } from './pages/admin/AdminOrganizationsPage';
+import { AdminServicesPricingPage } from './pages/admin/AdminServicesPricingPage';
+import { AdminBookingsPage } from './pages/admin/AdminBookingsPage';
+import { AdminMatchingPage } from './pages/admin/AdminMatchingPage';
+import { AdminPaymentsPage } from './pages/admin/AdminPaymentsPage';
+import { AdminPayoutsPage } from './pages/admin/AdminPayoutsPage';
+import { AdminReviewsPage } from './pages/admin/AdminReviewsPage';
+import { AdminSupportDeskPage } from './pages/admin/AdminSupportDeskPage';
+import { AdminNotificationsPage } from './pages/admin/AdminNotificationsPage';
+import { AdminReportsPage } from './pages/admin/AdminReportsPage';
+import { AdminRolesPage } from './pages/admin/AdminRolesPage';
+import { AdminSettingsPage } from './pages/admin/AdminSettingsPage';
+
+// Organization Pages
+import { OrgDashboardPage } from './pages/organization/OrgDashboardPage';
+import { OrgRosterPage } from './pages/organization/OrgRosterPage';
+import { OrgTimesheetsPage } from './pages/organization/OrgTimesheetsPage';
+
+// Utility Pages
+import { NotFoundPage } from './pages/utility/NotFoundPage';
+import { UnauthorizedPage } from './pages/utility/UnauthorizedPage';
+
+export const App: React.FC = () => {
+  return (
+    <AuthProvider>
+      <BookingProvider>
+        <NotificationProvider>
+          <BrowserRouter>
+            <Routes>
+              {/* Public & Client Portal Shell */}
+              <Route path="/" element={<PublicLayout />}>
+                <Route index element={<HomePage />} />
+                <Route path="services" element={<ServicesPage />} />
+                <Route path="search" element={<SearchPage />} />
+                <Route path="pros/:id" element={<ProProfileViewPage />} />
+                <Route path="book" element={<BookingWizardPage />} />
+                <Route path="client/search" element={<SearchPage />} />
+                <Route path="client/booking/wizard" element={<BookingWizardPage />} />
+                <Route path="client/bookings" element={<MyBookingsPage />} />
+                <Route path="client/bookings/:id" element={<BookingDetailPage />} />
+                <Route path="client/support" element={<ClientSupportPage />} />
+                <Route path="client/profile" element={<ClientProfilePage />} />
+                <Route path="client/notifications" element={<ClientNotificationsPage />} />
+              </Route>
+
+              {/* Professional Portal Shell */}
+              <Route path="/pro" element={<ProLayout />}>
+                <Route index element={<Navigate to="/pro/dashboard" replace />} />
+                <Route path="dashboard" element={<ProDashboardPage />} />
+                <Route path="jobs" element={<ProJobsPage />} />
+                <Route path="schedule" element={<ProSchedulePage />} />
+                <Route path="earnings" element={<ProEarningsPage />} />
+                <Route path="kyc" element={<ProKYCPage />} />
+                <Route path="profile" element={<ProProfileEditPage />} />
+                <Route path="reviews" element={<ProReviewsPage />} />
+                <Route path="notifications" element={<ProNotificationsPage />} />
+                <Route path="support" element={<ProSupportPage />} />
+              </Route>
+
+              {/* Admin Operations Command Center Shell */}
+              <Route path="/admin" element={<AdminLayout />}>
+                <Route index element={<Navigate to="/admin/dashboard" replace />} />
+                <Route path="dashboard" element={<AdminDashboardPage />} />
+                <Route path="professionals" element={<AdminProfessionalsPage />} />
+                <Route path="kyc" element={<AdminKYCQueuePage />} />
+                <Route path="clients" element={<AdminClientsPage />} />
+                <Route path="organizations" element={<AdminOrganizationsPage />} />
+                <Route path="services" element={<AdminServicesPricingPage />} />
+                <Route path="pricing" element={<AdminServicesPricingPage />} />
+                <Route path="bookings" element={<AdminBookingsPage />} />
+                <Route path="matching" element={<AdminMatchingPage />} />
+                <Route path="payments" element={<AdminPaymentsPage />} />
+                <Route path="payouts" element={<AdminPayoutsPage />} />
+                <Route path="reviews" element={<AdminReviewsPage />} />
+                <Route path="support" element={<AdminSupportDeskPage />} />
+                <Route path="notifications" element={<AdminNotificationsPage />} />
+                <Route path="reports" element={<AdminReportsPage />} />
+                <Route path="roles" element={<AdminRolesPage />} />
+                <Route path="settings" element={<AdminSettingsPage />} />
+              </Route>
+
+              {/* Organization Portal Shell */}
+              <Route path="/organization" element={<OrgLayout />}>
+                <Route index element={<Navigate to="/organization/dashboard" replace />} />
+                <Route path="dashboard" element={<OrgDashboardPage />} />
+                <Route path="requests" element={<OrgRosterPage />} />
+                <Route path="roster" element={<OrgRosterPage />} />
+                <Route path="timesheets" element={<OrgTimesheetsPage />} />
+              </Route>
+
+              {/* Utility Pages */}
+              <Route path="/unauthorized" element={<UnauthorizedPage />} />
+              <Route path="*" element={<NotFoundPage />} />
+            </Routes>
+          </BrowserRouter>
+        </NotificationProvider>
+      </BookingProvider>
+    </AuthProvider>
+  );
+};
+
+export default App;

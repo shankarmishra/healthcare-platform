@@ -1,0 +1,2 @@
+file 'C:/Users/xshan/Desktop/healthcare-platform/video-output/overlays/title-card-08.mp4'
+file 'C:/Users/xshan/Desktop/healthcare-platform/video-output/segments/raw-08.mp4'

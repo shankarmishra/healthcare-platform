@@ -1,0 +1,86 @@
+@import "tailwindcss";
+
+@theme {
+  --color-canvas-primary: #FFFFFF;
+  --color-canvas-secondary: #F8FAFC;
+  --color-canvas-tertiary: #F1F5F9;
+  --color-canvas-cool: #F4F8FB;
+  --color-canvas-warm: #FFF8F1;
+  --color-canvas-teal: #F0FDFA;
+  --color-canvas-blue: #EFF6FF;
+  --color-canvas-green: #F0FDF4;
+  --color-canvas-orange: #FFF7ED;
+
+  --color-text-primary: #0F172A;
+  --color-text-secondary: #334155;
+  --color-text-tertiary: #475569;
+  --color-text-muted: #64748B;
+  --color-text-placeholder: #94A3B8;
+  --color-text-disabled: #CBD5E1;
+
+  --color-border-default: #E2E8F0;
+  --color-border-light: #EDF2F7;
+  --color-border-emphasis: #CBD5E1;
+
+  --color-brand-teal: #0EA5A4;
+  --color-brand-teal-dark: #0F766E;
+  --color-brand-blue: #2563EB;
+  --color-brand-blue-dark: #1D4ED8;
+
+  --color-status-success: #16A34A;
+  --color-status-info: #2563EB;
+  --color-status-warning: #D97706;
+  --color-status-danger: #DC2626;
+  --color-status-neutral: #64748B;
+
+  --font-sans: 'Manrope', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  --radius-btn: 12px;
+  --radius-card: 16px;
+  --radius-card-lg: 20px;
+  --radius-hero: 24px;
+  --radius-badge: 9999px;
+
+  --shadow-subtle: 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-card: 0 8px 24px rgba(15, 23, 42, 0.05);
+  --shadow-floating: 0 16px 40px rgba(15, 23, 42, 0.08);
+}
+
+/* Global Reset & Base Rules */
+:root {
+  color-scheme: light;
+}
+
+body {
+  background-color: var(--color-canvas-primary);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Scrollbar for Light Theme */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #F8FAFC;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
