@@ -20,9 +20,9 @@ export const ProJobsPage: React.FC = () => {
   return (
     <div className="max-w-4xl mx-auto px-4 py-8 space-y-6 text-left">
       <div>
-        <span className="text-xs font-bold text-brand-teal uppercase tracking-widest">Professional Portal</span>
-        <h1 className="text-3xl font-extrabold text-text-primary">Incoming Job Requests</h1>
-        <p className="text-xs text-text-muted mt-1">Accept or decline visit requests within the 45-second timer.</p>
+        <span className="text-xs font-bold text-brand-teal uppercase tracking-widest">Employee Work Portal</span>
+        <h1 className="text-3xl font-extrabold text-text-primary">My Duty Assignments</h1>
+        <p className="text-xs text-text-muted mt-1">Review and acknowledge shifts assigned by Operations Desk.</p>
       </div>
 
       <div className="space-y-4">

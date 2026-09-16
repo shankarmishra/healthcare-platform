@@ -28,7 +28,7 @@ export const AdminLayout: React.FC = () => {
   const adminMenu = [
     { label: 'Dashboard', path: '/admin/dashboard', icon: <LayoutDashboard className="w-5 h-5" /> },
     { label: 'KYC Verification', path: '/admin/kyc', icon: <ShieldCheck className="w-5 h-5" />, badge: '1 New' },
-    { label: 'Professionals', path: '/admin/professionals', icon: <Users className="w-5 h-5" /> },
+    { label: 'Staff Directory', path: '/admin/professionals', icon: <Users className="w-5 h-5" /> },
     { label: 'Bookings & Ops', path: '/admin/bookings', icon: <CalendarCheck className="w-5 h-5" /> },
     { label: 'Matching & Dispatch', path: '/admin/matching', icon: <Activity className="w-5 h-5" /> },
     { label: 'Clients', path: '/admin/clients', icon: <Users className="w-5 h-5" /> },

@@ -25,8 +25,8 @@ export const ProDashboardPage: React.FC = () => {
             <h1 className="text-2xl font-extrabold text-slate-900">Welcome back, {pro.displayName}</h1>
             <ProStatusBadge status={pro.availabilityStatus} />
           </div>
-          <p className="text-xs text-slate-600 font-medium">
-            {pro.qualification} • Reg #{pro.registrationNumber} • {pro.experienceYears} Years Experience
+          <p className="text-xs text-brand-teal font-extrabold">
+            Employee Work Portal (Staff ID: {pro.employeeId || 'EMP-1042'}) • {pro.qualification} • Reg #{pro.registrationNumber}
           </p>
         </div>
 

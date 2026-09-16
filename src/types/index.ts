@@ -152,6 +152,11 @@ export interface ProfessionalProfile {
   documents: ProfessionalDocument[];
   availability: AvailabilitySlot[];
   badge?: string; // e.g. "Top Rated", "Verified Expert", "Hospital Experienced"
+  employeeId?: string; // e.g. "EMP-8041"
+  employmentType?: 'full_time' | 'part_time' | 'contract';
+  assignedShiftCount?: number;
+  leaveStatus?: 'active' | 'on_leave' | 'sick_leave';
+  leaves?: Array<{ id: string; startDate: string; endDate: string; type: string; reason: string; status: 'pending' | 'approved' | 'rejected' }>;
   createdAt: string;
   updatedAt: string;
 }
@@ -170,6 +175,8 @@ export interface Organization {
   address: Address;
   activeStaffCount: number;
   openStaffingRequestsCount: number;
+  contractType?: 'monthly_retainer' | 'per_shift' | 'volume_discount';
+  billingCycle?: 'monthly' | 'biweekly' | 'weekly';
   createdAt: string;
 }
 
@@ -237,6 +244,20 @@ export interface ServicePricing {
   platformCommissionPercent: number; // e.g. 15%
 }
 
+export interface ServiceShiftOption {
+  id: string;
+  label: string;
+  durationLabel: string;
+  hours: number;
+  priceMultiplier: number;
+}
+
+export interface ServiceCareTaskOption {
+  id: string;
+  name: string;
+  category: string;
+}
+
 export interface Service {
   id: string;
   category: ServiceCategory;
@@ -248,6 +269,10 @@ export interface Service {
   estimatedDuration: string; // e.g. "45 - 60 mins", "4 Hours", "12 Hours"
   requiredQualifications: string[];
   keyInclusions: string[];
+  whoItsFor?: string;
+  exclusions?: string[];
+  shiftOptions?: ServiceShiftOption[];
+  careTasksOptions?: ServiceCareTaskOption[];
   preparationInstructions?: string[];
   isActive: boolean;
 }
@@ -309,6 +334,22 @@ export interface Booking {
   scheduledDate: string; // YYYY-MM-DD
   scheduledTimeSlot: string; // e.g. "09:00 AM - 01:00 PM"
   durationHours?: number;
+  careTasks?: string[];
+  shiftType?: string;
+  dateRange?: {
+    startDate: string;
+    endDate: string;
+    isRecurring?: boolean;
+    recurringDays?: string[];
+  };
+  staffPreferences?: {
+    role?: string;
+    gender?: 'no_preference' | 'female' | 'male';
+    minExperienceYears?: number;
+    languages?: string[];
+  };
+  assignedStaffId?: string;
+  assignedStaffName?: string;
   status: BookingStatus;
   statusHistory: BookingStatusHistory[];
   priceBreakdown: PriceBreakdown;

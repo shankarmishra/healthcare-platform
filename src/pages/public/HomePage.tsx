@@ -41,7 +41,7 @@ export const HomePage: React.FC = () => {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    navigate(`/search?location=${encodeURIComponent(searchLocation)}&category=${selectedCategory}`);
+    navigate(`/client/booking/wizard?category=${selectedCategory}`);
   };
 
   const careJourneySteps = [
@@ -153,7 +153,7 @@ export const HomePage: React.FC = () => {
                 </div>
 
                 <Button type="submit" size="lg" className="w-full sm:w-auto bg-teal-600 hover:bg-teal-700 text-white font-bold px-6 py-3 rounded-xl cursor-pointer shrink-0">
-                  Find Care
+                  Book Service
                 </Button>
               </form>
 

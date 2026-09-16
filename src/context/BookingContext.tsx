@@ -34,6 +34,20 @@ interface BookingWizardDraft {
   durationHours?: number;
   selectedProfessional?: ProfessionalProfile;
   specialInstructions?: string;
+  careTasks?: string[];
+  shiftType?: string;
+  dateRange?: {
+    startDate: string;
+    endDate: string;
+    isRecurring?: boolean;
+    recurringDays?: string[];
+  };
+  staffPreferences?: {
+    role?: string;
+    gender?: 'no_preference' | 'female' | 'male';
+    minExperienceYears?: number;
+    languages?: string[];
+  };
 }
 
 interface BookingContextType {
@@ -101,39 +115,43 @@ export const BookingProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   const createBooking = (draft: BookingWizardDraft): Booking => {
     const service = draft.service || services[0];
-    const duration = draft.durationHours || 1;
+    const duration = draft.durationHours || 4;
     const price = calculatePrice(service, duration);
     const defaultPatient = MOCK_CLIENTS[0].patients[0];
     const defaultAddress = MOCK_CLIENTS[0].addresses[0];
+
+    // If pre-assigned pro in draft or default to unassigned for Operations Dispatch
+    const assignedPro = draft.selectedProfessional;
 
     const newBooking: Booking = {
       id: `bkg-${Date.now()}`,
       bookingCode: `BKG-2026-${Math.floor(1000 + Math.random() * 9000)}`,
       clientId: 'clt-001',
       clientName: 'Rahul Mehta',
-      clientPhone: '+91-XXXXX-C0001',
+      clientPhone: '+91-98450-99881',
       patientProfile: draft.patient || defaultPatient,
       serviceId: service.id,
       serviceName: service.name,
       serviceCategory: service.category,
-      professionalId: draft.selectedProfessional?.id || 'pro-001',
-      professionalName: draft.selectedProfessional?.displayName || 'Dr. Anjali Sharma, BPT',
-      professionalPhoto: draft.selectedProfessional?.profilePhoto || 'https://images.unsplash.com/photo-1594824813566-88855ce78905?w=300&q=80',
-      professionalPhone: '+91-XXXXX-X0001',
+      professionalId: assignedPro?.id,
+      professionalName: assignedPro?.displayName,
+      professionalPhoto: assignedPro?.profilePhoto,
+      professionalPhone: assignedPro ? '+91-98765-43210' : undefined,
       address: draft.address || defaultAddress,
-      scheduledDate: draft.scheduledDate || '2026-03-18',
-      scheduledTimeSlot: draft.scheduledTimeSlot || '10:00 AM - 11:00 AM',
+      scheduledDate: draft.scheduledDate || draft.dateRange?.startDate || '2026-03-20',
+      scheduledTimeSlot: draft.scheduledTimeSlot || draft.shiftType || 'Day Shift (08:00 AM - 08:00 PM)',
       durationHours: duration,
-      status: 'ACCEPTED',
+      careTasks: draft.careTasks || ['Medication management', 'Vital monitoring', 'Hygiene support'],
+      shiftType: draft.shiftType || 'Day Shift (12 hrs)',
+      dateRange: draft.dateRange,
+      staffPreferences: draft.staffPreferences,
+      status: assignedPro ? 'ASSIGNED' : 'REQUESTED',
       statusHistory: [
         { status: 'DRAFT', timestamp: new Date().toISOString(), actorId: 'clt-001', actorRole: 'client' },
-        { status: 'REQUESTED', timestamp: new Date().toISOString(), actorId: 'clt-001', actorRole: 'client' },
-        { status: 'MATCHING', timestamp: new Date().toISOString(), actorId: 'sys', actorRole: 'super_admin' },
-        { status: 'ASSIGNED', timestamp: new Date().toISOString(), actorId: 'sys', actorRole: 'super_admin' },
-        { status: 'ACCEPTED', timestamp: new Date().toISOString(), actorId: 'pro-001', actorRole: 'professional' }
+        { status: 'REQUESTED', timestamp: new Date().toISOString(), actorId: 'clt-001', actorRole: 'client', note: 'Requirement submitted by client for in-house staff allocation.' }
       ],
       priceBreakdown: price,
-      paymentStatus: 'COMPLETED',
+      paymentStatus: 'PENDING',
       specialInstructions: draft.specialInstructions || '',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()

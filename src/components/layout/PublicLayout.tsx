@@ -6,7 +6,6 @@ import { DemoRoleSwitcher } from '../common/DemoRoleSwitcher';
 import { Button } from '../common/Button';
 import {
   HeartPulse,
-  Search,
   Calendar,
   Bell,
   ShieldCheck,
@@ -22,10 +21,12 @@ export const PublicLayout: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 
   const navLinks = [
-    { label: 'Find Care', path: '/client/search' },
+    { label: 'Home', path: '/' },
     { label: 'Services', path: '/services' },
     { label: 'How It Works', path: '/#how-it-works' },
-    { label: 'For Hospitals', path: '/organization/dashboard' }
+    { label: 'For Organizations', path: '/organizations' },
+    { label: 'About', path: '/#about' },
+    { label: 'Support', path: '/client/support' }
   ];
 
   return (
@@ -55,7 +56,7 @@ export const PublicLayout: React.FC = () => {
           <nav className="hidden md:flex items-center gap-6">
             {navLinks.map((link) => (
               <Link
-                key={link.path}
+                key={link.label}
                 to={link.path}
                 className={`text-sm font-semibold transition-colors hover:text-brand-teal ${
                   location.pathname === link.path ? 'text-brand-teal' : 'text-text-secondary'
@@ -81,9 +82,9 @@ export const PublicLayout: React.FC = () => {
                     My Bookings
                   </Button>
                 </Link>
-                <Link to="/client/search">
-                  <Button variant="primary" size="sm" leftIcon={<Search className="w-4 h-4" />}>
-                    Book Care
+                <Link to="/client/booking/wizard">
+                  <Button variant="primary" size="sm" leftIcon={<Calendar className="w-4 h-4" />}>
+                    Book Service
                   </Button>
                 </Link>
               </>
@@ -121,9 +122,9 @@ export const PublicLayout: React.FC = () => {
               </Link>
             ))}
             <div className="pt-3 border-t border-border-light flex flex-col gap-2">
-              <Link to="/client/search" onClick={() => setMobileMenuOpen(false)}>
+              <Link to="/client/booking/wizard" onClick={() => setMobileMenuOpen(false)}>
                 <Button variant="primary" className="w-full">
-                  Book Care Now
+                  Book Service Now
                 </Button>
               </Link>
               <Link to="/client/bookings" onClick={() => setMobileMenuOpen(false)}>

@@ -26,10 +26,10 @@ export const ProLayout: React.FC = () => {
 
   const navItems = [
     { label: 'Dashboard', path: '/pro/dashboard', icon: <LayoutDashboard className="w-5 h-5" /> },
-    { label: 'Job Requests', path: '/pro/jobs', icon: <Briefcase className="w-5 h-5" />, badge: 2 },
-    { label: 'Schedule', path: '/pro/schedule', icon: <Calendar className="w-5 h-5" /> },
-    { label: 'Earnings', path: '/pro/earnings', icon: <IndianRupee className="w-5 h-5" /> },
-    { label: 'My Profile', path: '/pro/profile', icon: <User className="w-5 h-5" /> }
+    { label: 'My Assignments', path: '/pro/jobs', icon: <Briefcase className="w-5 h-5" />, badge: 2 },
+    { label: 'Schedule & Attendance', path: '/pro/schedule', icon: <Calendar className="w-5 h-5" /> },
+    { label: 'Payroll & Earnings', path: '/pro/earnings', icon: <IndianRupee className="w-5 h-5" /> },
+    { label: 'Employee Profile', path: '/pro/profile', icon: <User className="w-5 h-5" /> }
   ];
 
   return (
@@ -54,7 +54,7 @@ export const ProLayout: React.FC = () => {
                   </span>
                 )}
               </span>
-              <span className="text-xs text-text-muted">{proProfile.qualification}</span>
+              <span className="text-xs text-brand-teal font-semibold">Employee Portal (Staff ID: {proProfile.employeeId || 'EMP-1042'})</span>
             </div>
           </div>
 
