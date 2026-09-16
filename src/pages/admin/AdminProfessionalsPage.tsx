@@ -1,19 +1,21 @@
 import React, { useState } from 'react';
 import { 
-  Search, Filter, ShieldCheck, Star, Eye, X, Stethoscope
+  Search, Filter, ShieldCheck, Star, Eye, X, Stethoscope, UserPlus
 } from 'lucide-react';
 import { useBookings } from '../../context/BookingContext';
 import { Button } from '../../components/common/Button';
 import { KYCStatusBadge } from '../../components/common/Badge';
+import { AdminCreateStaffModal } from '../../components/domain/AdminCreateStaffModal';
 import type { ProfessionalProfile, ProfessionalDocument } from '../../types';
 import { clsx } from 'clsx';
 
 export const AdminProfessionalsPage: React.FC = () => {
-  const { professionals } = useBookings();
+  const { professionals, addProfessional } = useBookings();
   const [pros, setPros] = useState<ProfessionalProfile[]>(professionals);
   const [search, setSearch] = useState('');
   const [employmentFilter, setEmploymentFilter] = useState<string>('all');
   const [selectedPro, setSelectedPro] = useState<ProfessionalProfile | null>(null);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [drawerTab, setDrawerTab] = useState<'overview' | 'availability' | 'assignments' | 'credentials' | 'documents' | 'leave' | 'attendance' | 'performance'>('overview');
 
   const filtered = pros.filter((p: ProfessionalProfile) => {
@@ -59,10 +61,17 @@ export const AdminProfessionalsPage: React.FC = () => {
             Manage full-time & contract healthcare staff, employee IDs, shift rosters, and leave approvals.
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex items-center gap-2">
           <span className="text-xs font-bold px-3 py-1.5 bg-canvas-teal text-brand-teal rounded-xl border border-teal-200 flex items-center gap-1">
             <ShieldCheck className="w-4 h-4 text-brand-teal" /> {pros.length} Active Internal Employees
           </span>
+          <Button
+            onClick={() => setIsCreateModalOpen(true)}
+            leftIcon={<UserPlus className="w-4 h-4 text-white" />}
+            className="bg-brand-teal hover:bg-brand-teal-hover text-white font-extrabold text-xs px-4 py-2 rounded-xl cursor-pointer"
+          >
+            Provision New Staff
+          </Button>
         </div>
       </div>
 
@@ -300,6 +309,16 @@ export const AdminProfessionalsPage: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Admin Provision Staff Modal */}
+      <AdminCreateStaffModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        onSave={(newStaff) => {
+          addProfessional(newStaff);
+          setPros([newStaff, ...pros]);
+        }}
+      />
     </div>
   );
 };

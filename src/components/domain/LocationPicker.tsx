@@ -29,6 +29,13 @@ export const LocationPicker: React.FC<LocationPickerProps> = ({ value, onChange,
   const [detectionStatus, setDetectionStatus] = useState<'idle' | 'success' | 'denied' | 'error'>('idle');
   const [confirmed, setConfirmed] = useState(false);
 
+  // Check if city/pincode is within supported NCR service areas (Delhi, Noida, Gurugram, Faridabad)
+  const cityLower = (value.city || '').toLowerCase();
+  const pincodeTrim = (value.pincode || '').trim();
+  const isNCRCity = cityLower.includes('delhi') || cityLower.includes('noida') || cityLower.includes('gurugram') || cityLower.includes('gurgaon') || cityLower.includes('faridabad');
+  const isNCRPin = pincodeTrim.startsWith('110') || pincodeTrim.startsWith('2013') || pincodeTrim.startsWith('122') || pincodeTrim.startsWith('121');
+  const isSupportedLocation = isNCRCity || isNCRPin || (!value.city && !value.pincode);
+
   const handleGeolocate = () => {
     setDetecting(true);
     setDetectionStatus('idle');
@@ -41,8 +48,8 @@ export const LocationPicker: React.FC<LocationPickerProps> = ({ value, onChange,
 
     navigator.geolocation.getCurrentPosition(
       (pos) => {
-        const lat = pos.coords.latitude || 12.9716;
-        const lng = pos.coords.longitude || 77.5946;
+        const lat = pos.coords.latitude || 28.6139;
+        const lng = pos.coords.longitude || 77.2090;
 
         setTimeout(() => {
           setDetecting(false);
@@ -51,12 +58,12 @@ export const LocationPicker: React.FC<LocationPickerProps> = ({ value, onChange,
             ...value,
             latitude: lat,
             longitude: lng,
-            line1: value.line1 || 'Flat 402, Sterling Residency',
-            line2: value.line2 || '100 Feet Road, Indiranagar',
-            landmark: value.landmark || 'Near Toit Pub',
-            city: 'Bangalore',
-            state: 'Karnataka',
-            pincode: '560038',
+            line1: value.line1 || 'A-124, Defence Colony',
+            line2: value.line2 || 'Near Lajpat Nagar Metro Station',
+            landmark: value.landmark || 'Opposite Flyover Pillar 14',
+            city: 'New Delhi',
+            state: 'Delhi NCR',
+            pincode: '110024',
             isVerified: true
           });
         }, 1200);
@@ -123,6 +130,19 @@ export const LocationPicker: React.FC<LocationPickerProps> = ({ value, onChange,
           <div className="p-3 bg-rose-50 rounded-xl border border-rose-200 text-xs text-rose-800 flex items-center gap-2 font-medium">
             <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
             <span>Unable to detect GPS signal. Enter address manually below.</span>
+          </div>
+        )}
+
+        {/* Unsupported Geographical Service Area Warning Banner */}
+        {!isSupportedLocation && (
+          <div className="p-3.5 bg-rose-50/90 rounded-xl border border-rose-300 text-xs text-rose-900 flex items-start gap-2.5 font-medium shadow-2xs">
+            <AlertCircle className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" />
+            <div>
+              <span className="font-extrabold text-rose-900 block">Location Outside Service Boundary</span>
+              <span>
+                We currently do not operate in <strong className="font-extrabold">{value.city || 'this location'}</strong>. Our in-house healthcare workforce is strictly active within <strong className="underline">Delhi, Noida, Gurugram, and Faridabad (NCR)</strong>.
+              </span>
+            </div>
           </div>
         )}
       </div>

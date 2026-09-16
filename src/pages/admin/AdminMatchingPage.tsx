@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { Cpu, MapPin, CheckCircle2, Calendar } from 'lucide-react';
+import { Cpu, MapPin, CheckCircle2, Calendar, ShieldAlert } from 'lucide-react';
 import { useBookings } from '../../context/BookingContext';
 import { Button } from '../../components/common/Button';
 import { BookingStatusBadge } from '../../components/common/Badge';
+import { AdminOverrideModal } from '../../components/domain/AdminOverrideModal';
+import { checkStaffConflict } from '../../utils/conflictEngine';
 import type { Booking, ProfessionalProfile } from '../../types';
 
 export const AdminMatchingPage: React.FC = () => {
@@ -17,18 +19,35 @@ export const AdminMatchingPage: React.FC = () => {
     unassignedBookings[0]?.id || bookings[0]?.id
   );
   const [successMsg, setSuccessMsg] = useState('');
+  const [overrideModal, setOverrideModal] = useState<{
+    isOpen: boolean;
+    pro: ProfessionalProfile | null;
+    conflictReason: string;
+  }>({
+    isOpen: false,
+    pro: null,
+    conflictReason: ''
+  });
 
   const selectedBooking = bookings.find((b) => b.id === selectedBookingId) || unassignedBookings[0] || bookings[0];
   const availablePros: ProfessionalProfile[] = professionals.filter((p: ProfessionalProfile) => p.isVerified);
 
-  const handleManualDispatch = (proId: string) => {
+  const handleManualDispatch = (proId: string, isOverride: boolean = false, overrideRationale?: string) => {
     const pro = professionals.find((p) => p.id === proId);
     if (!selectedBooking || !pro) return;
 
     assignProfessional(selectedBooking.id, pro.id);
-    updateBookingStatus(selectedBooking.id, 'ASSIGNED', `Assigned internal staff ${pro.displayName} (${pro.employeeId || 'EMP-1092'}) by Operations Desk.`);
+    const note = isOverride
+      ? `[SUPER ADMIN OVERRIDE] Force assigned ${pro.displayName} (${pro.employeeId || 'EMP-Staff'}). Rationale: ${overrideRationale}`
+      : `Assigned internal staff ${pro.displayName} (${pro.employeeId || 'EMP-1092'}) by Operations Desk.`;
+
+    updateBookingStatus(selectedBooking.id, 'ASSIGNED', note);
     
-    setSuccessMsg(`Booking ${selectedBooking.bookingCode} assigned to ${pro.displayName} (${pro.employeeId || 'EMP-1092'}). Status updated to ASSIGNED.`);
+    setSuccessMsg(
+      `Booking ${selectedBooking.bookingCode} assigned to ${pro.displayName} (${pro.employeeId || 'EMP-1092'}). ${
+        isOverride ? '⚡ Super Admin Override Recorded.' : ''
+      }`
+    );
     setTimeout(() => {
       setSuccessMsg('');
     }, 4000);
@@ -164,7 +183,13 @@ export const AdminMatchingPage: React.FC = () => {
                   {availablePros.map((pro: ProfessionalProfile, index: number) => {
                     const matchScore = 98 - index * 4;
                     const isAlreadyAssigned = selectedBooking.professionalId === pro.id;
-                    const hasConflict = index === 2; // Simulate shift conflict for 3rd pro
+                    const conflictCheck = checkStaffConflict(
+                      pro,
+                      selectedBooking.scheduledDate,
+                      selectedBooking.scheduledTimeSlot,
+                      bookings
+                    );
+                    const hasConflict = conflictCheck.hasConflict;
 
                     return (
                       <div
@@ -196,7 +221,7 @@ export const AdminMatchingPage: React.FC = () => {
                               )}
                               {hasConflict && (
                                 <span className="text-[10px] font-extrabold text-amber-900 bg-amber-100 px-2 py-0.5 rounded border border-amber-300">
-                                  ⚠️ 2h Shift Conflict
+                                  ⚠️ Shift Conflict / On Leave
                                 </span>
                               )}
                             </div>
@@ -205,7 +230,7 @@ export const AdminMatchingPage: React.FC = () => {
                             </p>
                             {hasConflict && (
                               <p className="text-[11px] text-amber-800 font-bold mt-1">
-                                Conflict: Already assigned to BKG-2026-9941 ({selectedBooking.scheduledDate} 08:00 AM - 02:00 PM).
+                                Conflict: {conflictCheck.reason}
                               </p>
                             )}
                           </div>
@@ -216,9 +241,20 @@ export const AdminMatchingPage: React.FC = () => {
                             <CheckCircle2 className="w-4 h-4 text-emerald-600" /> Currently Assigned
                           </span>
                         ) : hasConflict ? (
-                          <span className="text-xs font-bold text-amber-800 bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-300 shrink-0">
-                            Conflict Flagged
-                          </span>
+                          <Button
+                            type="button"
+                            onClick={() =>
+                              setOverrideModal({
+                                isOpen: true,
+                                pro,
+                                conflictReason: conflictCheck.reason || 'Shift overlap detected'
+                              })
+                            }
+                            leftIcon={<ShieldAlert className="w-4 h-4 text-amber-100" />}
+                            className="bg-amber-600 hover:bg-amber-700 text-white font-extrabold text-xs px-3 py-2 rounded-xl shrink-0 cursor-pointer shadow-2xs"
+                          >
+                            Super Admin Override
+                          </Button>
                         ) : (
                           <Button
                             onClick={() => handleManualDispatch(pro.id)}
@@ -240,6 +276,20 @@ export const AdminMatchingPage: React.FC = () => {
           )}
         </div>
       </div>
+
+      {/* Super Admin Hard Conflict Override Modal */}
+      <AdminOverrideModal
+        isOpen={overrideModal.isOpen}
+        onClose={() => setOverrideModal({ isOpen: false, pro: null, conflictReason: '' })}
+        booking={selectedBooking}
+        professional={overrideModal.pro}
+        conflictReason={overrideModal.conflictReason}
+        onConfirmOverride={(rationale) => {
+          if (overrideModal.pro) {
+            handleManualDispatch(overrideModal.pro.id, true, rationale);
+          }
+        }}
+      />
     </div>
   );
 };

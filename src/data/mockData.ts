@@ -19,7 +19,8 @@ import type {
   Review,
   Notification,
   AuditLog,
-  PlatformSettings
+  PlatformSettings,
+  ServiceArea
 } from '../types';
 
 // ==========================================
@@ -1420,3 +1421,47 @@ export const MOCK_PLATFORM_SETTINGS: PlatformSettings = {
   supportPhone: '+91-80-4920-8800',
   demoMode: true
 };
+
+export const MOCK_SERVICE_AREAS: ServiceArea[] = [
+  {
+    id: 'area-delhi',
+    name: 'Delhi (NCR Central & South)',
+    city: 'Delhi',
+    state: 'Delhi NCR',
+    supportedPincodes: ['110001', '110002', '110003', '110016', '110017', '110019', '110020', '110024', '110048', '110065', '110070', '110075', '110091'],
+    isActive: true,
+    hubLocation: { latitude: 28.6139, longitude: 77.209, addressName: 'Connaught Place Operations Hub' },
+    coveredRadiusKm: 25
+  },
+  {
+    id: 'area-noida',
+    name: 'Noida & Greater Noida',
+    city: 'Noida',
+    state: 'Uttar Pradesh',
+    supportedPincodes: ['201301', '201303', '201304', '201307', '201309', '201310'],
+    isActive: true,
+    hubLocation: { latitude: 28.5355, longitude: 77.391, addressName: 'Noida Sector 62 Operations Hub' },
+    coveredRadiusKm: 20
+  },
+  {
+    id: 'area-gurugram',
+    name: 'Gurugram / Gurgaon',
+    city: 'Gurugram',
+    state: 'Haryana',
+    supportedPincodes: ['122001', '122002', '122003', '122011', '122018', '122051'],
+    isActive: true,
+    hubLocation: { latitude: 28.4595, longitude: 77.0266, addressName: 'Cyber City Operations Hub' },
+    coveredRadiusKm: 22
+  },
+  {
+    id: 'area-faridabad',
+    name: 'Faridabad',
+    city: 'Faridabad',
+    state: 'Haryana',
+    supportedPincodes: ['121001', '121002', '121003', '121004', '121006', '121007'],
+    isActive: true,
+    hubLocation: { latitude: 28.4089, longitude: 77.3178, addressName: 'Faridabad Sector 15 Operations Hub' },
+    coveredRadiusKm: 18
+  }
+];
+

@@ -573,3 +573,19 @@ export interface PlatformSettings {
   supportPhone: string;
   demoMode: boolean;
 }
+
+// ==========================================
+// 11. SERVICE AREA MASTER (NCR ENFORCEMENT)
+// ==========================================
+
+export interface ServiceArea {
+  id: string;
+  name: string;
+  city: string;
+  state: string;
+  supportedPincodes: string[];
+  isActive: boolean;
+  hubLocation: GeoLocation;
+  coveredRadiusKm: number;
+}
+

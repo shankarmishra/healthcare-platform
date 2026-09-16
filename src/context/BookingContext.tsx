@@ -69,6 +69,9 @@ interface BookingContextType {
   // KYC Management
   updateKYCStatus: (professionalId: string, newStatus: KYCStatus, rejectionReason?: string) => void;
 
+  // Staff Management (Admin Provisioning)
+  addProfessional: (newPro: ProfessionalProfile) => void;
+
   // Filters & Lookups
   getBookingById: (bookingId: string) => Booking | undefined;
   getServiceById: (serviceId: string) => Service | undefined;
@@ -228,6 +231,10 @@ export const BookingProvider: React.FC<{ children: React.ReactNode }> = ({ child
     );
   };
 
+  const addProfessional = (newPro: ProfessionalProfile) => {
+    setProfessionals((prev) => [newPro, ...prev]);
+  };
+
   const getBookingById = (id: string) => bookings.find((b) => b.id === id);
   const getServiceById = (id: string) => services.find((s) => s.id === id);
   const getProfessionalById = (id: string) => professionals.find((p) => p.id === id);
@@ -251,6 +258,7 @@ export const BookingProvider: React.FC<{ children: React.ReactNode }> = ({ child
         assignProfessional,
         cancelBooking,
         updateKYCStatus,
+        addProfessional,
         getBookingById,
         getServiceById,
         getProfessionalById,

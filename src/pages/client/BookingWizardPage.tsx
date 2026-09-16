@@ -57,15 +57,15 @@ export const BookingWizardPage: React.FC = () => {
   // Step 4: Location & Access (Integrated LocationPicker)
   const [locationData, setLocationData] = useState<LocationData>({
     addressType: 'Home Apartment',
-    line1: 'Flat 402, Sterling Residency',
-    line2: '100 Feet Road, Indiranagar',
-    landmark: 'Opposite Toit Pub, Gate 2',
-    city: 'Bangalore',
-    state: 'Karnataka',
-    pincode: '560038',
+    line1: 'A-124, Defence Colony',
+    line2: 'Near Lajpat Nagar Metro Station',
+    landmark: 'Opposite Flyover Pillar 14',
+    city: 'New Delhi',
+    state: 'Delhi NCR',
+    pincode: '110024',
     accessNotes: 'Elevator active 24/7. Visitor parking inside gate.',
-    latitude: 12.9716,
-    longitude: 77.5946,
+    latitude: 28.6139,
+    longitude: 77.209,
     isVerified: true
   });
 
