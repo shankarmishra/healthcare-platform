@@ -15,6 +15,7 @@ import { PublicLayout } from './components/layout/PublicLayout';
 import { ProLayout } from './components/layout/ProLayout';
 import { AdminLayout } from './components/layout/AdminLayout';
 import { OrgLayout } from './components/layout/OrgLayout';
+import { StaffLayout } from './components/layout/StaffLayout';
 
 // Public & Client Pages
 import { HomePage } from './pages/public/HomePage';
@@ -48,6 +49,9 @@ import { ProSupportPage } from './pages/pro/ProSupportPage';
 // Admin Operations Command Center Pages
 import { AdminDashboardPage } from './pages/admin/AdminDashboardPage';
 import { AdminProfessionalsPage } from './pages/admin/AdminProfessionalsPage';
+import { AdminStaffPage } from './pages/admin/AdminStaffPage';
+import { AdminAddStaffWizardPage } from './pages/admin/AdminAddStaffWizardPage';
+import { AdminStaffDetailPage } from './pages/admin/AdminStaffDetailPage';
 import { AdminKYCQueuePage } from './pages/admin/AdminKYCQueuePage';
 import { AdminClientsPage } from './pages/admin/AdminClientsPage';
 import { AdminOrganizationsPage } from './pages/admin/AdminOrganizationsPage';
@@ -62,6 +66,16 @@ import { AdminNotificationsPage } from './pages/admin/AdminNotificationsPage';
 import { AdminReportsPage } from './pages/admin/AdminReportsPage';
 import { AdminRolesPage } from './pages/admin/AdminRolesPage';
 import { AdminSettingsPage } from './pages/admin/AdminSettingsPage';
+
+// Staff Duty Portal Pages
+import { StaffLoginPage } from './pages/staff/StaffLoginPage';
+import { StaffFirstLoginPage } from './pages/staff/StaffFirstLoginPage';
+import { StaffDashboardPage } from './pages/staff/StaffDashboardPage';
+import { StaffDutyDetailPage } from './pages/staff/StaffDutyDetailPage';
+import { StaffSchedulePage } from './pages/staff/StaffSchedulePage';
+import { StaffAvailabilityPage } from './pages/staff/StaffAvailabilityPage';
+import { StaffLeavePage } from './pages/staff/StaffLeavePage';
+import { StaffSecurityPage } from './pages/staff/StaffSecurityPage';
 
 // Organization Pages
 import { OrgDashboardPage } from './pages/organization/OrgDashboardPage';
@@ -101,6 +115,19 @@ export const App: React.FC = () => {
                 <Route path="client/addresses" element={<SavedAddressesPage />} />
               </Route>
 
+              {/* Staff Employee Duty Portal Shell */}
+              <Route path="/staff/login" element={<StaffLoginPage />} />
+              <Route path="/staff/first-login" element={<StaffFirstLoginPage />} />
+              <Route path="/staff" element={<StaffLayout />}>
+                <Route index element={<Navigate to="/staff/dashboard" replace />} />
+                <Route path="dashboard" element={<StaffDashboardPage />} />
+                <Route path="duties" element={<StaffSchedulePage />} />
+                <Route path="duties/:dutyId" element={<StaffDutyDetailPage />} />
+                <Route path="availability" element={<StaffAvailabilityPage />} />
+                <Route path="leave" element={<StaffLeavePage />} />
+                <Route path="security" element={<StaffSecurityPage />} />
+              </Route>
+
               {/* Professional Portal Shell */}
               <Route path="/pro" element={<ProLayout />}>
                 <Route index element={<Navigate to="/pro/dashboard" replace />} />
@@ -119,6 +146,9 @@ export const App: React.FC = () => {
               <Route path="/admin" element={<AdminLayout />}>
                 <Route index element={<Navigate to="/admin/dashboard" replace />} />
                 <Route path="dashboard" element={<AdminDashboardPage />} />
+                <Route path="staff" element={<AdminStaffPage />} />
+                <Route path="staff/new" element={<AdminAddStaffWizardPage />} />
+                <Route path="staff/:staffId" element={<AdminStaffDetailPage />} />
                 <Route path="professionals" element={<AdminProfessionalsPage />} />
                 <Route path="kyc" element={<AdminKYCQueuePage />} />
                 <Route path="clients" element={<AdminClientsPage />} />

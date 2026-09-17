@@ -8,7 +8,7 @@
 // 1. ROLE & USER ENUMS AND INTERFACES
 // ==========================================
 
-export type UserRole = 'client' | 'professional' | 'admin' | 'organization' | 'super_admin';
+export type UserRole = 'client' | 'professional' | 'admin' | 'organization' | 'super_admin' | 'staff';
 
 export interface User {
   id: string;
@@ -597,4 +597,8 @@ export interface ServiceArea {
   hubLocation: GeoLocation;
   coveredRadiusKm: number;
 }
+
+// Re-export Staff Operations Data Models
+export * from './staff';
+
 

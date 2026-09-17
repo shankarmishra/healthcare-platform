@@ -89,8 +89,22 @@ const DEMO_USERS: Record<UserRole, User> = {
     isActive: true,
     isEmailVerified: true,
     isPhoneVerified: true,
-    createdAt: '2024-01-01T00:00:00Z',
-    updatedAt: '2026-03-15T10:00:00Z'
+    createdAt: '2024-01-01T10:00:00Z',
+    updatedAt: '2026-03-01T10:00:00Z'
+  },
+  staff: {
+    id: 'usr-stf-001',
+    email: 'anita.nursing@pulsen-care.com',
+    phone: '+91-98112-34567',
+    firstName: 'Anita',
+    lastName: 'Sharma',
+    role: 'staff',
+    avatar: 'https://images.unsplash.com/photo-1594824813566-88855ce78905?w=150&q=80',
+    isActive: true,
+    isEmailVerified: true,
+    isPhoneVerified: true,
+    createdAt: '2024-01-10T09:00:00Z',
+    updatedAt: '2026-09-17T10:00:00Z'
   }
 };
 
