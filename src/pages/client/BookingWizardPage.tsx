@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useBookings } from '../../context/BookingContext';
+import { useAuth } from '../../context/AuthContext';
 import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
+import { Modal } from '../../components/common/Modal';
 import { HealthcareTexture } from '../../components/common/HealthcareTexture';
 import { LocationPicker } from '../../components/domain/LocationPicker';
 import type { LocationData } from '../../components/domain/LocationPicker';
@@ -15,15 +17,19 @@ import {
   ShieldCheck,
   Moon,
   Sparkles,
-  Loader2
+  Loader2,
+  Check
 } from 'lucide-react';
 import { clsx } from 'clsx';
 import type { Service, PatientProfile } from '../../types';
+
+const DRAFT_STORAGE_KEY = 'careconnect_b2c_booking_draft_v3';
 
 export const BookingWizardPage: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { services, createBooking } = useBookings();
+  const { currentUser, switchRole } = useAuth();
 
   const initialServiceId = searchParams.get('serviceId') || services[0]?.id;
 
@@ -32,18 +38,21 @@ export const BookingWizardPage: React.FC = () => {
     services.find((s) => s.id === initialServiceId) || services[0]
   );
 
-  // Step 2: Care Requirements & Tasks
+  // Step 2: Contextual Care Requirements & Tasks
   const [careCategory, setCareCategory] = useState<string>('post_surgery');
   const [selectedTasks, setSelectedTasks] = useState<string[]>([
     'Vital signs monitoring & logging',
     'Medication timely administration',
     'Hygiene & bathing support'
   ]);
+  const [physioAffectedArea, setPhysioAffectedArea] = useState<string>('Knee Joint (Post-TKR)');
+  const [physioMobilityStatus, setPhysioMobilityStatus] = useState<string>('Walker Assisted');
+  const [doctorComplaint, setDoctorComplaint] = useState<string>('Post-Hospitalization Follow-up & Vitals Assessment');
 
-  // Step 3: Patient Profile (Integrated SavedPatientSelector)
+  // Step 3: Patient Profile
   const [patient, setPatient] = useState<PatientProfile>({
     id: 'pat-001',
-    clientId: 'clt-001',
+    clientId: currentUser?.id || 'clt-001',
     firstName: 'Kamla',
     lastName: 'Mehta',
     relationship: 'parent',
@@ -51,10 +60,11 @@ export const BookingWizardPage: React.FC = () => {
     gender: 'female',
     medicalNotes: 'Post-op total knee replacement (TKR), Type-2 Diabetes',
     mobilityStatus: 'assisted',
+    allergies: ['Penicillin'],
     createdAt: new Date().toISOString()
   });
 
-  // Step 4: Location & Access (Integrated LocationPicker)
+  // Step 4: Location & NCR Validation
   const [locationData, setLocationData] = useState<LocationData>({
     addressType: 'Home Apartment',
     line1: 'A-124, Defence Colony',
@@ -65,17 +75,17 @@ export const BookingWizardPage: React.FC = () => {
     pincode: '110024',
     accessNotes: 'Elevator active 24/7. Visitor parking inside gate.',
     latitude: 28.6139,
-    longitude: 77.209,
+    longitude: 77.2090,
     isVerified: true
   });
 
-  // Step 5: Date & Recurrence
+  // Step 5: Schedule & Recurrence
   const [scheduleType, setScheduleType] = useState<'single' | 'range' | 'recurring'>('range');
   const [startDate, setStartDate] = useState('2026-03-20');
   const [endDate, setEndDate] = useState('2026-03-27');
   const [recurringDays, setRecurringDays] = useState<string[]>(['Mon', 'Wed', 'Fri']);
 
-  // Step 6: Time & Shift Type (Night Rollover Calculation)
+  // Step 6: Time & Shift Type
   const [shiftType, setShiftType] = useState('Night Shift (10 PM - 8 AM)');
   const [timeSlot, setTimeSlot] = useState('10:00 PM - 08:00 AM');
   const [durationHours, setDurationHours] = useState(10);
@@ -83,17 +93,103 @@ export const BookingWizardPage: React.FC = () => {
   // Step 7: Staff Preferences
   const [preferredRole, setPreferredRole] = useState('B.Sc Registered Nurse');
   const [preferredGender, setPreferredGender] = useState<'no_preference' | 'female' | 'male'>('female');
-  const languages = ['English', 'Hindi', 'Kannada'];
+  const [selectedLanguages, setSelectedLanguages] = useState<string[]>(['English', 'Hindi']);
 
-  // Step 8: Special Requirements
+  // Step 8: Special Instructions & Medical Equipment
   const [specialInstructions, setSpecialInstructions] = useState(
     'Patient needs gentle handling for left leg movement. Require strict aseptic dressing for surgical incision.'
   );
+  const [selectedEquipment, setSelectedEquipment] = useState<string[]>(['Hospital Bed', 'Oxygen Cylinder']);
 
-  // Step 10: Post-Submission Interactive Simulation State
+  // Step 10: Auth Gate & Dispatch Simulation State
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authPhone, setAuthPhone] = useState('');
+  const [authOtp, setAuthOtp] = useState('');
+  const [otpSent, setOtpSent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [assignmentState, setAssignmentState] = useState<'reviewing' | 'finding' | 'assigned'>('reviewing');
   const [assignedStaff, setAssignedStaff] = useState<any>(null);
+
+  // Load draft from localStorage on mount
+  useEffect(() => {
+    try {
+      const savedDraft = localStorage.getItem(DRAFT_STORAGE_KEY);
+      if (savedDraft) {
+        const parsed = JSON.parse(savedDraft);
+        if (parsed.step) setStep(parsed.step);
+        if (parsed.selectedServiceId) {
+          const srv = services.find((s) => s.id === parsed.selectedServiceId);
+          if (srv) setSelectedService(srv);
+        }
+        if (parsed.careCategory) setCareCategory(parsed.careCategory);
+        if (parsed.selectedTasks) setSelectedTasks(parsed.selectedTasks);
+        if (parsed.patient) setPatient(parsed.patient);
+        if (parsed.locationData) setLocationData(parsed.locationData);
+        if (parsed.scheduleType) setScheduleType(parsed.scheduleType);
+        if (parsed.startDate) setStartDate(parsed.startDate);
+        if (parsed.endDate) setEndDate(parsed.endDate);
+        if (parsed.recurringDays) setRecurringDays(parsed.recurringDays);
+        if (parsed.shiftType) setShiftType(parsed.shiftType);
+        if (parsed.timeSlot) setTimeSlot(parsed.timeSlot);
+        if (parsed.durationHours) setDurationHours(parsed.durationHours);
+        if (parsed.preferredRole) setPreferredRole(parsed.preferredRole);
+        if (parsed.preferredGender) setPreferredGender(parsed.preferredGender);
+        if (parsed.selectedLanguages) setSelectedLanguages(parsed.selectedLanguages);
+        if (parsed.specialInstructions) setSpecialInstructions(parsed.specialInstructions);
+        if (parsed.selectedEquipment) setSelectedEquipment(parsed.selectedEquipment);
+      }
+    } catch (e) {
+      console.error('Failed to parse saved draft:', e);
+    }
+  }, [services]);
+
+  // Save draft state on changes
+  useEffect(() => {
+    const draftPayload = {
+      step,
+      selectedServiceId: selectedService.id,
+      careCategory,
+      selectedTasks,
+      patient,
+      locationData,
+      scheduleType,
+      startDate,
+      endDate,
+      recurringDays,
+      shiftType,
+      timeSlot,
+      durationHours,
+      preferredRole,
+      preferredGender,
+      selectedLanguages,
+      specialInstructions,
+      selectedEquipment
+    };
+    try {
+      localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(draftPayload));
+    } catch (e) {
+      console.error('Failed to save draft:', e);
+    }
+  }, [
+    step,
+    selectedService,
+    careCategory,
+    selectedTasks,
+    patient,
+    locationData,
+    scheduleType,
+    startDate,
+    endDate,
+    recurringDays,
+    shiftType,
+    timeSlot,
+    durationHours,
+    preferredRole,
+    preferredGender,
+    selectedLanguages,
+    specialInstructions,
+    selectedEquipment
+  ]);
 
   // Pricing Calculations
   const calculateDaysCount = () => {
@@ -106,14 +202,14 @@ export const BookingWizardPage: React.FC = () => {
 
   const daysCount = calculateDaysCount();
   const isNightShift = shiftType.toLowerCase().includes('night');
-  const baseRatePerDay = selectedService.pricing.basePrice * (durationHours > 8 ? durationHours : 1);
-  const subtotalBeforeNight = baseRatePerDay * daysCount;
+  const baseRatePerDay = selectedService.pricing.basePrice * (durationHours > 8 ? 1 : 0.85);
+  const subtotalBeforeNight = Math.round(baseRatePerDay * daysCount);
   const nightSurcharge = isNightShift ? Math.round(subtotalBeforeNight * 0.2) : 0;
   const subtotal = subtotalBeforeNight + nightSurcharge;
   const gst = Math.round(subtotal * 0.18);
   const grandTotal = subtotal + gst;
 
-  // Night Shift Date Rollover Calculator Display
+  // Night Shift Date Rollover Calculator
   const calculateNightRollover = () => {
     const nextDay = new Date(startDate);
     nextDay.setDate(nextDay.getDate() + 1);
@@ -130,13 +226,49 @@ export const BookingWizardPage: React.FC = () => {
     }
   };
 
-  const handleConfirmSubmit = () => {
+  const handleEquipmentToggle = (item: string) => {
+    if (selectedEquipment.includes(item)) {
+      setSelectedEquipment(selectedEquipment.filter((e) => e !== item));
+    } else {
+      setSelectedEquipment([...selectedEquipment, item]);
+    }
+  };
+
+  const handleLanguageToggle = (lang: string) => {
+    if (selectedLanguages.includes(lang)) {
+      setSelectedLanguages(selectedLanguages.filter((l) => l !== lang));
+    } else {
+      setSelectedLanguages([...selectedLanguages, lang]);
+    }
+  };
+
+  const handleInitiateSubmit = () => {
+    if (!currentUser) {
+      setShowAuthModal(true);
+    } else {
+      executeSubmission();
+    }
+  };
+
+  const handleAuthSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!otpSent) {
+      if (authPhone.length >= 10) setOtpSent(true);
+    } else {
+      // Simulate quick OTP verification & client login
+      switchRole('client');
+      setShowAuthModal(false);
+      executeSubmission();
+    }
+  };
+
+  const executeSubmission = () => {
     setSubmitting(true);
     setAssignmentState('reviewing');
 
     setTimeout(() => {
       setAssignmentState('finding');
-    }, 1500);
+    }, 1600);
 
     setTimeout(() => {
       setAssignmentState('assigned');
@@ -145,13 +277,15 @@ export const BookingWizardPage: React.FC = () => {
         qualification: 'B.Sc Nursing (KNC Reg #88419)',
         experienceYears: 6,
         photo: 'https://images.unsplash.com/photo-1594824813566-88855ce78905?w=300&q=80',
-        employeeId: 'EMP-1042'
+        employeeId: 'EMP-1042',
+        rating: 4.9,
+        activeHub: 'South Delhi Operations Center'
       });
-    }, 3500);
+    }, 3600);
   };
 
   const handleFinalRedirect = () => {
-    sessionStorage.removeItem('healthcare_b2c_booking_draft_v3');
+    localStorage.removeItem(DRAFT_STORAGE_KEY);
     const newBooking = createBooking({
       service: selectedService,
       patient,
@@ -164,8 +298,8 @@ export const BookingWizardPage: React.FC = () => {
         city: locationData.city,
         state: locationData.state,
         pincode: locationData.pincode,
-        latitude: locationData.latitude || 12.9716,
-        longitude: locationData.longitude || 77.5946
+        latitude: locationData.latitude || 28.6139,
+        longitude: locationData.longitude || 77.2090
       },
       scheduledDate: startDate,
       scheduledTimeSlot: timeSlot,
@@ -181,7 +315,7 @@ export const BookingWizardPage: React.FC = () => {
       staffPreferences: {
         role: preferredRole,
         gender: preferredGender,
-        languages
+        languages: selectedLanguages
       },
       specialInstructions
     });
@@ -191,30 +325,30 @@ export const BookingWizardPage: React.FC = () => {
 
   const stepsList = [
     '1. Service',
-    '2. Tasks',
+    '2. Care Tasks',
     '3. Patient',
     '4. Location',
     '5. Dates',
     '6. Shift',
     '7. Staff Prefs',
-    '8. Instructions',
-    '9. Pricing',
+    '8. Notes',
+    '9. Price',
     '10. Review'
   ];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 text-left relative bg-white">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 text-left relative bg-white pb-24 lg:pb-8">
       <HealthcareTexture type="care-pathway" opacity={0.03} />
 
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-border-default pb-4 gap-3">
         <div>
           <span className="text-xs font-extrabold text-brand-teal uppercase tracking-widest flex items-center gap-1.5">
-            <Sparkles className="w-4 h-4 text-brand-teal" /> Guided Care Concierge Experience
+            <Sparkles className="w-4 h-4 text-brand-teal" /> Care Concierge Guided Experience
           </span>
           <h1 className="text-2xl font-extrabold text-text-primary">Schedule Managed Clinical Home Care</h1>
           <p className="text-xs text-text-muted mt-0.5">
-            Specify your patient's exact clinical needs. Our Operations Desk assigns qualified in-house staff.
+            Specify patient requirements. CareConnect Operations assigns qualified internal staff in Delhi NCR.
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -236,7 +370,7 @@ export const BookingWizardPage: React.FC = () => {
               key={label}
               onClick={() => isDone && setStep(stepNum)}
               disabled={!isDone && !isActive}
-              className="text-left space-y-1 focus:outline-none disabled:cursor-not-allowed"
+              className="text-left space-y-1 focus:outline-none disabled:cursor-not-allowed cursor-pointer"
             >
               <div
                 className={clsx(
@@ -259,17 +393,17 @@ export const BookingWizardPage: React.FC = () => {
         })}
       </div>
 
-      {/* Main Grid */}
+      {/* Main Layout Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Step Interactive Decision Card */}
         <div className="lg:col-span-8 space-y-6">
           <Card className="p-6 space-y-6 border-border-default shadow-subtle bg-white">
-            {/* STEP 1: Service */}
+            {/* STEP 1: Service Selection */}
             {step === 1 && (
               <div className="space-y-4">
                 <div>
-                  <h2 className="text-lg font-extrabold text-text-primary">Step 1: Select Primary Health Service</h2>
-                  <p className="text-xs text-text-muted">Select from our internal clinical & attendant care catalog.</p>
+                  <h2 className="text-lg font-extrabold text-text-primary">Step 1: Select Home Care Service</h2>
+                  <p className="text-xs text-text-muted">Select from our internal clinical & caregiver workforce catalog.</p>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {services.map((srv) => {
@@ -294,7 +428,7 @@ export const BookingWizardPage: React.FC = () => {
                         </div>
                         <div className="flex items-center justify-between border-t border-border-light pt-2 text-xs">
                           <span className="text-text-muted font-medium">{srv.estimatedDuration}</span>
-                          <span className="font-extrabold text-brand-teal">₹{srv.pricing.basePrice} / unit</span>
+                          <span className="font-extrabold text-brand-teal">From ₹{srv.pricing.basePrice}</span>
                         </div>
                       </div>
                     );
@@ -303,89 +437,191 @@ export const BookingWizardPage: React.FC = () => {
               </div>
             )}
 
-            {/* STEP 2: Tasks */}
+            {/* STEP 2: Smart Contextual Care Requirements */}
             {step === 2 && (
               <div className="space-y-5">
                 <div>
-                  <h2 className="text-lg font-extrabold text-text-primary">Step 2: Care Category & Clinical Tasks</h2>
-                  <p className="text-xs text-text-muted">Select specific duties for our assigned internal staff to perform.</p>
+                  <h2 className="text-lg font-extrabold text-text-primary">Step 2: Smart Care Requirement & Specific Tasks</h2>
+                  <p className="text-xs text-text-muted">Customized questions based on your selected service category.</p>
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-text-secondary uppercase tracking-wider">Primary Condition Focus</label>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
-                    {[
-                      { id: 'post_surgery', label: 'Post-Surgery Recovery' },
-                      { id: 'elderly_care', label: 'Elderly / Senior Care' },
-                      { id: 'bedridden', label: 'Bedridden / Total Care' },
-                      { id: 'stroke_rehab', label: 'Stroke / Neuro Rehab' },
-                      { id: 'chronic_illness', label: 'Chronic Illness Support' },
-                      { id: 'palliative', label: 'Palliative Care' }
-                    ].map((cat) => (
-                      <button
-                        key={cat.id}
-                        type="button"
-                        onClick={() => setCareCategory(cat.id)}
-                        className={clsx(
-                          'p-3 rounded-xl border text-xs font-bold text-center cursor-pointer transition-all',
-                          careCategory === cat.id
-                            ? 'bg-brand-teal text-white border-brand-teal shadow-xs'
-                            : 'bg-canvas-secondary border-border-default text-text-primary hover:border-border-hover'
-                        )}
-                      >
-                        {cat.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="space-y-2 pt-2">
-                  <label className="text-xs font-bold text-text-secondary uppercase tracking-wider">
-                    Required Tasks & Procedures
-                  </label>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                    {[
-                      'Sterile wound dressing & aseptic care',
-                      'Vital signs monitoring & digital logging',
-                      'Medication timely administration (Oral / Injections)',
-                      'IV / IM injection & drip management',
-                      'Bathing, oral hygiene & sponge bath',
-                      'Bed transfers, mobility & positioning',
-                      'Ryle tube / PEG tube feeding assistance',
-                      'Catheter & urinary bag care',
-                      'Night supervision & bed alarm monitor',
-                      'Bedsore prevention & position rotation'
-                    ].map((task) => {
-                      const isChecked = selectedTasks.includes(task);
-                      return (
-                        <div
-                          key={task}
-                          onClick={() => handleTaskToggle(task)}
-                          className={clsx(
-                            'p-3 rounded-xl border cursor-pointer flex items-center justify-between text-xs font-semibold transition-all',
-                            isChecked
-                              ? 'bg-canvas-teal border-brand-teal text-brand-teal font-bold'
-                              : 'bg-white border-border-default text-text-secondary hover:border-border-hover'
-                          )}
-                        >
-                          <span>{task}</span>
-                          <div
+                {/* Service Category: Nursing */}
+                {selectedService.category === 'home_nursing' && (
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-text-secondary uppercase tracking-wider">Primary Clinical Focus</label>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                        {[
+                          { id: 'post_surgery', label: 'Post-Surgery Recovery' },
+                          { id: 'elderly_nursing', label: 'Elderly Nursing Care' },
+                          { id: 'icu_transition', label: 'ICU / High-Dependency Setup' },
+                          { id: 'wound_care', label: 'Wound Care & Dressing' },
+                          { id: 'chronic_care', label: 'Chronic Disease Support' },
+                          { id: 'palliative', label: 'Palliative Care' }
+                        ].map((cat) => (
+                          <button
+                            key={cat.id}
+                            type="button"
+                            onClick={() => setCareCategory(cat.id)}
                             className={clsx(
-                              'w-4 h-4 rounded flex items-center justify-center border',
-                              isChecked ? 'bg-brand-teal border-brand-teal text-white' : 'border-border-hover'
+                              'p-3 rounded-xl border text-xs font-bold text-center cursor-pointer transition-all',
+                              careCategory === cat.id
+                                ? 'bg-brand-teal text-white border-brand-teal shadow-xs'
+                                : 'bg-canvas-secondary border-border-default text-text-primary hover:border-border-hover'
                             )}
                           >
-                            {isChecked && <CheckCircle2 className="w-3 h-3 text-white" />}
-                          </div>
-                        </div>
-                      );
-                    })}
+                            {cat.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="space-y-2 pt-2">
+                      <label className="text-xs font-bold text-text-secondary uppercase tracking-wider">
+                        Required Nursing Tasks & Clinical Procedures
+                      </label>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        {[
+                          'Sterile surgical wound dressing & drain care',
+                          'Vital signs monitoring & digital chart logging',
+                          'Medication timely administration (Oral / Injections)',
+                          'IV infusion / IM injection & drip management',
+                          'Ryle tube / PEG tube feeding assistance',
+                          'Urinary catheter care & bag management',
+                          'Tracheostomy care & suctioning support',
+                          'Bedsore prevention & position rotation schedule'
+                        ].map((task) => {
+                          const isChecked = selectedTasks.includes(task);
+                          return (
+                            <div
+                              key={task}
+                              onClick={() => handleTaskToggle(task)}
+                              className={clsx(
+                                'p-3 rounded-xl border cursor-pointer flex items-center justify-between text-xs font-semibold transition-all',
+                                isChecked
+                                  ? 'bg-canvas-teal border-brand-teal text-brand-teal font-bold'
+                                  : 'bg-white border-border-default text-text-secondary hover:border-border-hover'
+                              )}
+                            >
+                              <span>{task}</span>
+                              <div
+                                className={clsx(
+                                  'w-4 h-4 rounded flex items-center justify-center border',
+                                  isChecked ? 'bg-brand-teal border-brand-teal text-white' : 'border-border-hover'
+                                )}
+                              >
+                                {isChecked && <CheckCircle2 className="w-3 h-3 text-white" />}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
                   </div>
-                </div>
+                )}
+
+                {/* Service Category: Physiotherapy */}
+                {selectedService.category === 'physiotherapy' && (
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-text-secondary uppercase tracking-wider">Affected Area / Target Joint</label>
+                      <select
+                        value={physioAffectedArea}
+                        onChange={(e) => setPhysioAffectedArea(e.target.value)}
+                        className="w-full h-11 px-3 text-sm bg-white border border-border-default rounded-xl focus:border-brand-teal focus:outline-none"
+                      >
+                        <option value="Knee Joint (Post-TKR)">Knee Joint (Post-TKR Surgery)</option>
+                        <option value="Hip Joint (Post-THR)">Hip Joint (Post-THR Replacement)</option>
+                        <option value="Shoulder / Frozen Shoulder">Shoulder / Frozen Shoulder Rehab</option>
+                        <option value="Spine / Lumbar Back">Spine / Lumbar Back Pain</option>
+                        <option value="Post-Stroke Neuro Mobility">Post-Stroke Neuro Mobility & Gait</option>
+                        <option value="Parkinson Mobility">Parkinson Motor Skills Rehab</option>
+                      </select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-text-secondary uppercase tracking-wider">Patient Current Mobility Status</label>
+                      <div className="grid grid-cols-2 gap-2.5">
+                        {['Bedridden', 'Wheelchair Bound', 'Walker Assisted', 'Independent Step'].map((mob) => (
+                          <button
+                            key={mob}
+                            type="button"
+                            onClick={() => setPhysioMobilityStatus(mob)}
+                            className={clsx(
+                              'p-3 rounded-xl border text-xs font-bold text-center cursor-pointer transition-all',
+                              physioMobilityStatus === mob
+                                ? 'bg-brand-teal text-white border-brand-teal shadow-xs'
+                                : 'bg-canvas-secondary border-border-default text-text-primary'
+                            )}
+                          >
+                            {mob}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Service Category: Doctor Visit */}
+                {selectedService.category === 'doctor_visit' && (
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-text-secondary uppercase tracking-wider">Chief Medical Complaint / Purpose</label>
+                      <input
+                        type="text"
+                        value={doctorComplaint}
+                        onChange={(e) => setDoctorComplaint(e.target.value)}
+                        className="w-full h-11 px-3 text-sm bg-white border border-border-default rounded-xl focus:border-brand-teal focus:outline-none"
+                        placeholder="e.g., High fever review, post-hospitalization check, medication audit..."
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* Service Category: Caregiver / Attendant */}
+                {selectedService.category === 'caregiver_attendant' && (
+                  <div className="space-y-4">
+                    <label className="text-xs font-bold text-text-secondary uppercase tracking-wider">Bedside Attendant Duties</label>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                      {[
+                        'Bedside hygiene & daily sponge bath',
+                        'Oral feeding & hydration assistance',
+                        'Diaper changes & commode assistance',
+                        'Position rotation & bed transfer support',
+                        'Walking assistance & mobility guard',
+                        'Night supervision & bed alarm monitoring'
+                      ].map((task) => {
+                        const isChecked = selectedTasks.includes(task);
+                        return (
+                          <div
+                            key={task}
+                            onClick={() => handleTaskToggle(task)}
+                            className={clsx(
+                              'p-3 rounded-xl border cursor-pointer flex items-center justify-between text-xs font-semibold transition-all',
+                              isChecked
+                                ? 'bg-canvas-teal border-brand-teal text-brand-teal font-bold'
+                                : 'bg-white border-border-default text-text-secondary hover:border-border-hover'
+                            )}
+                          >
+                            <span>{task}</span>
+                            <div
+                              className={clsx(
+                                'w-4 h-4 rounded flex items-center justify-center border',
+                                isChecked ? 'bg-brand-teal border-brand-teal text-white' : 'border-border-hover'
+                              )}
+                            >
+                              {isChecked && <CheckCircle2 className="w-3 h-3 text-white" />}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 
-            {/* STEP 3: Patient Profile */}
+            {/* STEP 3: Patient Selection */}
             {step === 3 && (
               <SavedPatientSelector
                 selectedPatientId={patient.id}
@@ -401,7 +637,7 @@ export const BookingWizardPage: React.FC = () => {
               />
             )}
 
-            {/* STEP 5: Dates */}
+            {/* STEP 5: Dates & Recurrence */}
             {step === 5 && (
               <div className="space-y-5">
                 <div>
@@ -495,12 +731,12 @@ export const BookingWizardPage: React.FC = () => {
               </div>
             )}
 
-            {/* STEP 6: Shift (With Night Rollover UX) */}
+            {/* STEP 6: Shift Timing & Night Rollover UX */}
             {step === 6 && (
               <div className="space-y-5">
                 <div>
-                  <h2 className="text-lg font-extrabold text-text-primary">Step 6: Shift Timing & Night Care UX</h2>
-                  <p className="text-xs text-text-muted">Choose your shift timing. Night shifts calculate date rollover automatically.</p>
+                  <h2 className="text-lg font-extrabold text-text-primary">Step 6: Shift Timing & Overnight Rollover</h2>
+                  <p className="text-xs text-text-muted">Choose your shift timing. Night shifts calculate overnight date rollover automatically.</p>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -541,7 +777,7 @@ export const BookingWizardPage: React.FC = () => {
                 {isNightShift && (
                   <div className="p-4 bg-amber-50 rounded-2xl border border-amber-200 text-xs text-amber-900 space-y-1">
                     <span className="font-extrabold block flex items-center gap-1.5">
-                      <Moon className="w-4 h-4 text-amber-600" /> Overnight Shift Schedule
+                      <Moon className="w-4 h-4 text-amber-600" /> Overnight Shift Schedule Banner
                     </span>
                     <p className="font-medium">
                       Shift Start: <span className="font-bold">{startDate} 10:00 PM</span> → Shift End: <span className="font-bold">{nextDayStr} 08:00 AM</span> (Duration: 10 Hours)
@@ -561,7 +797,7 @@ export const BookingWizardPage: React.FC = () => {
 
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold text-text-secondary uppercase tracking-wider">
-                    Staff Designation / Role
+                    Required Staff Qualification / Role
                   </label>
                   <select
                     value={preferredRole}
@@ -596,28 +832,41 @@ export const BookingWizardPage: React.FC = () => {
                       Languages Spoken
                     </label>
                     <div className="flex flex-wrap gap-2 pt-1">
-                      {['English', 'Hindi', 'Kannada', 'Tamil'].map((lang) => (
-                        <span key={lang} className="px-3 py-1 rounded-full text-xs font-bold bg-canvas-teal text-brand-teal border border-teal-200">
-                          {lang}
-                        </span>
-                      ))}
+                      {['English', 'Hindi', 'Punjabi', 'Bengali'].map((lang) => {
+                        const isSelected = selectedLanguages.includes(lang);
+                        return (
+                          <button
+                            key={lang}
+                            type="button"
+                            onClick={() => handleLanguageToggle(lang)}
+                            className={clsx(
+                              'px-3 py-1.5 rounded-full text-xs font-bold border cursor-pointer transition-all',
+                              isSelected
+                                ? 'bg-canvas-teal text-brand-teal border-teal-300'
+                                : 'bg-white text-text-secondary border-border-default'
+                            )}
+                          >
+                            {lang}
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
               </div>
             )}
 
-            {/* STEP 8: Instructions */}
+            {/* STEP 8: Special Instructions & Equipment */}
             {step === 8 && (
               <div className="space-y-5">
                 <div>
-                  <h2 className="text-lg font-extrabold text-text-primary">Step 8: Special Instructions & Equipment</h2>
-                  <p className="text-xs text-text-muted">Important details for staff handling and preparation.</p>
+                  <h2 className="text-lg font-extrabold text-text-primary">Step 8: Special Instructions & Medical Equipment</h2>
+                  <p className="text-xs text-text-muted">Clinical handling notes and equipment at home.</p>
                 </div>
 
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold text-text-secondary uppercase tracking-wider">
-                    Care Notes for Assigned Nurse
+                    Care Notes for Assigned Nurse / Caregiver
                   </label>
                   <textarea
                     rows={4}
@@ -627,10 +876,44 @@ export const BookingWizardPage: React.FC = () => {
                     placeholder="Enter any special requests, diet instructions, or patient behavioral tips..."
                   />
                 </div>
+
+                <div className="space-y-2 pt-2">
+                  <label className="text-xs font-bold text-text-secondary uppercase tracking-wider">
+                    Medical Equipment Available at Home
+                  </label>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                    {[
+                      'Hospital Bed',
+                      'Oxygen Cylinder',
+                      'Wheelchair',
+                      'Patient Lift',
+                      'Suction Machine',
+                      'Multipara Monitor'
+                    ].map((eq) => {
+                      const isChecked = selectedEquipment.includes(eq);
+                      return (
+                        <button
+                          key={eq}
+                          type="button"
+                          onClick={() => handleEquipmentToggle(eq)}
+                          className={clsx(
+                            'p-3 rounded-xl border text-xs font-semibold flex items-center justify-between cursor-pointer transition-all',
+                            isChecked
+                              ? 'bg-canvas-teal border-brand-teal text-brand-teal font-bold'
+                              : 'bg-white border-border-default text-text-secondary'
+                          )}
+                        >
+                          <span>{eq}</span>
+                          {isChecked && <Check className="w-3.5 h-3.5 text-brand-teal" />}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
               </div>
             )}
 
-            {/* STEP 9: Price Breakdown */}
+            {/* STEP 9: Transparent Price Breakdown */}
             {step === 9 && (
               <div className="space-y-5">
                 <div>
@@ -675,8 +958,8 @@ export const BookingWizardPage: React.FC = () => {
                 {!submitting ? (
                   <div className="space-y-5">
                     <div>
-                      <h2 className="text-lg font-extrabold text-text-primary">Step 10: Review & Send Request</h2>
-                      <p className="text-xs text-text-muted">Review your booking details before submitting to Operations.</p>
+                      <h2 className="text-lg font-extrabold text-text-primary">Step 10: Review & Submit Request</h2>
+                      <p className="text-xs text-text-muted">Review your booking details before submitting to CareConnect Operations.</p>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
@@ -698,7 +981,7 @@ export const BookingWizardPage: React.FC = () => {
                     </div>
                   </div>
                 ) : (
-                  /* Post-Submission Animated Operations Tracker (Section 26 & 27) */
+                  /* Post-Submission Animated Operations Tracker */
                   <div className="p-6 bg-canvas-teal rounded-3xl border border-teal-200 text-center space-y-6">
                     <div className="w-16 h-16 rounded-full bg-brand-teal text-white flex items-center justify-center mx-auto shadow-lg animate-pulse">
                       {assignmentState === 'assigned' ? <CheckCircle2 className="w-8 h-8" /> : <Loader2 className="w-8 h-8 animate-spin" />}
@@ -724,7 +1007,7 @@ export const BookingWizardPage: React.FC = () => {
                       </span>
                     </div>
 
-                    {/* Assigned Staff Reveal Card (Section 27 "Premium Moment") */}
+                    {/* Assigned Staff Reveal Card */}
                     {assignedStaff && (
                       <div className="p-4 bg-white rounded-2xl border border-teal-300 shadow-subtle flex items-center justify-between text-left animate-in zoom-in duration-300">
                         <div className="flex items-center gap-3">
@@ -782,7 +1065,7 @@ export const BookingWizardPage: React.FC = () => {
                 ) : (
                   <Button
                     variant="primary"
-                    onClick={handleConfirmSubmit}
+                    onClick={handleInitiateSubmit}
                     leftIcon={<CheckCircle2 className="w-4 h-4" />}
                     className="bg-brand-teal hover:bg-brand-teal-hover text-white font-bold px-8 py-3 cursor-pointer shadow-subtle text-sm"
                   >
@@ -794,7 +1077,7 @@ export const BookingWizardPage: React.FC = () => {
           </Card>
         </div>
 
-        {/* Live Persistent Desktop Booking Summary Sidebar (Section 23 & 24) */}
+        {/* Live Persistent Desktop Booking Summary Sidebar */}
         <div className="lg:col-span-4">
           <div className="bg-white p-5 rounded-2xl border border-border-default shadow-subtle space-y-4 sticky top-6 text-left">
             <h3 className="font-extrabold text-text-primary text-sm border-b border-border-light pb-2 uppercase tracking-wider">
@@ -823,7 +1106,7 @@ export const BookingWizardPage: React.FC = () => {
                 <span className="font-bold text-brand-teal">{shiftType}</span>
               </div>
 
-              {/* Itemized Price Presentation (Section 24) */}
+              {/* Itemized Price Presentation */}
               <div className="border-t border-border-default pt-3 space-y-1.5">
                 <div className="flex justify-between text-text-secondary">
                   <span>Base Service ({daysCount} d)</span>
@@ -853,6 +1136,80 @@ export const BookingWizardPage: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Mobile Bottom Sticky Bar */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-border-default p-4 flex items-center justify-between z-40 shadow-lg">
+        <div>
+          <span className="text-[10px] text-text-muted block font-bold uppercase">Step {step} of 10</span>
+          <span className="text-sm font-extrabold text-brand-teal">₹{grandTotal}</span>
+        </div>
+        {step < 10 ? (
+          <Button
+            variant="primary"
+            onClick={() => setStep(step + 1)}
+            className="bg-brand-teal text-white font-bold text-xs py-2 px-5 rounded-xl cursor-pointer"
+          >
+            Step {step + 1} →
+          </Button>
+        ) : (
+          <Button
+            variant="primary"
+            onClick={handleInitiateSubmit}
+            className="bg-brand-teal text-white font-bold text-xs py-2 px-5 rounded-xl cursor-pointer"
+          >
+            Submit Request
+          </Button>
+        )}
+      </div>
+
+      {/* Late Auth Modal Gate */}
+      <Modal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        title="Confirm Client Identity"
+        maxWidth="md"
+      >
+        <div className="space-y-4 text-left">
+          <p className="text-xs text-text-secondary">
+            Please enter your mobile number to receive an instant OTP verification before submitting your care request.
+          </p>
+          <form onSubmit={handleAuthSubmit} className="space-y-3">
+            <div>
+              <label className="text-xs font-bold text-text-secondary block mb-1">Mobile Number (+91)</label>
+              <input
+                type="tel"
+                value={authPhone}
+                onChange={(e) => setAuthPhone(e.target.value)}
+                placeholder="9876543210"
+                required
+                className="w-full h-11 px-3 text-sm border border-border-default rounded-xl focus:border-brand-teal focus:outline-none"
+              />
+            </div>
+
+            {otpSent && (
+              <div>
+                <label className="text-xs font-bold text-text-secondary block mb-1">6-Digit OTP</label>
+                <input
+                  type="text"
+                  value={authOtp}
+                  onChange={(e) => setAuthOtp(e.target.value)}
+                  placeholder="123456"
+                  required
+                  className="w-full h-11 px-3 text-sm border border-border-default rounded-xl focus:border-brand-teal focus:outline-none"
+                />
+              </div>
+            )}
+
+            <Button
+              type="submit"
+              variant="primary"
+              className="w-full bg-brand-teal hover:bg-brand-teal-hover text-white font-bold h-11 rounded-xl cursor-pointer"
+            >
+              {otpSent ? 'Verify OTP & Continue' : 'Send OTP'}
+            </Button>
+          </form>
+        </div>
+      </Modal>
     </div>
   );
 };
