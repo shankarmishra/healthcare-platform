@@ -13,7 +13,7 @@ export const SearchPage: React.FC = () => {
   const navigate = useNavigate();
   const { professionals } = useBookings();
 
-  const [locationQuery, setLocationQuery] = useState('Indiranagar, Bangalore');
+  const [locationQuery, setLocationQuery] = useState('Defence Colony, New Delhi');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedProId, setSelectedProId] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<'split' | 'list' | 'map'>('split');
@@ -35,7 +35,7 @@ export const SearchPage: React.FC = () => {
           <div className="flex-1 w-full">
             <Input
               label="Location / Address"
-              placeholder="e.g. Indiranagar, Bangalore"
+              placeholder="e.g. Defence Colony, New Delhi"
               value={locationQuery}
               onChange={(e) => setLocationQuery(e.target.value)}
               leftIcon={<MapPin className="w-4 h-4 text-brand-teal" />}

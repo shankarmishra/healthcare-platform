@@ -6,7 +6,6 @@ import { DemoRoleSwitcher } from '../common/DemoRoleSwitcher';
 import { Button } from '../common/Button';
 import { Modal } from '../common/Modal';
 import {
-  HeartPulse,
   Calendar,
   Bell,
   ShieldCheck,
@@ -47,17 +46,11 @@ export const PublicLayout: React.FC = () => {
           <div className="flex items-center gap-6">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-2.5 group">
-              <div className="w-10 h-10 rounded-xl bg-brand-teal flex items-center justify-center text-white shadow-xs group-hover:scale-105 transition-transform">
-                <HeartPulse className="w-6 h-6" />
-              </div>
-              <div className="flex flex-col text-left">
-                <span className="text-xl font-extrabold tracking-tight text-text-primary leading-tight">
-                  CareConnect
-                </span>
-                <span className="text-[10px] font-semibold text-brand-teal uppercase tracking-widest leading-none">
-                  Healthcare Platform
-                </span>
-              </div>
+              <img
+                src="/assets/brand/pulse-n-care/pulse-n-care-logo.svg"
+                alt="Pulse n Care"
+                className="h-10 w-auto group-hover:scale-105 transition-transform"
+              />
             </Link>
 
             {/* Header Location Pill */}
@@ -66,7 +59,7 @@ export const PublicLayout: React.FC = () => {
               className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-canvas-teal border border-teal-200 text-xs font-extrabold text-brand-teal hover:bg-teal-100 transition-colors cursor-pointer"
             >
               <MapPin className="w-3.5 h-3.5 text-brand-teal" />
-              <span>{selectedHub.city} ({selectedHub.name})</span>
+              <span>Serving selected Delhi NCR areas</span>
               <ChevronDown className="w-3.5 h-3.5 text-brand-teal" />
             </button>
           </div>
@@ -167,16 +160,17 @@ export const PublicLayout: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8 text-left">
             <div className="space-y-3">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-brand-teal flex items-center justify-center text-white">
-                  <HeartPulse className="w-5 h-5" />
-                </div>
-                <span className="text-lg font-bold text-text-primary">CareConnect</span>
+                <img
+                  src="/assets/brand/pulse-n-care/pulse-n-care-logo.svg"
+                  alt="Pulse n Care"
+                  className="h-8 w-auto"
+                />
               </div>
               <p className="text-xs text-text-muted leading-relaxed">
-                Premium healthcare staffing & verified home care platform. Connecting families with clinical experts.
+                Pulse n Care — Nurse care at doorstep. Council-verified home nursing & clinical care operations across Delhi NCR.
               </p>
               <div className="flex items-center gap-2 text-xs text-brand-teal font-semibold">
-                <ShieldCheck className="w-4 h-4" /> 100% Background Verified Professionals
+                <ShieldCheck className="w-4 h-4" /> 100% Council Verified Nursing Staff
               </div>
             </div>
 
@@ -214,7 +208,7 @@ export const PublicLayout: React.FC = () => {
           </div>
 
           <div className="pt-8 border-t border-border-default flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-text-muted">
-            <p>© 2026 CareConnect Healthcare Platform. All rights reserved.</p>
+            <p>© 2026 Pulse n Care — Nurse Care at Doorstep. All rights reserved.</p>
             <div className="flex items-center gap-6">
               <span className="hover:text-text-primary cursor-pointer">Privacy Policy</span>
               <span className="hover:text-text-primary cursor-pointer">Terms of Service</span>
@@ -233,7 +227,7 @@ export const PublicLayout: React.FC = () => {
       >
         <div className="space-y-4 text-left">
           <p className="text-xs text-text-secondary">
-            CareConnect operates an internal, managed healthcare workforce strictly within <strong>Delhi, Noida, Gurugram, and Faridabad (NCR)</strong>. Select your active locality hub below:
+            Pulse n Care operates an internal, managed healthcare workforce strictly within <strong>Delhi, Noida, Gurugram, and Faridabad (NCR)</strong>. Select your active locality hub below:
           </p>
 
           <div className="space-y-2.5">

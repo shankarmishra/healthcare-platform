@@ -253,7 +253,7 @@ export const LocationPicker: React.FC<LocationPickerProps> = ({ value, onChange,
               <div>
                 <span className="font-extrabold text-rose-950 text-sm block">Location Outside Service Boundary</span>
                 <p className="mt-0.5">
-                  CareConnect operates exclusively in <strong className="underline font-bold">Delhi, Noida, Gurugram, and Faridabad</strong>. We currently do not have an active staff dispatch hub in <strong className="font-extrabold">{value.city || 'your city'}</strong>.
+                  Pulse n Care operates exclusively in <strong className="underline font-bold">Delhi, Noida, Gurugram, and Faridabad</strong>. We currently do not have an active staff dispatch hub in <strong className="font-extrabold">{value.city || 'your city'}</strong>.
                 </p>
               </div>
             </div>
@@ -447,7 +447,7 @@ export const LocationPicker: React.FC<LocationPickerProps> = ({ value, onChange,
       <Modal
         isOpen={showExpansionModal}
         onClose={() => setShowExpansionModal(false)}
-        title="Request CareConnect in Your Locality"
+        title="Request Pulse n Care in Your Locality"
         maxWidth="md"
       >
         <div className="space-y-4 text-left">

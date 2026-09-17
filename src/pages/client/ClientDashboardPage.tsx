@@ -133,7 +133,7 @@ export const ClientDashboardPage: React.FC = () => {
                       <span className="font-extrabold flex items-center gap-1 text-amber-950">
                         <Clock className="w-3.5 h-3.5 text-amber-600 animate-spin" /> Operations Review Active
                       </span>
-                      <p className="text-[11px] mt-1">CareConnect Operations is confirming internal staff availability in Delhi NCR.</p>
+                      <p className="text-[11px] mt-1">Pulse n Care Operations is confirming internal staff availability in Delhi NCR.</p>
                     </div>
                     <span className="text-[10px] font-bold text-amber-700">ETA: ~15 mins confirmation</span>
                   </div>

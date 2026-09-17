@@ -216,7 +216,7 @@ export const BookingDetailPage: React.FC = () => {
                 <Clock className="w-4 h-4 text-amber-600 animate-spin" /> Selecting Internal Staff...
               </span>
               <p>
-                CareConnect Operations Desk is selecting a qualified, background-checked nurse/caregiver active in your Delhi NCR locality.
+                Pulse n Care Operations Desk is selecting a qualified, background-checked nurse/caregiver active in your Delhi NCR locality.
               </p>
             </Card>
           )}

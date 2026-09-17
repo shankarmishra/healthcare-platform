@@ -58,7 +58,7 @@ export const HomeNursingServicePage: React.FC = () => {
     { num: '01', title: 'Tell us what care is needed', desc: 'Select home nursing requirements & specific clinical duties.' },
     { num: '02', title: 'Share patient details', desc: 'Provide patient relationship, age, allergies & medical history.' },
     { num: '03', title: 'Choose timing', desc: 'Select 12h, 24h, or night shift with overnight date rollover.' },
-    { num: '04', title: 'Operations team arranges staff', desc: 'CareConnect Operations assigns qualified internal staff in Delhi NCR.' },
+    { num: '04', title: 'Operations team arranges staff', desc: 'Pulse n Care Operations assigns qualified internal staff in Delhi NCR.' },
     { num: '05', title: 'Care is confirmed', desc: 'Receive instant confirmation & assigned nurse credentials.' },
     { num: '06', title: 'Nurse arrives', desc: 'Council-verified nurse arrives at doorstep with clinical kit.' },
     { num: '07', title: 'Care begins', desc: 'Vitals logged, medication administered, prescribed routines fulfilled.' },

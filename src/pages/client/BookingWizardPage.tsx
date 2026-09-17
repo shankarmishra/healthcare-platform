@@ -23,7 +23,7 @@ import {
 import { clsx } from 'clsx';
 import type { Service, PatientProfile } from '../../types';
 
-const DRAFT_STORAGE_KEY = 'careconnect_b2c_booking_draft_v3';
+const DRAFT_STORAGE_KEY = 'pulsen_care_b2c_booking_draft_v3';
 
 export const BookingWizardPage: React.FC = () => {
   const navigate = useNavigate();
@@ -348,7 +348,7 @@ export const BookingWizardPage: React.FC = () => {
           </span>
           <h1 className="text-2xl font-extrabold text-text-primary">Schedule Managed Clinical Home Care</h1>
           <p className="text-xs text-text-muted mt-0.5">
-            Specify patient requirements. CareConnect Operations assigns qualified internal staff in Delhi NCR.
+            Specify patient requirements. Pulse n Care Operations assigns qualified internal staff in Delhi NCR.
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -959,7 +959,7 @@ export const BookingWizardPage: React.FC = () => {
                   <div className="space-y-5">
                     <div>
                       <h2 className="text-lg font-extrabold text-text-primary">Step 10: Review & Submit Request</h2>
-                      <p className="text-xs text-text-muted">Review your booking details before submitting to CareConnect Operations.</p>
+                      <p className="text-xs text-text-muted">Review your booking details before submitting to Pulse n Care Operations.</p>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">

@@ -66,7 +66,7 @@ export const ServicesPage: React.FC = () => {
     },
     {
       q: 'How are clinical staff members assigned?',
-      a: 'CareConnect owns and manages its internal clinical workforce. Once you submit a care request, Central Operations assigns a qualified, council-verified nurse or caregiver matching your clinical needs and requested schedule.'
+      a: 'Pulse n Care owns and manages its internal clinical workforce. Once you submit a care request, Central Operations assigns a qualified, council-verified nurse or caregiver matching your clinical needs and requested schedule.'
     },
     {
       q: 'Can I request a 10-hour night shift or 24-hour live-in care?',
@@ -123,7 +123,7 @@ export const ServicesPage: React.FC = () => {
               <div className="relative rounded-3xl overflow-hidden border border-border-default shadow-card bg-white p-2">
                 <img
                   src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80"
-                  alt="CareConnect Clinical Home Care"
+                  alt="Pulse n Care Clinical Home Care"
                   className="w-full h-80 sm:h-96 object-cover rounded-2xl"
                 />
                 <div className="absolute bottom-6 left-6 right-6 bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-teal-200 shadow-lg flex items-center justify-between">
@@ -316,7 +316,7 @@ export const ServicesPage: React.FC = () => {
             </div>
             <h3 className="text-2xl font-extrabold text-text-primary">Active Operational Regions</h3>
             <p className="text-xs sm:text-sm text-text-secondary leading-relaxed font-medium">
-              CareConnect currently operates dedicated clinical hubs across Delhi, Noida, Gurugram, and Faridabad. Pincodes are validated during booking.
+              Pulse n Care currently operates dedicated clinical hubs across Delhi, Noida, Gurugram, and Faridabad. Pincodes are validated during booking.
             </p>
             <div className="flex flex-wrap gap-2 pt-1">
               {['New Delhi', 'South Delhi', 'Noida (Sec 15-128)', 'Gurugram (DLF 1-5)', 'Faridabad'].map((loc, idx) => (
@@ -341,7 +341,7 @@ export const ServicesPage: React.FC = () => {
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         <div className="text-center space-y-2">
           <h2 className="text-2xl font-extrabold text-text-primary">Frequently Asked Questions</h2>
-          <p className="text-xs text-text-muted">Everything you need to know about CareConnect services</p>
+          <p className="text-xs text-text-muted">Everything you need to know about Pulse n Care services</p>
         </div>
 
         <div className="space-y-3">

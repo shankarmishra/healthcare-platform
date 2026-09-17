@@ -8,7 +8,7 @@ export const ProProfileEditPage: React.FC = () => {
   const pro: ProfessionalProfile = MOCK_PROFESSIONALS[0];
   const [bio, setBio] = useState(pro.bio);
   const [hourlyRate, setHourlyRate] = useState(pro.hourlyRate);
-  const [serviceArea, setServiceArea] = useState(pro.location?.addressName || 'Indiranagar & Central Bangalore');
+  const [serviceArea, setServiceArea] = useState(pro.location?.addressName || 'Delhi NCR Active Hubs');
   const [saved, setSaved] = useState(false);
 
   const handleSave = (e: React.FormEvent) => {

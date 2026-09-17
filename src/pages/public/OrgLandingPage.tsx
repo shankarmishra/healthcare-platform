@@ -31,7 +31,7 @@ export const OrgLandingPage: React.FC = () => {
             Instantly Scale Your Clinical Workforce With Managed In-House Professionals.
           </h1>
           <p className="text-base text-text-secondary leading-relaxed">
-            Partner with CareConnect to fulfill ICU nursing shifts, ward attendants, night coverage, and specialized clinical requisitions with 100% verified, background-checked staff.
+            Partner with Pulse n Care to fulfill ICU nursing shifts, ward attendants, night coverage, and specialized clinical requisitions with 100% verified, background-checked staff.
           </p>
 
           <div className="flex flex-wrap gap-4 pt-2">
@@ -131,7 +131,7 @@ export const OrgLandingPage: React.FC = () => {
               <form onSubmit={(e) => { e.preventDefault(); setSubmitted(true); }} className="space-y-4 text-xs">
                 <div>
                   <label className="font-bold text-text-primary block mb-1">Organization / Hospital Name</label>
-                  <input required placeholder="E.g. Manipal Hospital, HAL Airport Rd" className="w-full h-11 px-3 bg-canvas-secondary border border-border-default rounded-xl focus:outline-none focus:border-brand-teal" />
+                  <input required placeholder="E.g. Max Hospital, HAL Airport Rd" className="w-full h-11 px-3 bg-canvas-secondary border border-border-default rounded-xl focus:outline-none focus:border-brand-teal" />
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div>

@@ -115,7 +115,7 @@ export function validateNCRServiceLocation(city?: string, pincode?: string): Loc
   if (cityTrim || pincodeTrim) {
     return {
       isSupported: false,
-      reason: `CareConnect currently operates exclusively within Delhi, Noida, Gurugram, and Faridabad. '${city || pincode}' is outside our active coverage boundary.`
+      reason: `Pulse n Care currently operates exclusively within Delhi, Noida, Gurugram, and Faridabad. '${city || pincode}' is outside our active coverage boundary.`
     };
   }
 

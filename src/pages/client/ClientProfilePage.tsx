@@ -16,8 +16,8 @@ export const ClientProfilePage: React.FC = () => {
   ]);
 
   const [savedAddresses] = useState([
-    { id: 'A-1', label: 'Home', address: '42, 4th Cross, Indiranagar 1st Stage, Bangalore - 560038' },
-    { id: 'A-2', label: 'Parents House', address: '108, Palm Meadows, Whitefield, Bangalore - 560066' }
+    { id: 'A-1', label: 'Home', address: '42, 4th Cross, Indiranagar 1st Stage, Delhi NCR - 560038' },
+    { id: 'A-2', label: 'Parents House', address: '108, Palm Meadows, Whitefield, Delhi NCR - 560066' }
   ]);
 
   const [isEditingProfile, setIsEditingProfile] = useState(false);

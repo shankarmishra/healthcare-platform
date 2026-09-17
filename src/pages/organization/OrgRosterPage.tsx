@@ -19,7 +19,7 @@ export const OrgRosterPage: React.FC = () => {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Hospital Ward Roster Schedule</h1>
-          <p className="text-slate-600 text-xs mt-1">Manipal Hospital Bangalore • Active Weekly Nursing Shifts</p>
+          <p className="text-slate-600 text-xs mt-1">Max Hospital Delhi NCR • Active Weekly Nursing Shifts</p>
         </div>
         <Button
           onClick={() => setIsModalOpen(true)}

@@ -53,7 +53,7 @@ export const ProProfileViewPage: React.FC = () => {
                     <Stethoscope className="w-4 h-4 text-teal-600" /> {pro.qualification} • {pro.experienceYears} Years Experience
                   </p>
                   <p className="text-slate-500 text-xs flex items-center gap-1 mt-1">
-                    <MapPin className="w-3.5 h-3.5 text-slate-400" /> {pro.location?.addressName || 'Central Bangalore'} ({pro.serviceRadius} km coverage)
+                    <MapPin className="w-3.5 h-3.5 text-slate-400" /> {pro.location?.addressName || 'Delhi NCR'} ({pro.serviceRadius} km coverage)
                   </p>
                 </div>
               </div>
@@ -226,7 +226,7 @@ export const ProProfileViewPage: React.FC = () => {
         {selectedTab === 'availability' && (
           <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
             <h3 className="text-lg font-bold text-slate-900">Shift Availability</h3>
-            <p className="text-xs text-slate-500">Professional is available for immediate home-care bookings in Bangalore Central & East.</p>
+            <p className="text-xs text-slate-500">Professional is available for immediate home-care bookings in Delhi NCR Active Hubs.</p>
             <div className="grid grid-cols-7 gap-2 text-center text-xs font-semibold py-4">
               {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => (
                 <div key={day} className="p-3 bg-emerald-50 text-emerald-800 rounded-lg border border-emerald-200">
