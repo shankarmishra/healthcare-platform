@@ -14,6 +14,7 @@ export type StaffRoleCategory =
 
 export type StaffEmploymentStatus =
   | 'active'
+  | 'onboarding'
   | 'on_leave'
   | 'suspended'
   | 'archived';

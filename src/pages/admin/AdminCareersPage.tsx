@@ -13,7 +13,7 @@ import {
   UserCheck,
   CheckCircle2,
   X,
-  ShieldCheck,
+  ArrowRight,
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -35,13 +35,13 @@ export const AdminCareersPage: React.FC = () => {
     return matchesStatus && matchesSearch;
   });
 
-  const handleConvertToStaff = (app: JobApplication) => {
-    // Generate new PNC employee ID
+  const handleConvertToStaffDraft = (app: JobApplication) => {
+    // Generate new PNC employee ID draft
     const newEmpId = `PNC-EMP-00${MOCK_STAFF_PROFILES.length + 45}`;
     const newStaffId = `staff-${Date.now()}`;
 
-    // Create staff profile
-    const newStaff: StaffProfile = {
+    // Create staff profile DRAFT with status 'onboarding' (NOT active directly)
+    const newStaffDraft: StaffProfile = {
       id: newStaffId,
       userId: `user-staff-${Date.now()}`,
       employeeId: newEmpId,
@@ -68,14 +68,14 @@ export const AdminCareersPage: React.FC = () => {
       },
       roleCategory: 'registered_nurse',
       primaryServiceId: 'srv-nursing-01',
-      eligibleServiceIds: ['srv-nursing-01', 'srv-icu-02'],
-      skills: ['Clinical Assessment', 'Patient Care', 'Vitals Monitoring'],
+      eligibleServiceIds: ['srv-nursing-01'],
+      skills: ['Clinical Assessment', 'Patient Care'],
       specializations: [app.qualification],
       totalExperienceYears: app.experienceYears,
       languages: ['Hindi', 'English'],
-      eligibleCities: ['Delhi', 'Noida', 'Gurugram', 'Faridabad'],
+      eligibleCities: ['Delhi', 'Noida'],
       eligibleLocalities: ['All Zones'],
-      eligiblePincodes: ['110001', '201301', '122001'],
+      eligiblePincodes: ['110001', '201301'],
       shiftEligibility: {
         canDo12HourDay: true,
         canDo12HourNight: true,
@@ -89,16 +89,16 @@ export const AdminCareersPage: React.FC = () => {
         { dayOfWeek: 4, startTime: '08:00', endTime: '20:00', isAvailable: true },
         { dayOfWeek: 5, startTime: '08:00', endTime: '20:00', isAvailable: true },
       ],
-      employmentStatus: 'active',
-      verificationStatus: 'verified',
-      onboardingCompletionPercent: 100,
+      employmentStatus: 'onboarding', // Staged draft onboarding
+      verificationStatus: 'pending',
+      onboardingCompletionPercent: 40,
       education: [
         {
           id: `edu-${Date.now()}`,
           qualification: app.qualification,
-          institution: 'Delhi Nursing College & University',
+          institution: 'Nursing Institution',
           completionYear: 2020,
-          verificationStatus: 'verified',
+          verificationStatus: 'pending',
         },
       ],
       experience: [
@@ -108,8 +108,8 @@ export const AdminCareersPage: React.FC = () => {
           role: app.jobTitle,
           startDate: '2021-01-01',
           isCurrent: true,
-          responsibilities: 'Patient care delivery & clinical shift duties.',
-          verificationStatus: 'verified',
+          responsibilities: 'Patient care delivery.',
+          verificationStatus: 'pending',
         },
       ],
       documents: [],
@@ -120,7 +120,7 @@ export const AdminCareersPage: React.FC = () => {
       updatedAt: new Date().toISOString(),
     };
 
-    MOCK_STAFF_PROFILES.push(newStaff);
+    MOCK_STAFF_PROFILES.push(newStaffDraft);
 
     // Update application status
     setApplications((prev) =>
@@ -131,11 +131,11 @@ export const AdminCareersPage: React.FC = () => {
       )
     );
 
-    setConvertSuccessMsg(`Successfully converted ${app.fullName} to active staff member with Employee ID ${newEmpId}!`);
+    setConvertSuccessMsg(`Candidate ${app.fullName} converted to Staff Onboarding Draft (${newEmpId}). Redirecting to Verification Stepper...`);
     setTimeout(() => {
       setConvertSuccessMsg(null);
       setConvertModalOpen(false);
-      navigate(`/admin/staff/${newStaffId}`);
+      navigate(`/admin/staff/new?candidateId=${app.id}`);
     }, 1500);
   };
 
@@ -151,10 +151,10 @@ export const AdminCareersPage: React.FC = () => {
             Care Operations HR & Candidate Desk
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-            Careers ATS & Staffing Pipeline
+            Careers ATS & Candidate Pipeline
           </h1>
           <p className="text-slate-300 text-xs sm:text-sm font-medium">
-            Review applicant profiles, schedule interviews, and convert candidates into background-verified Pulse n Care staff.
+            Review candidate applications, manage ATS stages, and initiate verified staff onboarding.
           </p>
         </div>
 
@@ -190,7 +190,7 @@ export const AdminCareersPage: React.FC = () => {
             { id: 'screening', label: 'Screening' },
             { id: 'interview_scheduled', label: 'Interview' },
             { id: 'offered', label: 'Offered' },
-            { id: 'converted_to_staff', label: 'Converted Staff' },
+            { id: 'converted_to_staff', label: 'Converted Drafts' },
           ].map((status) => (
             <button
               key={status.id}
@@ -222,9 +222,9 @@ export const AdminCareersPage: React.FC = () => {
                 <Badge
                   variant={
                     app.status === 'converted_to_staff'
-                      ? 'success'
-                      : app.status === 'offered'
                       ? 'info'
+                      : app.status === 'offered'
+                      ? 'success'
                       : 'warning'
                   }
                   className="capitalize font-bold text-[10px]"
@@ -274,7 +274,7 @@ export const AdminCareersPage: React.FC = () => {
                 onClick={() => setSelectedApp(app)}
                 className="text-xs font-bold cursor-pointer"
               >
-                View Full CV
+                View CV
               </Button>
 
               {app.status !== 'converted_to_staff' ? (
@@ -288,11 +288,11 @@ export const AdminCareersPage: React.FC = () => {
                   leftIcon={<UserCheck className="w-3.5 h-3.5" />}
                   className="bg-teal-600 hover:bg-teal-700 text-white font-bold cursor-pointer text-xs"
                 >
-                  Convert to Staff
+                  Convert to Staff Draft
                 </Button>
               ) : (
-                <span className="text-xs font-bold text-emerald-600 flex items-center gap-1">
-                  <CheckCircle2 className="w-4 h-4" /> Active Staff
+                <span className="text-xs font-bold text-teal-700 flex items-center gap-1">
+                  <CheckCircle2 className="w-4 h-4" /> Staff Draft Created
                 </span>
               )}
             </div>
@@ -300,7 +300,7 @@ export const AdminCareersPage: React.FC = () => {
         ))}
       </div>
 
-      {/* Convert to Staff Confirmation Modal */}
+      {/* Convert to Staff Draft Modal */}
       {convertModalOpen && selectedApp && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4">
           <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-6 shadow-2xl relative text-left">
@@ -317,19 +317,19 @@ export const AdminCareersPage: React.FC = () => {
                   <div className="w-12 h-12 rounded-2xl bg-teal-50 text-teal-700 flex items-center justify-center font-bold">
                     <UserCheck className="w-6 h-6" />
                   </div>
-                  <h2 className="text-xl font-extrabold text-slate-900">Convert Candidate to Active Staff</h2>
+                  <h2 className="text-xl font-extrabold text-slate-900">Initiate Staff Onboarding Pipeline</h2>
                   <p className="text-xs text-slate-600">
-                    This action will onboard <strong>{selectedApp.fullName}</strong> as an internal verified Pulse n Care employee.
+                    Convert <strong>{selectedApp.fullName}</strong> into a Staff Onboarding Draft. (Requires document verification before activation).
                   </p>
                 </div>
 
                 <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs space-y-2">
-                  <p className="font-bold text-slate-900">System Onboarding Actions:</p>
+                  <p className="font-bold text-slate-900">Staged Pipeline Actions:</p>
                   <ul className="list-disc list-inside text-slate-600 space-y-1">
-                    <li>Generate immutable Employee ID (e.g. PNC-EMP-0045)</li>
-                    <li>Create internal <code>StaffProfile</code> with qualification & experience</li>
-                    <li>Issue first-time login credentials for Employee Duty Portal (<code>/staff/login</code>)</li>
-                    <li>Set employment status to <strong>ACTIVE</strong></li>
+                    <li>Create candidate Staff Draft (<code>employmentStatus = onboarding</code>)</li>
+                    <li>Pre-fill candidate info into 12-Step Onboarding Stepper</li>
+                    <li>Verify nursing license, degree, & police background checks</li>
+                    <li>Provision active login credentials upon final verification</li>
                   </ul>
                 </div>
 
@@ -339,11 +339,11 @@ export const AdminCareersPage: React.FC = () => {
                   </Button>
                   <Button
                     variant="primary"
-                    onClick={() => handleConvertToStaff(selectedApp)}
-                    leftIcon={<ShieldCheck className="w-4 h-4" />}
+                    onClick={() => handleConvertToStaffDraft(selectedApp)}
+                    leftIcon={<ArrowRight className="w-4 h-4" />}
                     className="bg-teal-600 hover:bg-teal-700 text-white font-bold cursor-pointer"
                   >
-                    Confirm & Onboard Staff
+                    Start Onboarding Verification
                   </Button>
                 </div>
               </>
@@ -352,7 +352,7 @@ export const AdminCareersPage: React.FC = () => {
                 <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
                   <CheckCircle2 className="w-10 h-10" />
                 </div>
-                <h3 className="text-xl font-extrabold text-slate-900">Onboarding Complete!</h3>
+                <h3 className="text-xl font-extrabold text-slate-900">Staff Draft Created!</h3>
                 <p className="text-xs text-slate-600">{convertSuccessMsg}</p>
               </div>
             )}

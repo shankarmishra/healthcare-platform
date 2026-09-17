@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { clsx } from 'clsx';
 import type { Service, PatientProfile } from '../../types';
+import { validateNCRServiceLocation } from '../../data/serviceAreaMatrix';
 
 const DRAFT_STORAGE_KEY = 'pulsen_care_b2c_booking_draft_v3';
 
@@ -110,8 +111,37 @@ export const BookingWizardPage: React.FC = () => {
   const [assignmentState, setAssignmentState] = useState<'reviewing' | 'finding' | 'assigned'>('reviewing');
   const [assignedStaff, setAssignedStaff] = useState<any>(null);
 
-  // Load draft from localStorage on mount
+  // Load draft from localStorage & location query params on mount
   useEffect(() => {
+    const locParam = searchParams.get('location');
+    if (locParam) {
+      const decodedLoc = decodeURIComponent(locParam).trim();
+      if (decodedLoc) {
+        const pinMatch = decodedLoc.match(/\b\d{6}\b/);
+        const pin = pinMatch ? pinMatch[0] : '';
+        const validation = validateNCRServiceLocation(decodedLoc, pin);
+        const matchedCity = validation.matchedHub
+          ? (validation.matchedHub.city === 'Delhi' ? 'New Delhi' : validation.matchedHub.city)
+          : (decodedLoc.toLowerCase().includes('gurugram') || decodedLoc.toLowerCase().includes('gurgaon')
+            ? 'Gurugram'
+            : decodedLoc.toLowerCase().includes('noida')
+            ? 'Noida'
+            : decodedLoc.toLowerCase().includes('faridabad')
+            ? 'Faridabad'
+            : 'New Delhi');
+
+        const cleanLine1 = decodedLoc.replace(/\(\d{6}\)/, '').trim();
+
+        setLocationData((prev) => ({
+          ...prev,
+          line1: cleanLine1 || prev.line1,
+          city: matchedCity,
+          pincode: pin || (validation.matchedHub ? validation.matchedHub.pincodePrefixes[0] : prev.pincode),
+          isVerified: true
+        }));
+      }
+    }
+
     try {
       const savedDraft = localStorage.getItem(DRAFT_STORAGE_KEY);
       if (savedDraft) {
@@ -124,7 +154,7 @@ export const BookingWizardPage: React.FC = () => {
         if (parsed.careCategory) setCareCategory(parsed.careCategory);
         if (parsed.selectedTasks) setSelectedTasks(parsed.selectedTasks);
         if (parsed.patient) setPatient(parsed.patient);
-        if (parsed.locationData) setLocationData(parsed.locationData);
+        if (parsed.locationData && !locParam) setLocationData(parsed.locationData);
         if (parsed.scheduleType) setScheduleType(parsed.scheduleType);
         if (parsed.startDate) setStartDate(parsed.startDate);
         if (parsed.endDate) setEndDate(parsed.endDate);
@@ -141,7 +171,7 @@ export const BookingWizardPage: React.FC = () => {
     } catch (e) {
       console.error('Failed to parse saved draft:', e);
     }
-  }, [services]);
+  }, [services, searchParams]);
 
   // Save draft state on changes
   useEffect(() => {

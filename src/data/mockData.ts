@@ -1468,6 +1468,7 @@ export const MOCK_PLATFORM_SETTINGS: PlatformSettings = {
   sessionTimeoutMinutes: 30,
   kycValidityMonths: 12,
   maxFileUploadMb: 10,
+  minimumRestHours: 10,
   supportEmail: 'support@pulsen-care.com',
   supportPhone: '+91-80-4920-8800',
   demoMode: true

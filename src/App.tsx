@@ -1,7 +1,7 @@
 /**
  * Healthcare Staffing & Home Care Platform
  * Master Application Routing & Context Providers
- * Source of Truth: docs/03-Information-Architecture.md, docs/06-Screen-Specification.md (62 Screens)
+ * Source of Truth: p0_master_architecture_hardening_plan.md
  */
 
 import React from 'react';
@@ -23,6 +23,7 @@ import { ServicesPage } from './pages/public/ServicesPage';
 import { ServiceDetailPage } from './pages/public/ServiceDetailPage';
 import { HomeNursingServicePage } from './pages/public/HomeNursingServicePage';
 import { OrgLandingPage } from './pages/public/OrgLandingPage';
+import { CareersPage } from './pages/public/CareersPage';
 import { SearchPage } from './pages/client/SearchPage';
 import { ProProfileViewPage } from './pages/client/ProProfileViewPage';
 import { BookingWizardPage } from './pages/client/BookingWizardPage';
@@ -46,11 +47,8 @@ import { ProReviewsPage } from './pages/pro/ProReviewsPage';
 import { ProNotificationsPage } from './pages/pro/ProNotificationsPage';
 import { ProSupportPage } from './pages/pro/ProSupportPage';
 
-import { CareersPage } from './pages/public/CareersPage';
-
 // Admin Operations Command Center Pages
 import { AdminDashboardPage } from './pages/admin/AdminDashboardPage';
-import { AdminProfessionalsPage } from './pages/admin/AdminProfessionalsPage';
 import { AdminStaffPage } from './pages/admin/AdminStaffPage';
 import { AdminAddStaffWizardPage } from './pages/admin/AdminAddStaffWizardPage';
 import { AdminStaffDetailPage } from './pages/admin/AdminStaffDetailPage';
@@ -81,10 +79,15 @@ import { StaffAvailabilityPage } from './pages/staff/StaffAvailabilityPage';
 import { StaffLeavePage } from './pages/staff/StaffLeavePage';
 import { StaffSecurityPage } from './pages/staff/StaffSecurityPage';
 
-// Organization Pages
+// B2B Organization Workspace Pages
+import { OrgLoginPage } from './pages/organization/OrgLoginPage';
 import { OrgDashboardPage } from './pages/organization/OrgDashboardPage';
+import { OrgRequestsListPage } from './pages/organization/OrgRequestsListPage';
+import { OrgRequestBuilderPage } from './pages/organization/OrgRequestBuilderPage';
 import { OrgRosterPage } from './pages/organization/OrgRosterPage';
 import { OrgTimesheetsPage } from './pages/organization/OrgTimesheetsPage';
+import { OrgInvoicesPage } from './pages/organization/OrgInvoicesPage';
+import { OrgProfilePage } from './pages/organization/OrgProfilePage';
 
 // Utility Pages
 import { NotFoundPage } from './pages/utility/NotFoundPage';
@@ -133,6 +136,19 @@ export const App: React.FC = () => {
                 <Route path="security" element={<StaffSecurityPage />} />
               </Route>
 
+              {/* B2B Organization Workspace Shell */}
+              <Route path="/organization/login" element={<OrgLoginPage />} />
+              <Route path="/organization" element={<OrgLayout />}>
+                <Route index element={<Navigate to="/organization/dashboard" replace />} />
+                <Route path="dashboard" element={<OrgDashboardPage />} />
+                <Route path="requests" element={<OrgRequestsListPage />} />
+                <Route path="requests/new" element={<OrgRequestBuilderPage />} />
+                <Route path="roster" element={<OrgRosterPage />} />
+                <Route path="timesheets" element={<OrgTimesheetsPage />} />
+                <Route path="invoices" element={<OrgInvoicesPage />} />
+                <Route path="profile" element={<OrgProfilePage />} />
+              </Route>
+
               {/* Professional Portal Shell */}
               <Route path="/pro" element={<ProLayout />}>
                 <Route index element={<Navigate to="/pro/dashboard" replace />} />
@@ -156,7 +172,7 @@ export const App: React.FC = () => {
                 <Route path="staff/:staffId" element={<AdminStaffDetailPage />} />
                 <Route path="careers" element={<AdminCareersPage />} />
                 <Route path="organization-requests" element={<AdminOrganizationRequestsPage />} />
-                <Route path="professionals" element={<AdminProfessionalsPage />} />
+                <Route path="professionals" element={<Navigate to="/admin/staff" replace />} />
                 <Route path="kyc" element={<AdminKYCQueuePage />} />
                 <Route path="clients" element={<AdminClientsPage />} />
                 <Route path="organizations" element={<AdminOrganizationsPage />} />
@@ -172,15 +188,6 @@ export const App: React.FC = () => {
                 <Route path="reports" element={<AdminReportsPage />} />
                 <Route path="roles" element={<AdminRolesPage />} />
                 <Route path="settings" element={<AdminSettingsPage />} />
-              </Route>
-
-              {/* Organization Portal Shell */}
-              <Route path="/organization" element={<OrgLayout />}>
-                <Route index element={<Navigate to="/organization/dashboard" replace />} />
-                <Route path="dashboard" element={<OrgDashboardPage />} />
-                <Route path="requests" element={<OrgRosterPage />} />
-                <Route path="roster" element={<OrgRosterPage />} />
-                <Route path="timesheets" element={<OrgTimesheetsPage />} />
               </Route>
 
               {/* Utility Pages */}

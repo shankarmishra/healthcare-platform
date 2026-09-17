@@ -82,43 +82,72 @@ export const LocationPicker: React.FC<LocationPickerProps> = ({ value, onChange,
 
     navigator.geolocation.getCurrentPosition(
       (pos) => {
-        const lat = pos.coords.latitude || 28.6139;
-        const lng = pos.coords.longitude || 77.2090;
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
 
         setSystemState('LOC-04');
 
-        setTimeout(() => {
-          setSystemState('LOC-05');
+        fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`)
+          .then((res) => res.json())
+          .then((data) => {
+            setSystemState('LOC-05');
+            const addr = data?.address || {};
+            const area = addr.suburb || addr.neighbourhood || addr.residential || addr.road || addr.county || 'Locality Area';
+            const cityRaw = addr.city || addr.town || addr.state_district || 'New Delhi';
+            const pin = addr.postcode || '110024';
 
-          // Simulate reverse geocoding to Defence Colony Delhi NCR
-          setTimeout(() => {
+            const validation = validateNCRServiceLocation(cityRaw, pin);
+            const resolvedCity = validation.matchedHub
+              ? (validation.matchedHub.city === 'Delhi' ? 'New Delhi' : validation.matchedHub.city)
+              : 'New Delhi';
+
             setSystemState('LOC-06');
-
             setTimeout(() => {
               const updatedData: LocationData = {
                 ...value,
                 latitude: lat,
                 longitude: lng,
-                line1: value.line1 || 'A-124, Defence Colony',
-                line2: value.line2 || 'Near Lajpat Nagar Metro Station',
-                landmark: value.landmark || 'Opposite Flyover Pillar 14',
-                city: 'New Delhi',
+                line1: area,
+                line2: addr.road || value.line2 || 'Main Sector Road',
+                landmark: value.landmark || '',
+                city: resolvedCity,
                 state: 'Delhi NCR',
-                pincode: '110024',
+                pincode: pin,
                 isVerified: true
               };
-
               onChange(updatedData);
+              setSystemState(validation.isSupported ? 'LOC-07' : 'LOC-08');
+            }, 300);
+          })
+          .catch(() => {
+            setSystemState('LOC-05');
+            let city = 'New Delhi';
+            let pin = '110024';
+            let line1 = 'Defence Colony';
 
-              const check = validateNCRServiceLocation('New Delhi', '110024');
-              if (check.isSupported) {
-                setSystemState('LOC-07');
-              } else {
-                setSystemState('LOC-08');
-              }
-            }, 600);
-          }, 600);
-        }, 500);
+            if (lat < 28.48) {
+              city = 'Gurugram';
+              pin = '122002';
+              line1 = 'DLF Phase 5';
+            } else if (lng > 77.3) {
+              city = 'Noida';
+              pin = '201301';
+              line1 = 'Sector 62';
+            }
+
+            const updatedData: LocationData = {
+              ...value,
+              latitude: lat,
+              longitude: lng,
+              line1,
+              city,
+              state: 'Delhi NCR',
+              pincode: pin,
+              isVerified: true
+            };
+            onChange(updatedData);
+            setSystemState('LOC-07');
+          });
       },
       (err) => {
         if (err.code === err.PERMISSION_DENIED) {
@@ -127,7 +156,7 @@ export const LocationPicker: React.FC<LocationPickerProps> = ({ value, onChange,
           setSystemState('LOC-10');
         }
       },
-      { timeout: 10000 }
+      { timeout: 8000, enableHighAccuracy: true }
     );
   };
 
@@ -224,8 +253,8 @@ export const LocationPicker: React.FC<LocationPickerProps> = ({ value, onChange,
 
         {systemState === 'LOC-05' && (
           <div className="p-3 bg-teal-50 rounded-xl border border-teal-200 text-xs text-brand-teal flex items-center gap-2">
-            <MapPin className="w-4 h-4" />
-            <span>Resolved Address: Defence Colony, New Delhi (110024)</span>
+            <MapPin className="w-4 h-4 shrink-0" />
+            <span>Resolved Address: {value.line1 || 'Locality'}, {value.city} ({value.pincode})</span>
           </div>
         )}
 

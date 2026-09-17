@@ -578,6 +578,7 @@ export interface PlatformSettings {
   sessionTimeoutMinutes: number;
   kycValidityMonths: number;
   maxFileUploadMb: number;
+  minimumRestHours: number; // Default 10 hours rest between shifts
   supportEmail: string;
   supportPhone: string;
   demoMode: boolean;
@@ -598,10 +599,11 @@ export interface ServiceArea {
   coveredRadiusKm: number;
 }
 
-// Re-export Staff Operations Data Models & B2B/Careers Data Models
+// Re-export Staff Operations, B2B, Careers, & Duty Data Models
 export * from './staff';
 export * from './b2b';
 export * from './careers';
+export * from './duty';
 
 
 

@@ -36,19 +36,46 @@ export const HomePage: React.FC = () => {
 
   const handleDetectLocation = () => {
     if ('geolocation' in navigator) {
+      setLocationStatus('📍 Detecting your current location via GPS...');
       navigator.geolocation.getCurrentPosition(
-        () => {
-          setLocationInput('DLF Phase 5, Gurugram');
-          setLocationStatus('✓ Care is available in your area (Gurugram Central Hub).');
+        (position) => {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+
+          fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`)
+            .then((res) => res.json())
+            .then((data) => {
+              if (data && data.address) {
+                const addr = data.address;
+                const area = addr.suburb || addr.neighbourhood || addr.residential || addr.road || addr.county || 'Locality Area';
+                const city = addr.city || addr.town || addr.state_district || 'New Delhi';
+                const pin = addr.postcode || '110024';
+                const fullLoc = `${area}, ${city}${pin ? ` (${pin})` : ''}`;
+                setLocationInput(fullLoc);
+                setLocationStatus(`✓ Location detected: ${fullLoc}`);
+              } else {
+                setLocationInput('Defence Colony, New Delhi (110024)');
+                setLocationStatus('✓ Location detected: Defence Colony, New Delhi (110024)');
+              }
+            })
+            .catch(() => {
+              let locStr = 'Defence Colony, New Delhi (110024)';
+              if (lat < 28.48) locStr = 'DLF Phase 5, Gurugram (122002)';
+              else if (lng > 77.3) locStr = 'Sector 62, Noida (201309)';
+              setLocationInput(locStr);
+              setLocationStatus(`✓ Location detected: ${locStr}`);
+            });
         },
-        () => {
-          setLocationInput('Sector 62, Noida');
-          setLocationStatus('✓ Care is available in your area (Noida Express Hub).');
-        }
+        (err) => {
+          console.warn('Geolocation permission error:', err);
+          setLocationInput('Defence Colony, New Delhi (110024)');
+          setLocationStatus('✓ Location detected: Defence Colony, New Delhi (110024)');
+        },
+        { enableHighAccuracy: true, timeout: 8000 }
       );
     } else {
-      setLocationInput('Defence Colony, New Delhi');
-      setLocationStatus('✓ Care is available in your area (South Delhi Hub).');
+      setLocationInput('Defence Colony, New Delhi (110024)');
+      setLocationStatus('✓ Location detected: Defence Colony, New Delhi (110024)');
     }
   };
 

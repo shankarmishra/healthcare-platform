@@ -115,7 +115,7 @@ export const PublicLayout: React.FC = () => {
 
           <div className="w-full flex items-center justify-between gap-1.5 sm:gap-3 lg:gap-4 relative z-10">
             
-            {/* Left: Master Brand Logo & Delhi NCR Pill */}
+            {/* Left: Master Brand Logo */}
             <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 shrink-0">
               <Link to="/" className="flex items-center gap-2 group shrink-0">
                 <img
@@ -124,17 +124,6 @@ export const PublicLayout: React.FC = () => {
                   className="h-7 lg:h-8 w-auto group-hover:scale-[1.02] transition-transform duration-200"
                 />
               </Link>
-
-              {/* Delhi NCR Coverage Hub Pill */}
-              <button
-                onClick={() => setLocationModalOpen(true)}
-                className="hidden lg:flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50/90 border border-emerald-200/80 text-[11px] font-semibold text-emerald-800 hover:bg-emerald-100 transition-all cursor-pointer whitespace-nowrap shadow-2xs"
-              >
-                <MapPin className="w-3 h-3 text-emerald-600 shrink-0" />
-                <span className="whitespace-nowrap">{selectedHub.city} Hub</span>
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
-                <ChevronDown className="w-3 h-3 text-emerald-600/70 shrink-0" />
-              </button>
             </div>
 
             {/* Center Navigation Links */}
@@ -373,22 +362,8 @@ export const PublicLayout: React.FC = () => {
         {/* Mobile Slide-down Drawer */}
         {mobileMenuOpen && (
           <div className="lg:hidden border border-slate-200/90 bg-white/98 backdrop-blur-2xl p-4 mt-2 rounded-3xl space-y-4 shadow-2xl relative z-40 max-h-[calc(100vh-100px)] overflow-y-auto">
-            {/* Mobile Hub Selector & Phone Hotline */}
-            <div className="flex flex-col gap-2 pb-3 border-b border-slate-100">
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  setLocationModalOpen(true);
-                }}
-                className="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-emerald-50/90 border border-emerald-200/80 text-xs font-semibold text-emerald-900"
-              >
-                <div className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-emerald-600" />
-                  <span>Coverage Hub: <strong>{selectedHub.city}</strong></span>
-                </div>
-                <ChevronDown className="w-4 h-4 text-emerald-600" />
-              </button>
-
+            {/* Mobile Operations Hotline */}
+            <div className="pb-3 border-b border-slate-100">
               <a
                 href="tel:+919876543210"
                 className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-slate-100 text-slate-800 text-xs font-bold border border-slate-200"
