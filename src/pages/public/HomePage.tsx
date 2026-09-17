@@ -4,13 +4,10 @@ import { Button } from '../../components/common/Button';
 import { Card } from '../../components/common/Card';
 import { Modal } from '../../components/common/Modal';
 import { Input } from '../../components/common/Input';
-import { ServiceCard } from '../../components/domain/ServiceCard';
-import { useBookings } from '../../context/BookingContext';
 import { HealthcareTexture } from '../../components/common/HealthcareTexture';
 import {
   MapPin,
   ShieldCheck,
-  Award,
   Clock,
   UserCheck,
   ArrowRight,
@@ -18,13 +15,11 @@ import {
   Building2,
   PhoneCall,
   Send,
-  Stethoscope
+  Stethoscope,
+  CheckCircle2
 } from 'lucide-react';
-import type { Service } from '../../types';
-
 export const HomePage: React.FC = () => {
   const navigate = useNavigate();
-  const { services } = useBookings();
 
   const [locationInput, setLocationInput] = useState('');
   const [locationStatus, setLocationStatus] = useState<string | null>(null);
@@ -33,8 +28,6 @@ export const HomePage: React.FC = () => {
   const [callbackPhone, setCallbackPhone] = useState('');
   const [callbackNotes, setCallbackNotes] = useState('');
   const [callbackSubmitted, setCallbackSubmitted] = useState(false);
-
-  const featuredServices: Service[] = services.slice(0, 6);
 
   const handleDetectLocation = () => {
     if ('geolocation' in navigator) {
@@ -49,6 +42,7 @@ export const HomePage: React.FC = () => {
         }
       );
     } else {
+      setLocationInput('Defence Colony, New Delhi');
       setLocationStatus('✓ Home Nursing & Clinical Services are active in your area.');
     }
   };
@@ -71,37 +65,115 @@ export const HomePage: React.FC = () => {
     { step: '06', title: 'Care is confirmed', desc: 'Receive instant confirmation & assigned nurse credentials at doorstep.' }
   ];
 
+  const serviceEcosystemTiles = [
+    {
+      id: 'nursing',
+      title: 'Home Nursing',
+      desc: 'Wound care, IV fluids, catheter hygiene & vital monitoring',
+      path: '/services/home-nursing',
+      image: '/assets/services/home-nursing/pulse-n-care-wound-care.webp',
+      badge: '24×7 Flagship'
+    },
+    {
+      id: 'caregiver',
+      title: 'Caregiver / Attendant',
+      desc: 'Bathing, mobility, diaper changes & bedside supervision',
+      path: '/services/12-hour-caregiver-attendant',
+      image: '/assets/services/home-nursing/pulse-n-care-bedside-support.webp',
+      badge: '12h / 24h Shifts'
+    },
+    {
+      id: 'physio',
+      title: 'Physiotherapy',
+      desc: 'Post-op knee rehab, joint stiffness & stroke mobility recovery',
+      path: '/services/orthopedic-joint-rehab-physio',
+      image: '/assets/services/home-nursing/pulse-n-care-mobility.webp',
+      badge: 'Certified BPT'
+    },
+    {
+      id: 'doctor',
+      title: 'Doctor Visit',
+      desc: 'In-home clinical consultation, physical exam & prescriptions',
+      path: '/services/general-physician-home-visit',
+      image: '/assets/services/home-nursing/pulse-n-care-medication.webp',
+      badge: 'MBBS / MD'
+    },
+    {
+      id: 'icu',
+      title: 'Specialized ICU Care',
+      desc: 'Ventilator management, tracheostomy suctioning & ICU setup',
+      path: '/services/home-icu-critical-care-nurse',
+      image: '/assets/services/home-nursing/pulse-n-care-equipment.webp',
+      badge: 'Critical Care'
+    }
+  ];
+
   return (
-    <div className="space-y-20 pb-20 bg-white text-text-primary text-left">
-      {/* 01. Hero Section — Nurse Care at Doorstep */}
-      <section className="relative pt-10 pb-16 bg-gradient-to-b from-slate-50 via-teal-50/20 to-white border-b border-border-default overflow-hidden">
+    <div className="space-y-20 pb-20 bg-white text-text-primary text-left overflow-x-hidden">
+      
+      {/* ========================================================================= */}
+      {/* 01. FULL-WIDTH PREMIUM HEALTHCARE CAMPAIGN BANNER HERO                    */}
+      {/* ========================================================================= */}
+      <section className="relative min-h-[680px] pt-10 pb-16 bg-gradient-to-b from-slate-50 via-teal-50/20 to-white border-b border-border-default overflow-hidden flex items-center">
         <HealthcareTexture type="clinical-wave" opacity={0.03} />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-            {/* Left Column: Brand Storytelling & Location Console */}
-            <div className="lg:col-span-7 space-y-6">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-canvas-teal text-brand-teal text-xs font-extrabold border border-teal-200 uppercase tracking-widest shadow-2xs">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            {/* Left Column (45%): Brand Storytelling & Location Console */}
+            <div className="lg:col-span-6 space-y-6">
+              
+              {/* Category Pill */}
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-canvas-teal text-brand-teal text-xs font-black tracking-widest uppercase border border-teal-200 shadow-2xs">
                 <Sparkles className="w-3.5 h-3.5 text-brand-teal" />
-                <span>Verified Home Healthcare Operations</span>
+                <span>Pulse n Care · Home Healthcare</span>
               </div>
 
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-text-primary tracking-tight leading-[1.1]">
-                Nurse care at <span className="text-brand-teal">doorstep.</span>
+              {/* Main Headline */}
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black text-text-primary tracking-tight leading-[1.05]">
+                Nurse care at <span className="text-brand-teal underline decoration-teal-300 decoration-wavy decoration-2">doorstep.</span>
               </h1>
 
-              <p className="text-base sm:text-lg text-text-secondary leading-relaxed max-w-2xl font-medium">
-                Professional healthcare support arranged at home based on care requirements, timing, location and availability across Delhi NCR.
+              {/* Subheading */}
+              <p className="text-lg text-text-secondary leading-relaxed max-w-xl font-medium">
+                Professional healthcare support arranged at home — tailored to your patient's needs, schedule and location across Delhi NCR.
               </p>
 
-              {/* Location & Care Console: Where do you need care? */}
-              <div className="bg-white p-4 sm:p-5 rounded-3xl shadow-card border border-border-default space-y-3.5">
-                <span className="text-xs font-extrabold text-brand-teal uppercase tracking-wider block">
+              {/* Primary Action Buttons */}
+              <div className="flex flex-wrap items-center gap-3 pt-1">
+                <Button
+                  variant="primary"
+                  onClick={() => navigate('/client/booking/wizard?serviceId=srv-nursing-post-op')}
+                  rightIcon={<ArrowRight className="w-4 h-4" />}
+                  className="bg-brand-teal hover:bg-brand-teal-hover text-white font-black text-base px-8 py-4 rounded-2xl cursor-pointer shadow-card"
+                >
+                  Book a service
+                </Button>
+
+                <Button
+                  variant="outline"
+                  onClick={() => navigate('/services')}
+                  className="border-border-default text-text-primary hover:bg-canvas-secondary font-bold text-base px-6 py-4 rounded-2xl cursor-pointer"
+                >
+                  Explore services
+                </Button>
+
+                <button
+                  onClick={() => setCallbackModalOpen(true)}
+                  className="text-xs font-extrabold text-brand-teal hover:underline px-3 py-2 cursor-pointer"
+                >
+                  Talk to our care team →
+                </button>
+              </div>
+
+              {/* Compact Care Location Console */}
+              <div className="bg-white p-4 sm:p-5 rounded-3xl shadow-card border border-border-default space-y-3">
+                <span className="text-xs font-extrabold text-brand-teal uppercase tracking-widest block">
                   Where do you need care?
                 </span>
 
                 <div className="flex flex-col sm:flex-row items-center gap-3">
-                  <div className="flex-1 flex items-center gap-2.5 px-3 py-2.5 bg-canvas-secondary rounded-2xl border border-border-default w-full">
+                  <div className="flex-1 flex items-center gap-2.5 px-3.5 py-3 bg-canvas-secondary rounded-2xl border border-border-default w-full">
                     <MapPin className="w-4 h-4 text-brand-teal shrink-0" />
                     <input
                       type="text"
@@ -119,117 +191,191 @@ export const HomePage: React.FC = () => {
                     variant="outline"
                     size="sm"
                     onClick={handleDetectLocation}
-                    className="text-xs font-bold shrink-0 border-teal-200 text-brand-teal hover:bg-canvas-teal cursor-pointer"
+                    className="text-xs font-extrabold shrink-0 border-teal-200 text-brand-teal hover:bg-canvas-teal cursor-pointer px-4 py-3 rounded-2xl"
                   >
-                    Use current location
-                  </Button>
-
-                  <Button
-                    variant="primary"
-                    size="sm"
-                    onClick={() => navigate('/client/booking/wizard?serviceId=srv-nursing-post-op')}
-                    className="bg-brand-teal text-white font-extrabold px-6 py-3 rounded-2xl cursor-pointer shrink-0"
-                  >
-                    Book a service
+                    📍 Use current location
                   </Button>
                 </div>
 
                 {locationStatus && (
-                  <p className="text-xs font-bold text-emerald-800 bg-emerald-50 p-2.5 rounded-xl border border-emerald-200">
+                  <p className="text-xs font-bold text-emerald-800 bg-emerald-50 p-2.5 rounded-xl border border-emerald-200 animate-fadeIn">
                     {locationStatus}
                   </p>
                 )}
-
-                <div className="pt-2 flex flex-wrap items-center gap-3">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => navigate('/services')}
-                    className="text-xs font-extrabold text-brand-teal hover:bg-canvas-teal cursor-pointer"
-                  >
-                    Explore services →
-                  </Button>
-
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setCallbackModalOpen(true)}
-                    className="text-xs font-extrabold text-text-secondary hover:text-text-primary cursor-pointer"
-                  >
-                    Talk to our care team
-                  </Button>
-                </div>
               </div>
 
-              {/* Factual Trust Indicators */}
-              <div className="pt-2 flex flex-wrap items-center gap-6 text-xs text-text-secondary font-semibold">
+              {/* Factual Hero Trust Strip */}
+              <div className="pt-2 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs font-bold text-text-secondary">
                 <span className="flex items-center gap-1.5 text-text-primary">
-                  <ShieldCheck className="w-4 h-4 text-brand-teal" /> Council-Verified Nursing Staff
+                  <CheckCircle2 className="w-4 h-4 text-brand-teal" /> 24×7 Care Options
                 </span>
                 <span className="flex items-center gap-1.5 text-text-primary">
-                  <Clock className="w-4 h-4 text-brand-teal" /> Central Operations Oversight
+                  <CheckCircle2 className="w-4 h-4 text-brand-teal" /> 12h & Night Shifts
                 </span>
                 <span className="flex items-center gap-1.5 text-text-primary">
-                  <Award className="w-4 h-4 text-brand-teal" /> Delhi NCR Active Hubs
+                  <CheckCircle2 className="w-4 h-4 text-brand-teal" /> Delhi NCR Service Coverage
+                </span>
+                <span className="flex items-center gap-1.5 text-text-primary">
+                  <CheckCircle2 className="w-4 h-4 text-brand-teal" /> Managed Care Team
                 </span>
               </div>
             </div>
 
-            {/* Right Column: Branded Hero Photography & Nurse Cutout */}
-            <div className="lg:col-span-5 relative">
+            {/* Right Column (55%): Wide Photographic Campaign Scene & Floating Product Cards */}
+            <div className="lg:col-span-6 relative">
               <div className="relative mx-auto rounded-3xl overflow-hidden shadow-card border-4 border-white bg-white">
+                
+                {/* 5-Person Coordinated Pulse n Care Team Hero Image */}
                 <img
-                  src="/assets/services/home-nursing/pulse-n-care-home-nursing-hero.jpg"
-                  alt="Pulse n Care Home Nurse"
-                  className="w-full h-[460px] object-cover"
+                  src="/assets/services/home-nursing/pulse-n-care-team-hero.jpg"
+                  alt="Pulse n Care Healthcare Care Team"
+                  className="w-full h-[520px] object-cover object-center"
                 />
 
                 {/* Branded Uniform Logo Badge */}
-                <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-teal-200 shadow-2xs flex items-center gap-2">
-                  <img src="/assets/brand/pulse-n-care/pulse-n-care-logo.svg" alt="Pulse n Care" className="h-5 w-auto" />
+                <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-md px-4 py-2 rounded-full border border-teal-200 shadow-2xs flex items-center gap-2.5">
+                  <img src="/assets/brand/pulse-n-care/pulse-n-care-logo.svg" alt="Pulse n Care" className="h-6 w-auto" />
+                  <span className="text-[10px] font-black text-brand-teal uppercase tracking-widest border-l border-slate-200 pl-2">
+                    Official Care Team
+                  </span>
                 </div>
 
-                {/* Operations Staff Badge */}
-                <div className="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-border-default shadow-subtle flex items-center justify-between">
+                {/* Micro Role Badges */}
+                <div className="absolute top-16 right-4 flex flex-col gap-2">
+                  <span className="bg-slate-900/85 backdrop-blur-md text-white px-3 py-1 rounded-full text-[10px] font-extrabold border border-white/20">
+                    Lead Nurse (RN)
+                  </span>
+                  <span className="bg-slate-900/85 backdrop-blur-md text-white px-3 py-1 rounded-full text-[10px] font-extrabold border border-white/20">
+                    Physician (MBBS)
+                  </span>
+                  <span className="bg-slate-900/85 backdrop-blur-md text-white px-3 py-1 rounded-full text-[10px] font-extrabold border border-white/20">
+                    Physiotherapist (BPT)
+                  </span>
+                </div>
+
+                {/* Bottom Floating Operations Status Overlay */}
+                <div className="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-border-default shadow-subtle flex items-center justify-between gap-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-canvas-teal text-brand-teal flex items-center justify-center font-bold border border-teal-200">
+                    <div className="w-10 h-10 rounded-xl bg-canvas-teal text-brand-teal flex items-center justify-center font-bold border border-teal-200 shrink-0">
                       <UserCheck className="w-5 h-5" />
                     </div>
                     <div className="text-left">
-                      <p className="text-xs font-extrabold text-text-primary">Internal Workforce Allocation</p>
-                      <p className="text-[11px] text-text-muted">Assigned by Central Operations Desk</p>
+                      <p className="text-xs font-black text-text-primary">Managed In-House Care Roster</p>
+                      <p className="text-[11px] text-text-muted">Assigned & Monitored by Central Operations</p>
                     </div>
                   </div>
-                  <span className="text-[10px] font-extrabold text-brand-teal bg-canvas-teal px-2.5 py-1 rounded-full border border-teal-200 uppercase">
+                  <span className="text-[10px] font-black text-brand-teal bg-canvas-teal px-3 py-1.5 rounded-full border border-teal-200 uppercase shrink-0">
                     Council Verified
                   </span>
                 </div>
               </div>
+
+              {/* Floating Product Card 1: Active Hubs */}
+              <div className="hidden xl:flex absolute -bottom-6 -left-6 bg-white p-4 rounded-2xl border border-border-default shadow-card items-center gap-3 w-64 z-20">
+                <div className="w-10 h-10 rounded-xl bg-canvas-teal text-brand-teal flex items-center justify-center shrink-0">
+                  <MapPin className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-xs font-black text-text-primary">Delhi NCR Coverage</p>
+                  <p className="text-[10px] text-text-muted">Delhi • Noida • Gurugram • Faridabad</p>
+                </div>
+              </div>
+
+              {/* Floating Product Card 2: Shift Options */}
+              <div className="hidden xl:flex absolute -top-4 -left-6 bg-white p-3.5 rounded-2xl border border-border-default shadow-card items-center gap-3 z-20">
+                <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0 border border-emerald-200">
+                  <Clock className="w-4 h-4" />
+                </div>
+                <div>
+                  <p className="text-xs font-black text-text-primary">Flexible Shift Options</p>
+                  <p className="text-[10px] text-text-muted">Short Visit • 12h Day/Night • 24h Rotational</p>
+                </div>
+              </div>
             </div>
+
           </div>
         </div>
       </section>
 
-      {/* 02. Flagship Service Showcase: 24×7 Home Nursing */}
+      {/* ========================================================================= */}
+      {/* 02. SERVICE ECOSYSTEM STRIP IMMEDIATELY BELOW HERO                         */}
+      {/* ========================================================================= */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        <div className="text-left space-y-2">
+          <span className="text-xs font-black text-brand-teal uppercase tracking-widest block">
+            Integrated Service Ecosystem
+          </span>
+          <h2 className="text-3xl sm:text-4xl font-black text-text-primary tracking-tight">
+            Care for different needs. One coordinated team.
+          </h2>
+          <p className="text-sm text-text-secondary max-w-2xl font-medium">
+            Select any specialized service below to arrange verified, internal care support for your family.
+          </p>
+        </div>
+
+        {/* 5 Service Tiles with Alternating Visual Rhythm */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
+          {serviceEcosystemTiles.map((tile, idx) => (
+            <div
+              key={tile.id}
+              onClick={() => navigate(tile.path)}
+              className={`group bg-white rounded-3xl border border-border-default p-4 space-y-3 cursor-pointer hover:border-brand-teal hover:shadow-card transition-all flex flex-col justify-between ${
+                idx === 0 ? 'lg:col-span-1 ring-2 ring-brand-teal/30 bg-canvas-teal/10' : ''
+              }`}
+            >
+              <div className="space-y-3">
+                <div className="relative h-32 rounded-2xl overflow-hidden bg-slate-100">
+                  <img
+                    src={tile.image}
+                    alt={tile.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <span className="absolute top-2 left-2 bg-white/95 backdrop-blur-md text-[9px] font-black text-brand-teal px-2 py-0.5 rounded-md border border-teal-200 uppercase">
+                    {tile.badge}
+                  </span>
+                </div>
+
+                <div className="space-y-1">
+                  <h3 className="font-black text-text-primary text-sm group-hover:text-brand-teal transition-colors">
+                    {tile.title}
+                  </h3>
+                  <p className="text-[11px] text-text-muted leading-relaxed font-medium">
+                    {tile.desc}
+                  </p>
+                </div>
+              </div>
+
+              <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-brand-teal">
+                <span>View Details</span>
+                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* 03. FEATURED FLAGSHIP SERVICE SHOWCASE (24×7 HOME NURSING)               */}
+      {/* ========================================================================= */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-gradient-to-r from-teal-900 via-brand-teal to-teal-800 text-white rounded-3xl p-8 sm:p-10 shadow-card flex flex-col lg:flex-row items-center justify-between gap-8 relative overflow-hidden">
+        <div className="bg-gradient-to-r from-slate-900 via-teal-950 to-slate-900 text-white rounded-3xl p-8 sm:p-12 shadow-card flex flex-col lg:flex-row items-center justify-between gap-8 relative overflow-hidden">
           <HealthcareTexture type="care-pathway" opacity={0.08} />
 
           <div className="space-y-4 text-left max-w-2xl relative z-10">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold bg-white/10 text-teal-200 border border-white/20 uppercase tracking-widest">
-              Featured Flagship Service
+            <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-black bg-white/10 text-teal-300 border border-white/20 uppercase tracking-widest">
+              Flagship Clinical Service
             </span>
-            <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight">
               24×7 Home Nursing Care
             </h2>
-            <p className="text-sm text-teal-100 leading-relaxed font-medium">
-              Dedicated nursing support delivered at home. Includes short clinical visits, 12-hour day/night shifts, 24-hour rotational care, post-operative wound dressing, catheter management, and tube feeding.
+            <p className="text-sm sm:text-base text-teal-100 leading-relaxed font-medium">
+              Dedicated hospital-grade nursing care delivered at home. Includes sterile post-op wound dressings, IV/IM medication, catheter & stoma hygiene, vitals charting, and shift handovers.
             </p>
 
             <div className="flex flex-wrap items-center gap-4 text-xs font-bold text-white pt-2">
-              <span className="bg-white/10 px-3 py-1 rounded-lg border border-white/20">✓ 2–4h Short Visit</span>
-              <span className="bg-white/10 px-3 py-1 rounded-lg border border-white/20">✓ 12h Day / Night Shift</span>
-              <span className="bg-white/10 px-3 py-1 rounded-lg border border-white/20">✓ 24h Rotational Handover</span>
+              <span className="bg-white/10 px-3.5 py-1.5 rounded-xl border border-white/20">✓ 2–4h Clinical Visit</span>
+              <span className="bg-white/10 px-3.5 py-1.5 rounded-xl border border-white/20">✓ 12h Day / Night Shift</span>
+              <span className="bg-white/10 px-3.5 py-1.5 rounded-xl border border-white/20">✓ 24h Rotational Care</span>
             </div>
           </div>
 
@@ -238,7 +384,7 @@ export const HomePage: React.FC = () => {
               variant="primary"
               onClick={() => navigate('/services/home-nursing')}
               rightIcon={<ArrowRight className="w-4 h-4" />}
-              className="bg-white text-brand-teal hover:bg-teal-50 font-extrabold px-8 py-3.5 rounded-2xl cursor-pointer text-sm shadow-md"
+              className="bg-brand-teal text-white hover:bg-brand-teal-hover font-black px-8 py-4 rounded-2xl cursor-pointer text-sm shadow-md"
             >
               Explore Home Nursing
             </Button>
@@ -246,61 +392,30 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* 03. Complete Healthcare Service Ecosystem */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 text-left">
-          <div className="space-y-1">
-            <span className="text-xs font-extrabold text-brand-teal uppercase tracking-widest block">
-              Complete Service Ecosystem
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-black text-text-primary tracking-tight">
-              Specialized Home Care Services
-            </h2>
-            <p className="text-xs text-text-muted">
-              Select any care category below to arrange managed support for your family.
-            </p>
-          </div>
-
-          <Link to="/services">
-            <Button variant="ghost" className="text-brand-teal font-extrabold text-xs flex items-center gap-1 cursor-pointer">
-              Explore All Services <ArrowRight className="w-4 h-4" />
-            </Button>
-          </Link>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {featuredServices.map((service: Service) => (
-            <ServiceCard
-              key={service.id}
-              service={service}
-              onSelect={() => navigate(`/services/${service.slug || service.id}`)}
-            />
-          ))}
-        </div>
-      </section>
-
-      {/* 04. Care Pathway (01 to 06) */}
+      {/* ========================================================================= */}
+      {/* 04. SCROLL-TRIGGERED CARE PATHWAY (HOW ARRANGING CARE WORKS)              */}
+      {/* ========================================================================= */}
       <section id="how-it-works" className="relative bg-canvas-secondary py-16 border-y border-border-default overflow-hidden">
         <HealthcareTexture type="care-pathway" opacity={0.03} />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 text-center relative z-10">
           <div className="space-y-2">
-            <span className="text-xs font-extrabold text-brand-teal uppercase tracking-widest block">
+            <span className="text-xs font-black text-brand-teal uppercase tracking-widest block">
               Care Concierge Process
             </span>
-            <h2 className="text-2xl sm:text-3xl font-black text-text-primary tracking-tight">
+            <h2 className="text-3xl sm:text-4xl font-black text-text-primary tracking-tight">
               How Arranging Care Works
             </h2>
-            <p className="text-xs text-text-muted max-w-xl mx-auto">
-              Tell us what care you need. Pulse n Care Operations arranges qualified support tailored to your requirements.
+            <p className="text-xs sm:text-sm text-text-muted max-w-xl mx-auto">
+              Tell us what care you need. Pulse n Care Central Operations arranges qualified internal support tailored to your requirements.
             </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-left">
             {carePathwaySteps.map((item) => (
-              <div key={item.step} className="bg-white p-6 rounded-2xl border border-border-default shadow-2xs space-y-2 relative">
-                <span className="text-xl font-mono font-black text-brand-teal block">{item.step}</span>
-                <h3 className="font-extrabold text-text-primary text-sm">{item.title}</h3>
+              <div key={item.step} className="bg-white p-6 rounded-3xl border border-border-default shadow-2xs space-y-3 relative group hover:border-brand-teal transition-all">
+                <span className="text-2xl font-mono font-black text-brand-teal block">{item.step}</span>
+                <h3 className="font-black text-text-primary text-base">{item.title}</h3>
                 <p className="text-xs text-text-muted leading-relaxed font-medium">{item.desc}</p>
               </div>
             ))}
@@ -308,74 +423,76 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* 05. Pulse n Care Care Team (Capabilities & Managed Workforce Roster Showcase — NO PUBLIC MARKETPLACE) */}
+      {/* ========================================================================= */}
+      {/* 05. PULSE N CARE CARE TEAM — CAPABILITIES & TRUST (NO MARKETPLACE)        */}
+      {/* ========================================================================= */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 text-left">
         <div className="max-w-3xl space-y-2">
-          <span className="text-xs font-extrabold text-brand-teal uppercase tracking-widest block">
-            Operations & Clinical Oversight
+          <span className="text-xs font-black text-brand-teal uppercase tracking-widest block">
+            Internal Operations & Governance
           </span>
-          <h2 className="text-2xl sm:text-3xl font-black text-text-primary tracking-tight">
-            Pulse n Care Care Team
+          <h2 className="text-3xl sm:text-4xl font-black text-text-primary tracking-tight">
+            One team. Different kinds of care.
           </h2>
           <p className="text-sm text-text-secondary leading-relaxed font-medium">
-            Qualified and credential-verified care team managed by Pulse n Care Operations across active Delhi NCR dispatch hubs.
+            Qualified and credential-verified care team managed directly by Pulse n Care Operations across active Delhi NCR dispatch hubs.
           </p>
         </div>
 
         {/* Governance Pillars */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card className="p-6 space-y-3 border-border-default bg-white shadow-2xs">
-            <div className="w-10 h-10 rounded-xl bg-canvas-teal text-brand-teal flex items-center justify-center font-bold border border-teal-200">
-              <Stethoscope className="w-5 h-5" />
+          <Card className="p-6 space-y-3 border-border-default bg-white shadow-2xs rounded-3xl">
+            <div className="w-12 h-12 rounded-2xl bg-canvas-teal text-brand-teal flex items-center justify-center font-bold border border-teal-200">
+              <Stethoscope className="w-6 h-6" />
             </div>
-            <h3 className="font-extrabold text-text-primary text-base">Qualified Nursing Qualifications</h3>
+            <h3 className="font-black text-text-primary text-lg">Verified Nursing Qualifications</h3>
             <p className="text-xs text-text-muted leading-relaxed">
-              Staff hold B.Sc Nursing or GNM qualifications with active state nursing council registrations and verified clinical procedure experience.
+              Staff hold B.Sc Nursing, GNM, or BPT qualifications with active Delhi Nursing Council (DNC) or state registrations.
             </p>
           </Card>
 
-          <Card className="p-6 space-y-3 border-border-default bg-white shadow-2xs">
-            <div className="w-10 h-10 rounded-xl bg-canvas-teal text-brand-teal flex items-center justify-center font-bold border border-teal-200">
-              <ShieldCheck className="w-5 h-5" />
+          <Card className="p-6 space-y-3 border-border-default bg-white shadow-2xs rounded-3xl">
+            <div className="w-12 h-12 rounded-2xl bg-canvas-teal text-brand-teal flex items-center justify-center font-bold border border-teal-200">
+              <ShieldCheck className="w-6 h-6" />
             </div>
-            <h3 className="font-extrabold text-text-primary text-base">Operational Governance</h3>
+            <h3 className="font-black text-text-primary text-lg">Operational Governance</h3>
             <p className="text-xs text-text-muted leading-relaxed">
-              Every assignment is overseen by our 24/7 Central Operations Desk. Shift handovers, vitals logs, and care notes are documented systematically.
+              Every assignment is overseen by our 24/7 Central Operations Desk. Handovers, vitals charts, and care logs are documented systematically.
             </p>
           </Card>
 
-          <Card className="p-6 space-y-3 border-border-default bg-white shadow-2xs">
-            <div className="w-10 h-10 rounded-xl bg-canvas-teal text-brand-teal flex items-center justify-center font-bold border border-teal-200">
-              <MapPin className="w-5 h-5" />
+          <Card className="p-6 space-y-3 border-border-default bg-white shadow-2xs rounded-3xl">
+            <div className="w-12 h-12 rounded-2xl bg-canvas-teal text-brand-teal flex items-center justify-center font-bold border border-teal-200">
+              <MapPin className="w-6 h-6" />
             </div>
-            <h3 className="font-extrabold text-text-primary text-base">Delhi NCR Active Service Hubs</h3>
+            <h3 className="font-black text-text-primary text-lg">Delhi NCR Active Service Hubs</h3>
             <p className="text-xs text-text-muted leading-relaxed">
-              Active dispatch hubs operate in Delhi, Noida, Gurugram, and Faridabad to ensure reliable home nursing and attendant coverage.
+              Active dispatch hubs operate in Delhi, Noida, Gurugram, and Faridabad to ensure fast response times and continuous care.
             </p>
           </Card>
         </div>
 
-        {/* Managed Workforce Roster Overview */}
+        {/* Managed Care Team Roster Showcase */}
         <div className="bg-canvas-secondary p-6 sm:p-8 rounded-3xl border border-border-default space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="space-y-1">
-              <span className="text-[11px] font-extrabold text-brand-teal uppercase tracking-widest block">
-                Internal Care Workforce Profile Standard
+              <span className="text-[11px] font-black text-brand-teal uppercase tracking-widest block">
+                Internal Care Workforce Roster Standard
               </span>
               <h3 className="text-xl font-black text-text-primary">
-                Representative Pulse n Care Nursing Staff
+                Representative Pulse n Care Care Team
               </h3>
               <p className="text-xs text-text-muted">
-                Staff members are assigned by Central Operations based on your patient’s specific clinical requirements and locality hub.
+                Staff members are assigned by Central Operations based on your patient’s specific clinical needs and locality hub.
               </p>
             </div>
-            <span className="text-xs font-bold text-teal-800 bg-canvas-teal px-3 py-1.5 rounded-full border border-teal-200 shrink-0 self-start sm:self-center">
+            <span className="text-xs font-extrabold text-teal-800 bg-canvas-teal px-3.5 py-1.5 rounded-full border border-teal-200 shrink-0 self-start sm:self-center">
               ✓ 100% Council Verified Roster
             </span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white p-5 rounded-2xl border border-border-default shadow-2xs space-y-4">
+            <div className="bg-white p-5 rounded-3xl border border-border-default shadow-2xs space-y-4">
               <div className="flex items-center gap-3.5">
                 <img
                   src="/assets/services/home-nursing/pulse-n-care-nurse-portrait.webp"
@@ -383,7 +500,7 @@ export const HomePage: React.FC = () => {
                   className="w-14 h-14 rounded-2xl object-cover border-2 border-teal-200 shrink-0"
                 />
                 <div>
-                  <h4 className="font-extrabold text-text-primary text-sm">Sr. Nurse Priya Sharma, RN</h4>
+                  <h4 className="font-black text-text-primary text-sm">Sr. Nurse Priya Sharma, RN</h4>
                   <p className="text-xs text-brand-teal font-bold">B.Sc Nursing • DNC Reg #66412</p>
                   <p className="text-[11px] text-text-muted">6+ Years ICU & Home Nursing</p>
                 </div>
@@ -398,7 +515,7 @@ export const HomePage: React.FC = () => {
               </div>
             </div>
 
-            <div className="bg-white p-5 rounded-2xl border border-border-default shadow-2xs space-y-4">
+            <div className="bg-white p-5 rounded-3xl border border-border-default shadow-2xs space-y-4">
               <div className="flex items-center gap-3.5">
                 <img
                   src="/assets/services/home-nursing/pulse-n-care-vitals.webp"
@@ -406,7 +523,7 @@ export const HomePage: React.FC = () => {
                   className="w-14 h-14 rounded-2xl object-cover border-2 border-teal-200 shrink-0"
                 />
                 <div>
-                  <h4 className="font-extrabold text-text-primary text-sm">Karthik Verma, RN</h4>
+                  <h4 className="font-black text-text-primary text-sm">Karthik Verma, RN</h4>
                   <p className="text-xs text-brand-teal font-bold">B.Sc Nursing • Critical Care Cert.</p>
                   <p className="text-[11px] text-text-muted">5+ Years Ventilator & Tracheostomy</p>
                 </div>
@@ -421,7 +538,7 @@ export const HomePage: React.FC = () => {
               </div>
             </div>
 
-            <div className="bg-white p-5 rounded-2xl border border-border-default shadow-2xs space-y-4">
+            <div className="bg-white p-5 rounded-3xl border border-border-default shadow-2xs space-y-4">
               <div className="flex items-center gap-3.5">
                 <img
                   src="/assets/services/home-nursing/pulse-n-care-bedside-support.webp"
@@ -429,7 +546,7 @@ export const HomePage: React.FC = () => {
                   className="w-14 h-14 rounded-2xl object-cover border-2 border-teal-200 shrink-0"
                 />
                 <div>
-                  <h4 className="font-extrabold text-text-primary text-sm">Sunita Devi, GNM</h4>
+                  <h4 className="font-black text-text-primary text-sm">Sunita Devi, GNM</h4>
                   <p className="text-xs text-brand-teal font-bold">GNM • Geriatric Care Specialist</p>
                   <p className="text-[11px] text-text-muted">8+ Years Senior & Bedside Care</p>
                 </div>
@@ -447,13 +564,15 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* 06. Hospital & Organization Staffing Callout */}
+      {/* ========================================================================= */}
+      {/* 06. HOSPITAL & B2B ORGANIZATION STAFFING CALLOUT                           */}
+      {/* ========================================================================= */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative overflow-hidden">
         <div className="bg-gradient-to-r from-slate-50 via-teal-50/40 to-blue-50/30 p-8 sm:p-12 rounded-3xl border border-teal-200 text-text-primary flex flex-col md:flex-row justify-between items-center gap-8 shadow-2xs relative z-10">
           <HealthcareTexture type="soft-cell" opacity={0.03} />
 
           <div className="space-y-3 text-left max-w-xl relative z-10">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold bg-canvas-teal text-brand-teal border border-teal-200 uppercase tracking-wider">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-canvas-teal text-brand-teal border border-teal-200 uppercase tracking-wider">
               <Building2 className="w-4 h-4 text-brand-teal" /> B2B Healthcare Facilities
             </span>
             <h3 className="text-2xl sm:text-3xl font-black text-text-primary">Hospital & Clinic Staffing Solutions</h3>
@@ -470,7 +589,9 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* 07. Operations Callback Modal Trigger Banner */}
+      {/* ========================================================================= */}
+      {/* 07. OPERATIONS CALLBACK MODAL TRIGGER BANNER                               */}
+      {/* ========================================================================= */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-canvas-teal/50 rounded-3xl p-8 sm:p-12 border border-teal-200 text-text-primary flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="space-y-2 text-left max-w-xl">
@@ -483,7 +604,7 @@ export const HomePage: React.FC = () => {
             <Button
               size="lg"
               onClick={() => navigate('/client/booking/wizard?serviceId=srv-nursing-post-op')}
-              className="bg-brand-teal text-white font-extrabold px-8 py-3.5 rounded-2xl cursor-pointer text-sm"
+              className="bg-brand-teal text-white font-black px-8 py-3.5 rounded-2xl cursor-pointer text-sm"
             >
               Book Home Care Now
             </Button>
@@ -504,7 +625,7 @@ export const HomePage: React.FC = () => {
       <Modal
         isOpen={callbackModalOpen}
         onClose={() => setCallbackModalOpen(false)}
-        title="Talk to Pulse n Care Team"
+        title="Talk to Pulse n Care Operations Team"
         maxWidth="md"
       >
         <div className="space-y-4 text-left">
