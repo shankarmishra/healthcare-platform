@@ -29,6 +29,7 @@ import { BookingDetailPage } from './pages/client/BookingDetailPage';
 import { ClientSupportPage } from './pages/client/ClientSupportPage';
 import { ClientProfilePage } from './pages/client/ClientProfilePage';
 import { ClientNotificationsPage } from './pages/client/ClientNotificationsPage';
+import { ClientDashboardPage } from './pages/client/ClientDashboardPage';
 
 // Professional Pages
 import { ProDashboardPage } from './pages/pro/ProDashboardPage';
@@ -85,6 +86,7 @@ export const App: React.FC = () => {
                 <Route path="pros/:id" element={<ProProfileViewPage />} />
                 <Route path="book" element={<BookingWizardPage />} />
                 <Route path="client/search" element={<SearchPage />} />
+                <Route path="client/dashboard" element={<ClientDashboardPage />} />
                 <Route path="client/booking/wizard" element={<BookingWizardPage />} />
                 <Route path="client/bookings" element={<MyBookingsPage />} />
                 <Route path="client/bookings/:id" element={<BookingDetailPage />} />

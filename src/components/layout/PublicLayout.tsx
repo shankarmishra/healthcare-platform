@@ -11,7 +11,8 @@ import {
   ShieldCheck,
   Phone,
   Menu,
-  X
+  X,
+  LayoutDashboard
 } from 'lucide-react';
 
 export const PublicLayout: React.FC = () => {
@@ -76,6 +77,11 @@ export const PublicLayout: React.FC = () => {
                   {unreadCount > 0 && (
                     <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-status-danger rounded-full ring-2 ring-white" />
                   )}
+                </Link>
+                <Link to="/client/dashboard">
+                  <Button variant="ghost" size="sm" leftIcon={<LayoutDashboard className="w-4 h-4" />}>
+                    Dashboard
+                  </Button>
                 </Link>
                 <Link to="/client/bookings">
                   <Button variant="ghost" size="sm" leftIcon={<Calendar className="w-4 h-4" />}>
