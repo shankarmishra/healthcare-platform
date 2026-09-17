@@ -5,6 +5,7 @@ import { useNotifications } from '../../context/NotificationContext';
 import { DemoRoleSwitcher } from '../common/DemoRoleSwitcher';
 import { Button } from '../common/Button';
 import { Modal } from '../common/Modal';
+import { HealthcareTexture } from '../common/HealthcareTexture';
 import {
   Bell,
   ShieldCheck,
@@ -99,16 +100,18 @@ export const PublicLayout: React.FC = () => {
 
       {/* Primary Public Navigation Header — iOS Ultra-Premium Glassmorphism */}
       <header
-        className={`sticky top-0 z-50 transition-all duration-300 ${
+        className={`sticky top-0 z-50 transition-all duration-300 relative ${
           isScrolled
             ? 'bg-white/90 backdrop-blur-xl shadow-md border-b border-slate-200/80 h-16 flex items-center'
             : 'bg-white/95 backdrop-blur-lg border-b border-slate-100 h-20 flex items-center'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex items-center justify-between gap-4">
+        <HealthcareTexture type="micro-dot-mesh" opacity={0.03} />
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex items-center justify-between gap-4 relative z-10">
           
           {/* Left: Master Logo & Location Hub Selector */}
-          <div className="flex items-center gap-4 sm:gap-6">
+          <div className="flex items-center gap-4 sm:gap-6 shrink-0">
             <Link to="/" className="flex items-center gap-2.5 group shrink-0">
               <img
                 src="/assets/brand/pulse-n-care/pulse-n-care-logo.svg"
@@ -120,21 +123,21 @@ export const PublicLayout: React.FC = () => {
             {/* Delhi NCR Coverage Hub Pill */}
             <button
               onClick={() => setLocationModalOpen(true)}
-              className="hidden lg:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-canvas-teal/80 border border-teal-200 text-xs font-extrabold text-brand-teal hover:bg-teal-100/80 transition-all cursor-pointer shadow-2xs"
+              className="hidden lg:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-canvas-teal/80 border border-teal-200 text-xs font-extrabold text-brand-teal hover:bg-teal-100/80 transition-all cursor-pointer shadow-2xs whitespace-nowrap"
             >
               <MapPin className="w-3.5 h-3.5 text-brand-teal shrink-0" />
-              <span>Delhi NCR Care Hubs</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="whitespace-nowrap">Delhi NCR Care Hubs</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
               <ChevronDown className="w-3.5 h-3.5 text-brand-teal shrink-0" />
             </button>
           </div>
 
           {/* Center Navigation Links (with Mega-Menus) */}
-          <nav className="hidden md:flex items-center gap-1 lg:gap-2 relative">
+          <nav className="hidden md:flex items-center gap-1 lg:gap-2 relative shrink-0">
             
             <Link
               to="/"
-              className={`px-3.5 py-2 text-sm font-bold rounded-xl transition-all relative ${
+              className={`px-3.5 py-2 text-sm font-bold rounded-xl transition-all relative whitespace-nowrap ${
                 location.pathname === '/' ? 'text-brand-teal bg-canvas-teal/60 font-extrabold' : 'text-text-secondary hover:text-text-primary hover:bg-slate-50'
               }`}
             >
@@ -149,11 +152,11 @@ export const PublicLayout: React.FC = () => {
             >
               <button
                 onClick={() => navigate('/services')}
-                className={`flex items-center gap-1.5 px-3.5 py-2 text-sm font-bold rounded-xl transition-all cursor-pointer ${
+                className={`flex items-center gap-1.5 px-3.5 py-2 text-sm font-bold rounded-xl transition-all cursor-pointer whitespace-nowrap ${
                   location.pathname.startsWith('/services') ? 'text-brand-teal bg-canvas-teal/60 font-extrabold' : 'text-text-secondary hover:text-text-primary hover:bg-slate-50'
                 }`}
               >
-                <span>Services</span>
+                <span className="whitespace-nowrap">Services</span>
                 <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${servicesDropdownOpen ? 'rotate-180 text-brand-teal' : 'text-slate-400'}`} />
               </button>
 
@@ -164,10 +167,10 @@ export const PublicLayout: React.FC = () => {
                   {/* Left Column: Care Services List */}
                   <div className="col-span-7 space-y-2">
                     <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-                      <span className="text-[11px] font-extrabold text-brand-teal uppercase tracking-widest">
+                      <span className="text-[11px] font-extrabold text-brand-teal uppercase tracking-widest whitespace-nowrap">
                         Care Services Ecosystem
                       </span>
-                      <Link to="/services" className="text-[11px] font-bold text-text-muted hover:text-brand-teal">
+                      <Link to="/services" className="text-[11px] font-bold text-text-muted hover:text-brand-teal whitespace-nowrap">
                         View All (11) →
                       </Link>
                     </div>
@@ -184,11 +187,11 @@ export const PublicLayout: React.FC = () => {
                           </div>
                           <div>
                             <div className="flex items-center gap-2">
-                              <p className="text-xs font-extrabold text-text-primary group-hover:text-brand-teal">
+                              <p className="text-xs font-extrabold text-text-primary group-hover:text-brand-teal whitespace-nowrap">
                                 {item.title}
                               </p>
                               {item.badge && (
-                                <span className="text-[9px] font-black text-brand-teal bg-canvas-teal px-2 py-0.5 rounded-md border border-teal-200 uppercase">
+                                <span className="text-[9px] font-black text-brand-teal bg-canvas-teal px-2 py-0.5 rounded-md border border-teal-200 uppercase whitespace-nowrap">
                                   {item.badge}
                                 </span>
                               )}
@@ -210,7 +213,7 @@ export const PublicLayout: React.FC = () => {
                       className="absolute inset-0 w-full h-full object-cover opacity-35"
                     />
                     <div className="relative z-10 space-y-2">
-                      <span className="text-[10px] font-black text-teal-300 uppercase tracking-widest bg-white/10 px-2.5 py-1 rounded-md border border-white/20">
+                      <span className="text-[10px] font-black text-teal-300 uppercase tracking-widest bg-white/10 px-2.5 py-1 rounded-md border border-white/20 whitespace-nowrap">
                         24×7 Home Nursing
                       </span>
                       <h4 className="text-base font-black text-white leading-tight">
@@ -222,7 +225,7 @@ export const PublicLayout: React.FC = () => {
                     </div>
 
                     <Link to="/services/home-nursing" className="relative z-10 pt-4">
-                      <Button size="sm" className="w-full bg-brand-teal text-white font-extrabold text-xs rounded-xl h-9">
+                      <Button size="sm" className="w-full bg-brand-teal text-white font-extrabold text-xs rounded-xl h-9 whitespace-nowrap">
                         Explore Home Nursing <ArrowRight className="w-3.5 h-3.5 ml-1" />
                       </Button>
                     </Link>
@@ -233,7 +236,7 @@ export const PublicLayout: React.FC = () => {
 
             <a
               href="/#how-it-works"
-              className="px-3.5 py-2 text-sm font-bold text-text-secondary hover:text-text-primary hover:bg-slate-50 rounded-xl transition-all"
+              className="px-3.5 py-2 text-sm font-bold text-text-secondary hover:text-text-primary hover:bg-slate-50 rounded-xl transition-all whitespace-nowrap"
             >
               How It Works
             </a>
@@ -246,11 +249,11 @@ export const PublicLayout: React.FC = () => {
             >
               <button
                 onClick={() => navigate('/organizations')}
-                className={`flex items-center gap-1.5 px-3.5 py-2 text-sm font-bold rounded-xl transition-all cursor-pointer ${
+                className={`flex items-center gap-1.5 px-3.5 py-2 text-sm font-bold rounded-xl transition-all cursor-pointer whitespace-nowrap ${
                   location.pathname === '/organizations' ? 'text-brand-teal bg-canvas-teal/60 font-extrabold' : 'text-text-secondary hover:text-text-primary hover:bg-slate-50'
                 }`}
               >
-                <span>For Organizations</span>
+                <span className="whitespace-nowrap">For Organizations</span>
                 <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${orgDropdownOpen ? 'rotate-180 text-brand-teal' : 'text-slate-400'}`} />
               </button>
 
@@ -258,7 +261,7 @@ export const PublicLayout: React.FC = () => {
                 <div className="absolute top-full left-0 w-80 bg-white rounded-3xl shadow-card border border-border-default p-4 space-y-3 mt-1.5 z-50 animate-fadeIn">
                   <div className="flex items-center gap-2 px-2 pb-2 border-b border-slate-100">
                     <Building2 className="w-4 h-4 text-brand-teal" />
-                    <span className="text-xs font-extrabold text-text-primary">B2B Facility Staffing</span>
+                    <span className="text-xs font-extrabold text-text-primary whitespace-nowrap">B2B Facility Staffing</span>
                   </div>
 
                   <div className="space-y-1">
@@ -268,7 +271,7 @@ export const PublicLayout: React.FC = () => {
                         to="/organizations"
                         className="block p-2.5 rounded-xl hover:bg-canvas-teal/50 transition-colors"
                       >
-                        <p className="text-xs font-extrabold text-text-primary">{org.name}</p>
+                        <p className="text-xs font-extrabold text-text-primary whitespace-nowrap">{org.name}</p>
                         <p className="text-[11px] text-text-muted">{org.desc}</p>
                       </Link>
                     ))}
@@ -276,7 +279,7 @@ export const PublicLayout: React.FC = () => {
 
                   <div className="pt-2 border-t border-slate-100">
                     <Link to="/organization/dashboard">
-                      <Button size="sm" className="w-full bg-brand-teal text-white font-bold text-xs h-9 rounded-xl">
+                      <Button size="sm" className="w-full bg-brand-teal text-white font-bold text-xs h-9 rounded-xl whitespace-nowrap">
                         Access B2B Staffing Portal →
                       </Button>
                     </Link>
@@ -287,7 +290,7 @@ export const PublicLayout: React.FC = () => {
 
             <Link
               to="/client/support"
-              className={`px-3.5 py-2 text-sm font-bold rounded-xl transition-all ${
+              className={`px-3.5 py-2 text-sm font-bold rounded-xl transition-all whitespace-nowrap ${
                 location.pathname === '/client/support' ? 'text-brand-teal bg-canvas-teal/60 font-extrabold' : 'text-text-secondary hover:text-text-primary hover:bg-slate-50'
               }`}
             >

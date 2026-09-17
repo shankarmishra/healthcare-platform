@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '../../components/common/Button';
 import { Modal } from '../../components/common/Modal';
 import { Input } from '../../components/common/Input';
+import { HealthcareTexture } from '../../components/common/HealthcareTexture';
 import {
   MapPin,
   UserCheck,
@@ -132,6 +133,9 @@ export const HomePage: React.FC = () => {
       {/* ========================================================================= */}
       <section className="relative min-h-[580px] sm:min-h-[640px] bg-slate-900 border-b border-border-default overflow-hidden flex flex-col justify-between py-8 sm:py-12">
         
+        {/* Procedural Healthcare Micro Texture Overlay */}
+        <HealthcareTexture type="medical-grid" opacity={0.06} className="z-2" />
+
         {/* Full-Width Background Campaign Image (Branded Indian Healthcare Professionals with Medical Kits) */}
         <img
           src="/assets/services/home-nursing/pulse-n-care-team-banner-9.jpg"
@@ -146,14 +150,14 @@ export const HomePage: React.FC = () => {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full pt-4 pb-4 space-y-4 text-center flex flex-col items-center">
           
           {/* Centered Eyebrow Badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-teal/90 text-white text-[11px] font-black tracking-widest uppercase border border-teal-300/40 backdrop-blur-md shadow-md">
-            <Sparkles className="w-3 h-3 text-teal-200" />
-            <span>Pulse n Care · Managed Home Healthcare</span>
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-teal/90 text-white text-[11px] font-black tracking-widest uppercase border border-teal-300/40 backdrop-blur-md shadow-md whitespace-nowrap">
+            <Sparkles className="w-3 h-3 text-teal-200 shrink-0" />
+            <span className="whitespace-nowrap">Pulse n Care · Managed Home Healthcare</span>
           </div>
 
           {/* Centered Main Headline */}
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.08] drop-shadow-md">
-            Nurse care at <span className="text-teal-300 underline decoration-teal-400 decoration-wavy decoration-2">doorstep.</span>
+            Nurse care at <span className="text-teal-300 underline decoration-teal-400 decoration-wavy decoration-2 whitespace-nowrap">doorstep.</span>
           </h1>
 
           {/* Centered Subheading */}
@@ -167,7 +171,7 @@ export const HomePage: React.FC = () => {
               variant="primary"
               onClick={() => navigate('/client/booking/wizard?serviceId=srv-nursing-post-op')}
               rightIcon={<ArrowRight className="w-4 h-4" />}
-              className="bg-brand-teal hover:bg-brand-teal-hover text-white font-black text-sm px-7 py-3 rounded-full cursor-pointer shadow-lg border border-teal-400/30 h-11"
+              className="bg-brand-teal hover:bg-brand-teal-hover text-white font-black text-sm px-7 py-3 rounded-full cursor-pointer shadow-lg border border-teal-400/30 h-11 whitespace-nowrap"
             >
               Book a Service
             </Button>
@@ -175,14 +179,14 @@ export const HomePage: React.FC = () => {
             <Button
               variant="outline"
               onClick={() => navigate('/services')}
-              className="border-white/50 text-white hover:bg-white/15 font-bold text-sm px-6 py-3 rounded-full cursor-pointer bg-slate-900/50 backdrop-blur-md h-11"
+              className="border-white/50 text-white hover:bg-white/15 font-bold text-sm px-6 py-3 rounded-full cursor-pointer bg-slate-900/50 backdrop-blur-md h-11 whitespace-nowrap"
             >
               Explore All Services
             </Button>
 
             <button
               onClick={() => setCallbackModalOpen(true)}
-              className="text-xs font-extrabold text-teal-300 hover:text-teal-200 hover:underline px-3 py-2 cursor-pointer drop-shadow-sm"
+              className="text-xs font-extrabold text-teal-300 hover:text-teal-200 hover:underline px-3 py-2 cursor-pointer drop-shadow-sm whitespace-nowrap"
             >
               Talk to Care Concierge →
             </button>
@@ -192,15 +196,17 @@ export const HomePage: React.FC = () => {
 
         {/* Hero Bottom — Compact, High-Density Ultra-Premium Glass Floating Pill Bar */}
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full pb-2">
-          <div className="bg-white/95 backdrop-blur-2xl p-2.5 sm:p-3 rounded-2xl sm:rounded-full shadow-2xl border border-slate-200/90 space-y-2">
+          <div className="bg-white/95 backdrop-blur-2xl p-2.5 sm:p-3 rounded-2xl sm:rounded-full shadow-2xl border border-slate-200/90 space-y-2 relative overflow-hidden">
             
-            <div className="flex flex-col md:flex-row items-center justify-between gap-2">
+            <HealthcareTexture type="micro-dot-mesh" opacity={0.03} />
+
+            <div className="flex flex-col md:flex-row items-center justify-between gap-2 relative z-10">
               
               {/* 1. Select Service Dropdown Pill */}
               <div className="w-full md:w-5/12 flex items-center gap-2.5 px-3.5 py-2.5 bg-slate-50/80 rounded-xl sm:rounded-full border border-slate-200/70">
                 <Stethoscope className="w-4 h-4 text-brand-teal shrink-0" />
                 <select
-                  className="w-full text-xs font-bold bg-transparent text-slate-900 focus:outline-none cursor-pointer"
+                  className="w-full text-xs font-bold bg-transparent text-slate-900 focus:outline-none cursor-pointer whitespace-nowrap"
                   onChange={(e) => {
                     if (e.target.value) {
                       navigate(`/client/booking/wizard?serviceId=${e.target.value}`);
@@ -218,7 +224,7 @@ export const HomePage: React.FC = () => {
               </div>
 
               {/* Divider */}
-              <div className="hidden md:block w-px h-7 bg-slate-200" />
+              <div className="hidden md:block w-px h-7 bg-slate-200 shrink-0" />
 
               {/* 2. Enter Location Input Pill */}
               <div className="w-full md:w-5/12 flex items-center gap-2 px-3.5 py-2 bg-slate-50/80 rounded-xl sm:rounded-full border border-slate-200/70">
@@ -236,7 +242,7 @@ export const HomePage: React.FC = () => {
                 <button
                   type="button"
                   onClick={handleDetectLocation}
-                  className="text-[10px] font-extrabold text-brand-teal hover:bg-teal-100/70 px-2 py-1 rounded-full border border-teal-200 shrink-0 cursor-pointer"
+                  className="text-[10px] font-extrabold text-brand-teal hover:bg-teal-100/70 px-2 py-1 rounded-full border border-teal-200 shrink-0 cursor-pointer whitespace-nowrap"
                 >
                   📍 Detect
                 </button>
@@ -252,7 +258,7 @@ export const HomePage: React.FC = () => {
                   navigate(`/client/booking/wizard?serviceId=${selectedService}${loc}`);
                 }}
                 rightIcon={<ArrowRight className="w-3.5 h-3.5" />}
-                className="w-full md:w-auto bg-brand-teal hover:bg-brand-teal-hover text-white font-black text-xs px-6 py-3 rounded-full cursor-pointer shadow-md shrink-0 justify-center h-10"
+                className="w-full md:w-auto bg-brand-teal hover:bg-brand-teal-hover text-white font-black text-xs px-6 py-3 rounded-full cursor-pointer shadow-md shrink-0 justify-center h-10 whitespace-nowrap"
               >
                 Book Care Now
               </Button>
@@ -260,7 +266,7 @@ export const HomePage: React.FC = () => {
             </div>
 
             {locationStatus && (
-              <p className="text-[11px] font-bold text-emerald-800 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-200 text-center animate-fadeIn">
+              <p className="text-[11px] font-bold text-emerald-800 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-200 text-center animate-fadeIn relative z-10">
                 {locationStatus}
               </p>
             )}
@@ -268,15 +274,15 @@ export const HomePage: React.FC = () => {
           </div>
 
           {/* Compact Micro-Trust Row */}
-          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-1 text-[10px] font-extrabold text-white/90 pt-2 drop-shadow-sm">
-            <span className="flex items-center gap-1">
-              <CheckCircle2 className="w-3 h-3 text-teal-300" /> 24×7 Delhi NCR Dispatch
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-1 text-[10px] font-extrabold text-white/90 pt-2 drop-shadow-sm whitespace-nowrap">
+            <span className="flex items-center gap-1 whitespace-nowrap">
+              <CheckCircle2 className="w-3 h-3 text-teal-300 shrink-0" /> 24×7 Delhi NCR Dispatch
             </span>
-            <span className="flex items-center gap-1">
-              <CheckCircle2 className="w-3 h-3 text-teal-300" /> Council-Verified Nurses
+            <span className="flex items-center gap-1 whitespace-nowrap">
+              <CheckCircle2 className="w-3 h-3 text-teal-300 shrink-0" /> Council-Verified Nurses
             </span>
-            <span className="flex items-center gap-1">
-              <CheckCircle2 className="w-3 h-3 text-teal-300" /> Transparent Shift Rates
+            <span className="flex items-center gap-1 whitespace-nowrap">
+              <CheckCircle2 className="w-3 h-3 text-teal-300 shrink-0" /> Transparent Shift Rates
             </span>
           </div>
         </div>
