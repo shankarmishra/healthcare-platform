@@ -307,6 +307,139 @@ export const HomePage: React.FC = () => {
       </section>
 
       {/* ========================================================================= */}
+      {/* SECTION 01.5 — WECARE 24×7 HOME NURSING CLINICAL SCOPE & CAPABILITIES    */}
+      {/* ========================================================================= */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 py-4">
+        <div className="text-left space-y-2">
+          <span className="text-xs font-black text-brand-teal uppercase tracking-widest block">
+            WeCare 24×7 Home Nursing Scope & Capabilities
+          </span>
+          <h2 className="text-3xl sm:text-4xl font-black text-text-primary tracking-tight">
+            Clinical Procedures, Daily Charting & Personal Support at Home
+          </h2>
+          <p className="text-sm text-text-secondary max-w-3xl font-medium">
+            Our 24×7 home nurses (operating on 12-hour or 24-hour rotational shifts across Delhi NCR) execute doctor-prescribed clinical care, sterile wound dressings, equipment handling, daily charting, and emergency escalation.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          
+          {/* Pillar 1: Clinical & Medical Care */}
+          <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-2xs space-y-4 flex flex-col justify-between hover:border-brand-teal transition-all">
+            <div className="space-y-3">
+              <div className="w-12 h-12 rounded-2xl bg-canvas-teal text-brand-teal flex items-center justify-center font-black">
+                <Activity className="w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-black text-slate-900">Clinical & Medical Care</h3>
+              <p className="text-xs text-slate-500 font-medium leading-relaxed">
+                Sterile clinical protocols prescribed by attending physicians.
+              </p>
+              <ul className="space-y-2.5 pt-2 text-xs font-bold text-slate-700">
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-brand-teal shrink-0 mt-0.5" />
+                  <span><strong>Vitals Tracking:</strong> BP, Heart Rate, Pulse, SpO₂, Temp & Blood Glucose charting.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-brand-teal shrink-0 mt-0.5" />
+                  <span><strong>Medication Admin:</strong> Insulin, IM injections & prescribed IV fluids.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-brand-teal shrink-0 mt-0.5" />
+                  <span><strong>Wound & Surgical Care:</strong> Post-op dressing, bedsores & diabetic ulcers.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-brand-teal shrink-0 mt-0.5" />
+                  <span><strong>Tube Feeding (Ryle's / PEG):</strong> Flushing, sanitization & meal delivery.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-brand-teal shrink-0 mt-0.5" />
+                  <span><strong>Catheter & Stoma Care:</strong> Urinary catheter, colostomy bag & stoma hygiene.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-brand-teal shrink-0 mt-0.5" />
+                  <span><strong>Respiratory Equipment:</strong> O₂ concentrators, suction, CPAP/BiPAP & ventilator monitoring.</span>
+                </li>
+              </ul>
+            </div>
+            <div className="pt-3 border-t border-slate-100">
+              <span className="text-xs font-extrabold text-brand-teal uppercase tracking-wider">
+                ✓ Council-Verified B.Sc / GNM Nurses
+              </span>
+            </div>
+          </div>
+
+          {/* Pillar 2: Patient Support & Personal Hygiene */}
+          <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-2xs space-y-4 flex flex-col justify-between hover:border-brand-teal transition-all">
+            <div className="space-y-3">
+              <div className="w-12 h-12 rounded-2xl bg-canvas-teal text-brand-teal flex items-center justify-center font-black">
+                <UserCheck className="w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-black text-slate-900">Patient Support & Hygiene</h3>
+              <p className="text-xs text-slate-500 font-medium leading-relaxed">
+                Compassionate daily living care for bedridden & recovery patients.
+              </p>
+              <ul className="space-y-2.5 pt-2 text-xs font-bold text-slate-700">
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-brand-teal shrink-0 mt-0.5" />
+                  <span><strong>Bedridden Care & 2h Positioning:</strong> Regular repositioning to prevent pressure bedsores.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-brand-teal shrink-0 mt-0.5" />
+                  <span><strong>Personal Grooming:</strong> Sponge/bed baths, oral care, hair care & diaper changes.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-brand-teal shrink-0 mt-0.5" />
+                  <span><strong>Mobility & Transfer:</strong> Bed-to-wheelchair transfers & gait assistance.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-brand-teal shrink-0 mt-0.5" />
+                  <span><strong>Home Physio Coordination:</strong> Assisted light walking & joint exercise routines.</span>
+                </li>
+              </ul>
+            </div>
+            <div className="pt-3 border-t border-slate-100">
+              <span className="text-xs font-extrabold text-brand-teal uppercase tracking-wider">
+                ✓ Compassionate Bedside Attendants
+              </span>
+            </div>
+          </div>
+
+          {/* Pillar 3: Documentation, Safety & Escalation */}
+          <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-2xs space-y-4 flex flex-col justify-between hover:border-brand-teal transition-all">
+            <div className="space-y-3">
+              <div className="w-12 h-12 rounded-2xl bg-canvas-teal text-brand-teal flex items-center justify-center font-black">
+                <ClipboardCheck className="w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-black text-slate-900">Documentation & Safety</h3>
+              <p className="text-xs text-slate-500 font-medium leading-relaxed">
+                Structured clinical reporting, early warning alerts & shift handovers.
+              </p>
+              <ul className="space-y-2.5 pt-2 text-xs font-bold text-slate-700">
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-brand-teal shrink-0 mt-0.5" />
+                  <span><strong>Daily Charting:</strong> Medication times, fluid intake/output & vitals observation log.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-brand-teal shrink-0 mt-0.5" />
+                  <span><strong>Emergency Escalation:</strong> Early detection of breathlessness, low SpO₂ or fever with immediate physician alert.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-brand-teal shrink-0 mt-0.5" />
+                  <span><strong>Shift Handover Log:</strong> Detailed clinical handover during 12h/24h rotation shifts.</span>
+                </li>
+              </ul>
+            </div>
+            <div className="pt-3 border-t border-slate-100">
+              <span className="text-xs font-extrabold text-brand-teal uppercase tracking-wider">
+                ✓ 24×7 Central Operations Monitoring
+              </span>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
       {/* SECTION 02 — EDITORIAL ASYMMETRIC CARE ECOSYSTEM                         */}
       {/* ========================================================================= */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">

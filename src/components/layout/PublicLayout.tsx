@@ -97,33 +97,33 @@ export const PublicLayout: React.FC = () => {
       {/* Top Demo Role Bar */}
       <DemoRoleSwitcher />
 
-      {/* Primary Public Navigation Header */}
+      {/* Primary Public Navigation Header — iOS Ultra-Premium Glassmorphism */}
       <header
-        className={`sticky top-0 z-40 transition-all duration-300 ${
+        className={`sticky top-0 z-50 transition-all duration-300 ${
           isScrolled
-            ? 'bg-white/95 backdrop-blur-md shadow-card border-b border-border-default h-18 flex items-center'
-            : 'bg-white border-b border-slate-100 h-20 flex items-center'
+            ? 'bg-white/90 backdrop-blur-xl shadow-md border-b border-slate-200/80 h-16 flex items-center'
+            : 'bg-white/95 backdrop-blur-lg border-b border-slate-100 h-20 flex items-center'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex items-center justify-between gap-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex items-center justify-between gap-4">
           
           {/* Left: Master Logo & Location Hub Selector */}
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4 sm:gap-6">
             <Link to="/" className="flex items-center gap-2.5 group shrink-0">
               <img
                 src="/assets/brand/pulse-n-care/pulse-n-care-logo.svg"
                 alt="Pulse n Care"
-                className="h-10 sm:h-11 w-auto group-hover:scale-102 transition-transform"
+                className="h-9 sm:h-11 w-auto group-hover:scale-102 transition-transform"
               />
             </Link>
 
             {/* Delhi NCR Coverage Hub Pill */}
             <button
               onClick={() => setLocationModalOpen(true)}
-              className="hidden lg:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-canvas-teal border border-teal-200 text-xs font-extrabold text-brand-teal hover:bg-teal-100 transition-colors cursor-pointer"
+              className="hidden lg:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-canvas-teal/80 border border-teal-200 text-xs font-extrabold text-brand-teal hover:bg-teal-100/80 transition-all cursor-pointer shadow-2xs"
             >
               <MapPin className="w-3.5 h-3.5 text-brand-teal shrink-0" />
-              <span>Serving Delhi NCR</span>
+              <span>Delhi NCR Care Hubs</span>
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
               <ChevronDown className="w-3.5 h-3.5 text-brand-teal shrink-0" />
             </button>
