@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '../../components/common/Button';
 import { Modal } from '../../components/common/Modal';
 import { Input } from '../../components/common/Input';
-import { HealthcareTexture } from '../../components/common/HealthcareTexture';
 import {
   MapPin,
   UserCheck,
@@ -129,170 +128,182 @@ export const HomePage: React.FC = () => {
     <div className="space-y-24 pb-24 bg-white text-text-primary text-left overflow-x-hidden">
       
       {/* ========================================================================= */}
-      {/* SECTION 01 — FULL-WIDTH CAMPAIGN HERO BANNER                              */}
+      {/* SECTION 01 — FULL-BLEED REAL HEALTHCARE CAMPAIGN BANNER HERO             */}
       {/* ========================================================================= */}
-      <section className="relative min-h-[700px] lg:min-h-[740px] pt-10 pb-16 bg-gradient-to-b from-slate-50 via-teal-50/20 to-white border-b border-border-default overflow-hidden flex items-center">
-        <HealthcareTexture type="clinical-wave" opacity={0.03} />
+      <section className="relative min-h-[640px] sm:min-h-[700px] bg-slate-900 border-b border-border-default overflow-hidden flex flex-col justify-between py-12 sm:py-16">
+        
+        {/* Full-Width Background Campaign Image (9 Real Healthcare Professionals) */}
+        <img
+          src="/assets/services/home-nursing/pulse-n-care-team-banner-9.jpg"
+          alt="Pulse n Care Managed Healthcare Team Campaign"
+          className="absolute inset-0 w-full h-full object-cover object-center opacity-95 scale-100 transition-transform duration-700"
+        />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        {/* Balanced Top-to-Bottom & Radial Gradient Mask for High Contrast + Full Image Visibility */}
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/85 via-slate-950/40 to-slate-950/90 z-1" />
+
+        {/* Hero Top & Middle Content Container */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full pt-4 pb-8 space-y-6 text-center sm:text-left">
+          
+          {/* Eyebrow Badge */}
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-teal/90 text-white text-xs font-black tracking-widest uppercase border border-teal-300/40 backdrop-blur-md shadow-lg">
+            <Sparkles className="w-3.5 h-3.5 text-teal-200" />
+            <span>Pulse n Care · Home Healthcare</span>
+          </div>
+
+          {/* Main Headline */}
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black text-white tracking-tight leading-[1.05] drop-shadow-md max-w-4xl">
+            Nurse care at <span className="text-teal-300 underline decoration-teal-400 decoration-wavy decoration-2">doorstep.</span>
+          </h1>
+
+          {/* Subheading */}
+          <p className="text-base sm:text-xl text-slate-100 max-w-3xl leading-relaxed font-medium drop-shadow-sm">
+            Professional nursing support, post-operative care, elderly bedside assistance & physical therapy arranged at home by our internal verified care team across Delhi NCR.
+          </p>
+
+          {/* Action CTAs */}
+          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 pt-2">
+            <Button
+              variant="primary"
+              onClick={() => navigate('/client/booking/wizard?serviceId=srv-nursing-post-op')}
+              rightIcon={<ArrowRight className="w-4 h-4" />}
+              className="bg-brand-teal hover:bg-brand-teal-hover text-white font-black text-base px-8 py-4 rounded-2xl cursor-pointer shadow-xl border border-teal-400/30"
+            >
+              Book a Service
+            </Button>
+
+            <Button
+              variant="outline"
+              onClick={() => navigate('/services')}
+              className="border-white/40 text-white hover:bg-white/10 font-bold text-base px-6 py-4 rounded-2xl cursor-pointer bg-slate-900/60 backdrop-blur-md"
+            >
+              Explore All Services
+            </Button>
+
+            <button
+              onClick={() => setCallbackModalOpen(true)}
+              className="text-sm font-extrabold text-teal-300 hover:text-teal-200 hover:underline px-3 py-2 cursor-pointer drop-shadow-sm"
+            >
+              Talk to Care Concierge →
+            </button>
+          </div>
+
+        </div>
+
+        {/* Hero Bottom — Wide Horizontal Floating Booking & Location Console */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full pt-4">
+          <div className="bg-white/95 backdrop-blur-xl p-5 sm:p-6 rounded-3xl shadow-2xl border border-slate-200/80 space-y-4">
             
-            {/* Left Column (45%): Brand Storytelling & Location Console */}
-            <div className="lg:col-span-6 space-y-6">
-              
-              {/* Eyebrow */}
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-canvas-teal text-brand-teal text-xs font-black tracking-widest uppercase border border-teal-200 shadow-2xs">
-                <Sparkles className="w-3.5 h-3.5 text-brand-teal" />
-                <span>Pulse n Care · Home Healthcare</span>
-              </div>
-
-              {/* Main Headline */}
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black text-text-primary tracking-tight leading-[1.05]">
-                Nurse care at <span className="text-brand-teal underline decoration-teal-300 decoration-wavy decoration-2">doorstep.</span>
-              </h1>
-
-              {/* Subheading */}
-              <p className="text-lg sm:text-xl text-text-secondary leading-relaxed max-w-xl font-medium">
-                Professional care at home, arranged around your needs, schedule and location across Delhi NCR.
-              </p>
-
-              {/* Primary Action Buttons */}
-              <div className="flex flex-wrap items-center gap-3 pt-1">
-                <Button
-                  variant="primary"
-                  onClick={() => navigate('/client/booking/wizard?serviceId=srv-nursing-post-op')}
-                  rightIcon={<ArrowRight className="w-4 h-4" />}
-                  className="bg-brand-teal hover:bg-brand-teal-hover text-white font-black text-base px-8 py-4 rounded-2xl cursor-pointer shadow-card"
-                >
-                  Book a service
-                </Button>
-
-                <Button
-                  variant="outline"
-                  onClick={() => navigate('/services')}
-                  className="border-border-default text-text-primary hover:bg-canvas-secondary font-bold text-base px-6 py-4 rounded-2xl cursor-pointer"
-                >
-                  Explore services
-                </Button>
-
-                <button
-                  onClick={() => setCallbackModalOpen(true)}
-                  className="text-xs font-extrabold text-brand-teal hover:underline px-3 py-2 cursor-pointer"
-                >
-                  Talk to our care team →
-                </button>
-              </div>
-
-              {/* Compact Care Location Console */}
-              <div className="bg-white p-4 sm:p-5 rounded-3xl shadow-card border border-border-default space-y-3">
-                <span className="text-xs font-extrabold text-brand-teal uppercase tracking-widest block">
-                  Where do you need care?
-                </span>
-
-                <div className="flex flex-col sm:flex-row items-center gap-3">
-                  <div className="flex-1 flex items-center gap-2.5 px-3.5 py-3 bg-canvas-secondary rounded-2xl border border-border-default w-full">
-                    <MapPin className="w-4 h-4 text-brand-teal shrink-0" />
-                    <input
-                      type="text"
-                      value={locationInput}
-                      onChange={(e) => {
-                        setLocationInput(e.target.value);
-                        setLocationStatus(null);
-                      }}
-                      placeholder="Enter address or pincode in Delhi, Noida, Gurugram, Faridabad..."
-                      className="w-full text-xs font-bold text-text-primary bg-transparent focus:outline-none"
-                    />
-                  </div>
-
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handleDetectLocation}
-                    className="text-xs font-extrabold shrink-0 border-teal-200 text-brand-teal hover:bg-canvas-teal cursor-pointer px-4 py-3 rounded-2xl"
-                  >
-                    📍 Use my current location
-                  </Button>
-                </div>
-
-                {locationStatus && (
-                  <p className="text-xs font-bold text-emerald-800 bg-emerald-50 p-2.5 rounded-xl border border-emerald-200 animate-fadeIn">
-                    {locationStatus}
-                  </p>
-                )}
-              </div>
-
-              {/* Horizontal Factual Trust Strip */}
-              <div className="pt-2 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs font-bold text-text-secondary">
-                <span className="flex items-center gap-1.5 text-text-primary">
-                  <CheckCircle2 className="w-4 h-4 text-brand-teal" /> 24×7 Care Options
-                </span>
-                <span className="flex items-center gap-1.5 text-text-primary">
-                  <CheckCircle2 className="w-4 h-4 text-brand-teal" /> 12h & Night Shifts
-                </span>
-                <span className="flex items-center gap-1.5 text-text-primary">
-                  <CheckCircle2 className="w-4 h-4 text-brand-teal" /> Delhi NCR Coverage
-                </span>
-                <span className="flex items-center gap-1.5 text-text-primary">
-                  <CheckCircle2 className="w-4 h-4 text-brand-teal" /> Managed Care Team
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-2 border-b border-slate-100 pb-3">
+              <div className="flex items-center gap-2">
+                <ShieldPlus className="w-5 h-5 text-brand-teal" />
+                <span className="text-xs font-black text-slate-900 uppercase tracking-widest">
+                  Quick Care Booking Console
                 </span>
               </div>
+              <span className="text-xs font-bold text-slate-500">
+                Verified Delhi NCR Dispatch • 24×7 Availability
+              </span>
             </div>
 
-            {/* Right Column (55%): Real 7-9 Person Healthcare Campaign Photography */}
-            <div className="lg:col-span-6 relative">
-              <div className="relative mx-auto rounded-3xl overflow-hidden shadow-card border-4 border-white bg-white">
-                
-                {/* Real Photographic Healthcare Team Image (7-8 Professionals) */}
-                <img
-                  src="/assets/services/home-nursing/pulse-n-care-team-campaign-7-9.webp"
-                  alt="Pulse n Care Healthcare Care Team Campaign"
-                  className="w-full h-[520px] object-cover object-center"
-                />
-
-                {/* Subdued Pulse n Care Logo Badge */}
-                <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-md px-4 py-2 rounded-full border border-teal-200 shadow-2xs flex items-center gap-2.5">
-                  <img src="/assets/brand/pulse-n-care/pulse-n-care-logo.svg" alt="Pulse n Care" className="h-6 w-auto" />
-                  <span className="text-[10px] font-black text-brand-teal uppercase tracking-widest border-l border-slate-200 pl-2">
-                    Official Care Team
-                  </span>
-                </div>
-
-                {/* Role Micro Labels */}
-                <div className="absolute top-4 right-4 flex flex-col gap-1.5 items-end">
-                  <span className="bg-slate-900/85 backdrop-blur-md text-white px-3 py-1 rounded-full text-[10px] font-extrabold border border-white/20">
-                    Lead Nurse (RN)
-                  </span>
-                  <span className="bg-slate-900/85 backdrop-blur-md text-white px-3 py-1 rounded-full text-[10px] font-extrabold border border-white/20">
-                    Physician (MBBS)
-                  </span>
-                  <span className="bg-slate-900/85 backdrop-blur-md text-white px-3 py-1 rounded-full text-[10px] font-extrabold border border-white/20">
-                    Physiotherapist (BPT)
-                  </span>
-                  <span className="bg-slate-900/85 backdrop-blur-md text-white px-3 py-1 rounded-full text-[10px] font-extrabold border border-white/20">
-                    Senior Caregiver (GNM)
-                  </span>
-                </div>
-
-                {/* Bottom Managed Roster Status Strip */}
-                <div className="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-border-default shadow-subtle flex items-center justify-between gap-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-canvas-teal text-brand-teal flex items-center justify-center font-bold border border-teal-200 shrink-0">
-                      <UserCheck className="w-5 h-5" />
-                    </div>
-                    <div className="text-left">
-                      <p className="text-xs font-black text-text-primary">Managed In-House Care Team</p>
-                      <p className="text-[11px] text-text-muted">Assigned & Monitored by Central Operations Desk</p>
-                    </div>
-                  </div>
-                  <span className="text-[10px] font-black text-brand-teal bg-canvas-teal px-3 py-1.5 rounded-full border border-teal-200 uppercase shrink-0">
-                    Council Verified
-                  </span>
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
+              
+              {/* Select Service Dropdown */}
+              <div className="md:col-span-4 bg-canvas-secondary p-3 rounded-2xl border border-border-default">
+                <label className="block text-[10px] font-extrabold text-slate-500 uppercase tracking-wider mb-1">
+                  1. Select Healthcare Service
+                </label>
+                <div className="flex items-center gap-2 text-text-primary">
+                  <Stethoscope className="w-4 h-4 text-brand-teal shrink-0" />
+                  <select
+                    className="w-full text-xs font-bold bg-transparent text-slate-900 focus:outline-none cursor-pointer"
+                    onChange={(e) => {
+                      if (e.target.value) {
+                        navigate(`/client/booking/wizard?serviceId=${e.target.value}`);
+                      }
+                    }}
+                    defaultValue="srv-nursing-24x7"
+                  >
+                    <option value="srv-nursing-24x7">24×7 Skilled Home Nursing Care</option>
+                    <option value="srv-nursing-12h">12h Day / Night Nursing Shift</option>
+                    <option value="srv-nursing-post-op">Post-Operative Dressing & Care</option>
+                    <option value="srv-attendant-daily">Elderly Bedside Attendant</option>
+                    <option value="srv-physio-rehab">Home Physical Therapy & Rehab</option>
+                    <option value="srv-doctor-visit">MBBS Doctor Home Visit</option>
+                  </select>
                 </div>
               </div>
+
+              {/* Enter Location Input */}
+              <div className="md:col-span-5 bg-canvas-secondary p-3 rounded-2xl border border-border-default">
+                <label className="block text-[10px] font-extrabold text-slate-500 uppercase tracking-wider mb-1">
+                  2. Enter Location / Pincode (Delhi NCR)
+                </label>
+                <div className="flex items-center gap-2">
+                  <MapPin className="w-4 h-4 text-brand-teal shrink-0" />
+                  <input
+                    type="text"
+                    value={locationInput}
+                    onChange={(e) => {
+                      setLocationInput(e.target.value);
+                      setLocationStatus(null);
+                    }}
+                    placeholder="e.g. DLF Phase 5 Gurugram, Sec 62 Noida, South Del..."
+                    className="w-full text-xs font-bold text-slate-900 bg-transparent focus:outline-none"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleDetectLocation}
+                    className="text-[11px] font-extrabold text-brand-teal hover:bg-teal-100/60 px-2.5 py-1 rounded-lg border border-teal-200 shrink-0 cursor-pointer transition-colors"
+                  >
+                    📍 Detect
+                  </button>
+                </div>
+              </div>
+
+              {/* Book Now Button */}
+              <div className="md:col-span-3">
+                <Button
+                  variant="primary"
+                  onClick={() => {
+                    const selectedService = 'srv-nursing-24x7';
+                    const loc = locationInput ? `&location=${encodeURIComponent(locationInput)}` : '';
+                    navigate(`/client/booking/wizard?serviceId=${selectedService}${loc}`);
+                  }}
+                  rightIcon={<ArrowRight className="w-4 h-4" />}
+                  className="w-full bg-brand-teal hover:bg-brand-teal-hover text-white font-black text-sm py-4 rounded-2xl cursor-pointer shadow-md justify-center"
+                >
+                  Book Care Now
+                </Button>
+              </div>
+
+            </div>
+
+            {locationStatus && (
+              <p className="text-xs font-bold text-emerald-800 bg-emerald-50 p-2.5 rounded-xl border border-emerald-200 animate-fadeIn text-left">
+                {locationStatus}
+              </p>
+            )}
+
+            {/* Quick Factual Indicators */}
+            <div className="flex flex-wrap items-center justify-between text-[11px] font-extrabold text-slate-600 pt-1">
+              <span className="flex items-center gap-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5 text-brand-teal" /> 24×7 Dispatch Desk
+              </span>
+              <span className="flex items-center gap-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5 text-brand-teal" /> Council-Verified Nurses
+              </span>
+              <span className="flex items-center gap-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5 text-brand-teal" /> Transparent Daily & Shift Rates
+              </span>
+              <span className="flex items-center gap-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5 text-brand-teal" /> In-House Care Team (No Marketplace)
+              </span>
             </div>
 
           </div>
         </div>
+
       </section>
 
       {/* ========================================================================= */}
