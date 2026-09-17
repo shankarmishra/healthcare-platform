@@ -130,34 +130,34 @@ export const HomePage: React.FC = () => {
       {/* ========================================================================= */}
       {/* SECTION 01 — FULL-BLEED REAL HEALTHCARE CAMPAIGN BANNER HERO             */}
       {/* ========================================================================= */}
-      <section className="relative min-h-[640px] sm:min-h-[700px] bg-slate-900 border-b border-border-default overflow-hidden flex flex-col justify-between py-12 sm:py-16">
+      <section className="relative min-h-[660px] sm:min-h-[720px] bg-slate-50 border-b border-border-default overflow-hidden flex flex-col justify-between py-12 sm:py-16">
         
-        {/* Full-Width Background Campaign Image (9 Real Healthcare Professionals) */}
+        {/* Full-Width Studio Background Campaign Image (9 Branded Indian Healthcare Professionals) */}
         <img
           src="/assets/services/home-nursing/pulse-n-care-team-banner-9.jpg"
           alt="Pulse n Care Managed Healthcare Team Campaign"
-          className="absolute inset-0 w-full h-full object-cover object-center opacity-95 scale-100 transition-transform duration-700"
+          className="absolute inset-0 w-full h-full object-cover object-center opacity-100 scale-100 transition-transform duration-700"
         />
 
-        {/* Balanced Top-to-Bottom & Radial Gradient Mask for High Contrast + Full Image Visibility */}
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/85 via-slate-950/40 to-slate-950/90 z-1" />
+        {/* Subtle Side-to-Bottom Gradient for Crisp Typography Legibility while keeping Studio Image 100% Clear */}
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-950/85 via-slate-950/60 via-40% to-transparent z-1" />
 
         {/* Hero Top & Middle Content Container */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full pt-4 pb-8 space-y-6 text-center sm:text-left">
           
           {/* Eyebrow Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-teal/90 text-white text-xs font-black tracking-widest uppercase border border-teal-300/40 backdrop-blur-md shadow-lg">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-teal/95 text-white text-xs font-black tracking-widest uppercase border border-teal-300/40 backdrop-blur-md shadow-lg">
             <Sparkles className="w-3.5 h-3.5 text-teal-200" />
             <span>Pulse n Care · Home Healthcare</span>
           </div>
 
           {/* Main Headline */}
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black text-white tracking-tight leading-[1.05] drop-shadow-md max-w-4xl">
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black text-white tracking-tight leading-[1.05] drop-shadow-md max-w-2xl">
             Nurse care at <span className="text-teal-300 underline decoration-teal-400 decoration-wavy decoration-2">doorstep.</span>
           </h1>
 
           {/* Subheading */}
-          <p className="text-base sm:text-xl text-slate-100 max-w-3xl leading-relaxed font-medium drop-shadow-sm">
+          <p className="text-base sm:text-xl text-slate-100 max-w-xl leading-relaxed font-medium drop-shadow-sm">
             Professional nursing support, post-operative care, elderly bedside assistance & physical therapy arranged at home by our internal verified care team across Delhi NCR.
           </p>
 
