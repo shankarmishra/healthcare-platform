@@ -24,6 +24,7 @@ import {
 } from 'lucide-react';
 import type { Service, ServiceShiftOption } from '../../types';
 import { clsx } from 'clsx';
+import { HomeNursingServicePage } from './HomeNursingServicePage';
 
 export const ServiceDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -32,6 +33,11 @@ export const ServiceDetailPage: React.FC = () => {
 
   // Find service by ID or slug
   const service: Service | undefined = services.find((s) => s.id === id || s.slug === id);
+
+  // If this is a home nursing service or home-nursing route, render the specialized Pulse n Care page
+  if (id === 'home-nursing' || id === 'home_nursing' || service?.category === 'home_nursing') {
+    return <HomeNursingServicePage />;
+  }
 
   const [selectedShift, setSelectedShift] = useState<ServiceShiftOption | null>(
     service?.shiftOptions?.[0] || null

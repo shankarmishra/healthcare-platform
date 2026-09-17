@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 90" width="100%" height="100%">
+  <defs>
+    <linearGradient id="pnc-dark-teal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2DD4BF" />
+      <stop offset="100%" stop-color="#38BDF8" />
+    </linearGradient>
+  </defs>
+
+  <!-- Mark Container -->
+  <g transform="translate(5, 5)">
+    <rect x="0" y="0" width="80" height="80" rx="24" fill="#0F172A" stroke="#1E293B" stroke-width="1.5" />
+    
+    <g>
+      <!-- Heart Outline -->
+      <path d="M 40,66 C 24,52 14,40 14,28 C 14,18 22,12 31,14 C 36,15 38,18 40,21 C 42,18 44,15 49,14 C 58,12 66,18 66,28 C 66,40 56,52 40,66 Z" 
+            fill="none" 
+            stroke="url(#pnc-dark-teal)" 
+            stroke-width="4" 
+            stroke-linecap="round" 
+            stroke-linejoin="round" />
+
+      <!-- Pulse ECG Waveform Line -->
+      <path d="M 8,38 L 22,38 L 27,30 L 33,52 L 41,20 L 48,44 L 53,35 L 58,38 L 72,38" 
+            fill="none" 
+            stroke="url(#pnc-dark-teal)" 
+            stroke-width="3.5" 
+            stroke-linecap="round" 
+            stroke-linejoin="round" />
+
+      <circle cx="41" cy="20" r="3" fill="#38BDF8" />
+    </g>
+  </g>
+
+  <!-- Brand Typography -->
+  <g transform="translate(100, 22)" text-anchor="start">
+    <text x="0" y="28" font-family="Manrope, system-ui, -apple-system, sans-serif" font-size="30" font-weight="900" letter-spacing="-0.5">
+      <tspan fill="#FFFFFF">Pulse</tspan>
+      <tspan fill="#2DD4BF" font-weight="700"> n </tspan>
+      <tspan fill="#38BDF8">Care</tspan>
+    </text>
+
+    <text x="0" y="48" font-family="Manrope, system-ui, -apple-system, sans-serif" font-size="12" font-weight="800" fill="#94A3B8" letter-spacing="0.6">
+      NURSE CARE AT DOORSTEP
+    </text>
+  </g>
+</svg>

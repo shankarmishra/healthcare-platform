@@ -20,6 +20,7 @@ import { OrgLayout } from './components/layout/OrgLayout';
 import { HomePage } from './pages/public/HomePage';
 import { ServicesPage } from './pages/public/ServicesPage';
 import { ServiceDetailPage } from './pages/public/ServiceDetailPage';
+import { HomeNursingServicePage } from './pages/public/HomeNursingServicePage';
 import { OrgLandingPage } from './pages/public/OrgLandingPage';
 import { SearchPage } from './pages/client/SearchPage';
 import { ProProfileViewPage } from './pages/client/ProProfileViewPage';
@@ -82,6 +83,7 @@ export const App: React.FC = () => {
               <Route path="/" element={<PublicLayout />}>
                 <Route index element={<HomePage />} />
                 <Route path="services" element={<ServicesPage />} />
+                <Route path="services/home-nursing" element={<HomeNursingServicePage />} />
                 <Route path="services/:id" element={<ServiceDetailPage />} />
                 <Route path="organizations" element={<OrgLandingPage />} />
                 <Route path="search" element={<SearchPage />} />
