@@ -31,6 +31,7 @@ import { ClientProfilePage } from './pages/client/ClientProfilePage';
 import { ClientNotificationsPage } from './pages/client/ClientNotificationsPage';
 import { SavedPatientsPage } from './pages/client/SavedPatientsPage';
 import { SavedAddressesPage } from './pages/client/SavedAddressesPage';
+import { ClientDashboardPage } from './pages/client/ClientDashboardPage';
 
 // Professional Pages
 import { ProDashboardPage } from './pages/pro/ProDashboardPage';
@@ -93,6 +94,7 @@ export const App: React.FC = () => {
                 <Route path="client/support" element={<ClientSupportPage />} />
                 <Route path="client/profile" element={<ClientProfilePage />} />
                 <Route path="client/notifications" element={<ClientNotificationsPage />} />
+                <Route path="client/dashboard" element={<ClientDashboardPage />} />
                 <Route path="client/patients" element={<SavedPatientsPage />} />
                 <Route path="client/addresses" element={<SavedAddressesPage />} />
               </Route>
