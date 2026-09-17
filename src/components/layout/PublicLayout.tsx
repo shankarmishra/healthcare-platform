@@ -93,7 +93,7 @@ export const PublicLayout: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-canvas-primary text-text-primary">
+    <div className="min-h-screen flex flex-col bg-canvas-primary text-text-primary antialiased font-sans">
       {/* Top Demo Role Bar */}
       <DemoRoleSwitcher />
 
@@ -101,11 +101,11 @@ export const PublicLayout: React.FC = () => {
       <header
         className={`sticky top-0 z-40 transition-all duration-300 ${
           isScrolled
-            ? 'bg-white/95 backdrop-blur-md shadow-card border-b border-border-default py-2.5'
-            : 'bg-white border-b border-slate-100 py-3.5'
+            ? 'bg-white/95 backdrop-blur-md shadow-card border-b border-border-default h-18 flex items-center'
+            : 'bg-white border-b border-slate-100 h-20 flex items-center'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex items-center justify-between gap-6">
           
           {/* Left: Master Logo & Location Hub Selector */}
           <div className="flex items-center gap-6">
@@ -205,7 +205,7 @@ export const PublicLayout: React.FC = () => {
                   {/* Right Column: Featured Flagship Showcase */}
                   <div className="col-span-5 bg-gradient-to-br from-slate-900 via-teal-950 to-slate-900 rounded-2xl p-4 text-white flex flex-col justify-between relative overflow-hidden">
                     <img
-                      src="/assets/services/home-nursing/pulse-n-care-team-hero.jpg"
+                      src="/assets/services/home-nursing/pulse-n-care-team-campaign-7-9.jpg"
                       alt="Pulse n Care Team"
                       className="absolute inset-0 w-full h-full object-cover opacity-35"
                     />
@@ -413,16 +413,16 @@ export const PublicLayout: React.FC = () => {
       {/* Global Footer */}
       <footer className="bg-slate-900 text-white border-t border-slate-800 pt-16 pb-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-10">
             
             {/* Col 1: Brand & Operational Governance */}
-            <div className="space-y-4">
+            <div className="md:col-span-2 space-y-4">
               <img
                 src="/assets/brand/pulse-n-care/pulse-n-care-logo-dark.svg"
                 alt="Pulse n Care"
                 className="h-10 w-auto"
               />
-              <p className="text-xs text-slate-400 leading-relaxed">
+              <p className="text-xs text-slate-400 leading-relaxed max-w-sm">
                 Nurse care at doorstep. Managed home nursing, attendant care, physical therapy, and physician visits across Delhi NCR.
               </p>
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800 text-teal-400 text-xs font-bold border border-slate-700">
