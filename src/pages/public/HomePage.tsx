@@ -128,104 +128,71 @@ export const HomePage: React.FC = () => {
     <div className="space-y-24 pb-24 bg-white text-text-primary text-left overflow-x-hidden">
       
       {/* ========================================================================= */}
-      {/* SECTION 01 — PRISTINE TEAM CAMPAIGN BANNER IMAGE (TOP - ZERO OVERLAY)     */}
+      {/* SECTION 01 — FULL-BLEED REAL HEALTHCARE CAMPAIGN BANNER HERO             */}
       {/* ========================================================================= */}
-      <section className="bg-slate-50 border-b border-border-default pt-6 pb-12 space-y-8">
+      <section className="relative min-h-[680px] sm:min-h-[740px] bg-slate-900 border-b border-border-default overflow-hidden flex flex-col justify-between py-12 sm:py-16">
         
-        {/* 1. Pristine Full-Width Team Campaign Banner (ZERO Text Overlay on Top) */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="relative rounded-3xl overflow-hidden shadow-xl border border-slate-200/80 bg-white group">
-            <img
-              src="/assets/services/home-nursing/pulse-n-care-team-banner-9.jpg"
-              alt="Pulse n Care Managed Healthcare Team Campaign"
-              className="w-full h-auto max-h-[520px] object-cover object-center scale-100 group-hover:scale-101 transition-transform duration-700"
-            />
-            {/* Subtle bottom shadow accent */}
-            <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-slate-900/10 to-transparent" />
+        {/* Full-Width Background Campaign Image (Branded Indian Healthcare Professionals with Medical Kits) */}
+        <img
+          src="/assets/services/home-nursing/pulse-n-care-team-banner-9.jpg"
+          alt="Pulse n Care Managed Healthcare Team Campaign"
+          className="absolute inset-0 w-full h-full object-cover object-center opacity-90 scale-100 transition-transform duration-700"
+        />
+
+        {/* Ultra-Smooth Radial & Vignette Overlay for Crisp Centered Typography Legibility */}
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/85 via-slate-950/60 to-slate-950/90 z-1" />
+
+        {/* Hero Centered Content Container */}
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full pt-6 pb-8 space-y-6 text-center flex flex-col items-center">
+          
+          {/* Centered Eyebrow Badge */}
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-teal/95 text-white text-xs font-black tracking-widest uppercase border border-teal-300/40 backdrop-blur-md shadow-lg">
+            <Sparkles className="w-3.5 h-3.5 text-teal-200" />
+            <span>Pulse n Care · Managed Home Healthcare</span>
           </div>
+
+          {/* Centered Main Headline */}
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black text-white tracking-tight leading-[1.05] drop-shadow-md">
+            Nurse care at <span className="text-teal-300 underline decoration-teal-400 decoration-wavy decoration-2">doorstep.</span>
+          </h1>
+
+          {/* Centered Subheading */}
+          <p className="text-base sm:text-xl text-slate-100 max-w-3xl leading-relaxed font-medium drop-shadow-sm">
+            Professional 24×7 home nursing, post-operative clinical care, sterile dressing, tube feeding, catheter maintenance & elderly bedside assistance by our internal verified care team across Delhi NCR.
+          </p>
+
+          {/* Centered Action CTAs */}
+          <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
+            <Button
+              variant="primary"
+              onClick={() => navigate('/client/booking/wizard?serviceId=srv-nursing-post-op')}
+              rightIcon={<ArrowRight className="w-4 h-4" />}
+              className="bg-brand-teal hover:bg-brand-teal-hover text-white font-black text-base px-9 py-4 rounded-2xl cursor-pointer shadow-xl border border-teal-400/30"
+            >
+              Book a Service
+            </Button>
+
+            <Button
+              variant="outline"
+              onClick={() => navigate('/services')}
+              className="border-white/40 text-white hover:bg-white/10 font-bold text-base px-7 py-4 rounded-2xl cursor-pointer bg-slate-900/60 backdrop-blur-md"
+            >
+              Explore All Services
+            </Button>
+
+            <button
+              onClick={() => setCallbackModalOpen(true)}
+              className="text-sm font-extrabold text-teal-300 hover:text-teal-200 hover:underline px-3 py-2 cursor-pointer drop-shadow-sm"
+            >
+              Talk to Care Concierge →
+            </button>
+          </div>
+
         </div>
 
-        {/* 2. Hero Headline, Subheading, CTAs & Quick Booking Console (BELOW THE IMAGE) */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 text-center sm:text-left">
-          
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            
-            {/* Left Column: Eyebrow Badge, Main Headline & Subheading */}
-            <div className="lg:col-span-7 space-y-4">
-              
-              {/* Eyebrow Badge */}
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-canvas-teal text-brand-teal text-xs font-black tracking-widest uppercase border border-teal-200 shadow-2xs">
-                <Sparkles className="w-3.5 h-3.5 text-brand-teal" />
-                <span>Pulse n Care · Managed Home Healthcare</span>
-              </div>
-
-              {/* Main Headline */}
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.08]">
-                Nurse care at <span className="text-brand-teal underline decoration-teal-300 decoration-wavy decoration-2">doorstep.</span>
-              </h1>
-
-              {/* Subheading */}
-              <p className="text-base sm:text-lg text-slate-600 max-w-2xl leading-relaxed font-medium">
-                Professional 24×7 home nursing, post-operative clinical care, sterile dressing, tube feeding, catheter maintenance & elderly bedside assistance by our internal verified care team across Delhi NCR.
-              </p>
-
-              {/* Primary Action Buttons */}
-              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 pt-2">
-                <Button
-                  variant="primary"
-                  onClick={() => navigate('/client/booking/wizard?serviceId=srv-nursing-post-op')}
-                  rightIcon={<ArrowRight className="w-4 h-4" />}
-                  className="bg-brand-teal hover:bg-brand-teal-hover text-white font-black text-base px-8 py-4 rounded-2xl cursor-pointer shadow-lg"
-                >
-                  Book a Service
-                </Button>
-
-                <Button
-                  variant="outline"
-                  onClick={() => navigate('/services')}
-                  className="border-slate-300 text-slate-800 hover:bg-slate-100 font-bold text-base px-6 py-4 rounded-2xl cursor-pointer bg-white"
-                >
-                  Explore All Services
-                </Button>
-
-                <button
-                  onClick={() => setCallbackModalOpen(true)}
-                  className="text-xs font-extrabold text-brand-teal hover:underline px-3 py-2 cursor-pointer"
-                >
-                  Talk to Care Concierge →
-                </button>
-              </div>
-
-            </div>
-
-            {/* Right Column: Quick Factual Operational Guarantee Cards */}
-            <div className="lg:col-span-5 grid grid-cols-2 gap-3">
-              <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-2xs space-y-1">
-                <span className="text-xl font-black text-brand-teal block">24×7</span>
-                <span className="text-xs font-extrabold text-slate-900 block">Shift Rotation</span>
-                <span className="text-[11px] text-slate-500 font-medium block">12h Day/Night & 24h Live-in</span>
-              </div>
-              <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-2xs space-y-1">
-                <span className="text-xl font-black text-brand-teal block">Council</span>
-                <span className="text-xs font-extrabold text-slate-900 block">Verified Nurses</span>
-                <span className="text-[11px] text-slate-500 font-medium block">B.Sc & GNM Registered Staff</span>
-              </div>
-              <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-2xs space-y-1">
-                <span className="text-xl font-black text-brand-teal block">Delhi NCR</span>
-                <span className="text-xs font-extrabold text-slate-900 block">Dispatch Hubs</span>
-                <span className="text-[11px] text-slate-500 font-medium block">Delhi, Noida, Gurugram, Fdb</span>
-              </div>
-              <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-2xs space-y-1">
-                <span className="text-xl font-black text-brand-teal block">Managed</span>
-                <span className="text-xs font-extrabold text-slate-900 block">Care Team</span>
-                <span className="text-[11px] text-slate-500 font-medium block">No Marketplace / Freelancers</span>
-              </div>
-            </div>
-
-          </div>
-
-          {/* 3. Wide Horizontal Quick Care Booking Console */}
-          <div className="bg-white p-5 sm:p-6 rounded-3xl shadow-xl border border-slate-200/80 space-y-4">
+        {/* Hero Bottom — Wide Horizontal Floating Booking & Location Console */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full pt-4">
+          <div className="bg-white/95 backdrop-blur-xl p-5 sm:p-6 rounded-3xl shadow-2xl border border-slate-200/80 space-y-4">
             
             <div className="flex flex-col sm:flex-row items-center justify-between gap-2 border-b border-slate-100 pb-3">
               <div className="flex items-center gap-2">
