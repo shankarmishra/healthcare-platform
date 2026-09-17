@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { X, ArrowRight, ShieldCheck } from 'lucide-react';
 import { Button } from '../../components/common/Button';
 import { useAuth } from '../../context/AuthContext';
@@ -15,6 +16,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   onClose,
   defaultRole = 'client'
 }) => {
+  const navigate = useNavigate();
   const { switchRole } = useAuth();
   const [step, setStep] = useState<'input' | 'otp'>('input');
   const [phone, setPhone] = useState('9876543210');
@@ -32,6 +34,19 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     e.preventDefault();
     switchRole(selectedRole);
     onClose();
+
+    // Navigate to respective role portal dashboard
+    if (selectedRole === 'admin' || selectedRole === 'super_admin') {
+      navigate('/admin/dashboard');
+    } else if (selectedRole === 'professional') {
+      navigate('/pro/dashboard');
+    } else if (selectedRole === 'organization') {
+      navigate('/organization/dashboard');
+    } else if (selectedRole === 'staff') {
+      navigate('/staff/dashboard');
+    } else {
+      navigate('/');
+    }
   };
 
   return (
@@ -59,11 +74,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               {/* Role Selection */}
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1.5">Sign In As</label>
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                   {[
-                    { id: 'client', label: 'Patient / Family' },
-                    { id: 'pro', label: 'Nurse / Carer' },
-                    { id: 'admin', label: 'Admin Ops' }
+                    { id: 'client', label: 'Patient' },
+                    { id: 'professional', label: 'Pro Staff' },
+                    { id: 'admin', label: 'Ops Admin' },
+                    { id: 'organization', label: 'B2B Partner' }
                   ].map((r) => (
                     <button
                       key={r.id}

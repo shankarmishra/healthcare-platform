@@ -13,6 +13,8 @@ export interface ServiceAreaHub {
   activeStaffCount: number;
   avgDispatchTimeMinutes: string;
   isOperational: boolean;
+  coordinates: { latitude: number; longitude: number };
+  coverageRadiusKm: number;
 }
 
 export const DELHI_NCR_SERVICE_HUBS: ServiceAreaHub[] = [
@@ -24,7 +26,9 @@ export const DELHI_NCR_SERVICE_HUBS: ServiceAreaHub[] = [
     pincodePrefixes: ['110001', '110003', '110014', '110016', '110017', '110019', '110020', '110024', '110048', '110065', '110070'],
     activeStaffCount: 85,
     avgDispatchTimeMinutes: '30-45 mins',
-    isOperational: true
+    isOperational: true,
+    coordinates: { latitude: 28.5800, longitude: 77.2300 },
+    coverageRadiusKm: 15
   },
   {
     id: 'hub-delhi-west',
@@ -34,7 +38,9 @@ export const DELHI_NCR_SERVICE_HUBS: ServiceAreaHub[] = [
     pincodePrefixes: ['110015', '110027', '110058', '110063', '110085', '110088'],
     activeStaffCount: 62,
     avgDispatchTimeMinutes: '35-50 mins',
-    isOperational: true
+    isOperational: true,
+    coordinates: { latitude: 28.6700, longitude: 77.1200 },
+    coverageRadiusKm: 15
   },
   {
     id: 'hub-gurugram-cyber',
@@ -44,7 +50,9 @@ export const DELHI_NCR_SERVICE_HUBS: ServiceAreaHub[] = [
     pincodePrefixes: ['122001', '122002', '122003', '122008', '122011', '122018', '122051'],
     activeStaffCount: 74,
     avgDispatchTimeMinutes: '25-40 mins',
-    isOperational: true
+    isOperational: true,
+    coordinates: { latitude: 28.4950, longitude: 77.0890 },
+    coverageRadiusKm: 18
   },
   {
     id: 'hub-noida-sec62',
@@ -54,17 +62,21 @@ export const DELHI_NCR_SERVICE_HUBS: ServiceAreaHub[] = [
     pincodePrefixes: ['201301', '201303', '201304', '201307', '201309', '201313'],
     activeStaffCount: 58,
     avgDispatchTimeMinutes: '30-45 mins',
-    isOperational: true
+    isOperational: true,
+    coordinates: { latitude: 28.6280, longitude: 77.3750 },
+    coverageRadiusKm: 18
   },
   {
     id: 'hub-faridabad-sec15',
-    name: 'Faridabad Hub',
+    name: 'Faridabad Central Hub',
     city: 'Faridabad',
     hubAddress: 'Sector 15 / Mathura Road, Faridabad',
     pincodePrefixes: ['121001', '121002', '121003', '121006', '121007'],
     activeStaffCount: 41,
     avgDispatchTimeMinutes: '35-50 mins',
-    isOperational: true
+    isOperational: true,
+    coordinates: { latitude: 28.4000, longitude: 77.3100 },
+    coverageRadiusKm: 16
   }
 ];
 

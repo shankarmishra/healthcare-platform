@@ -8,7 +8,6 @@ import {
   Compass,
   Lock,
   WifiOff,
-  Building2,
   ShieldCheck,
   Send
 } from 'lucide-react';
@@ -21,6 +20,7 @@ import {
   validateNCRServiceLocation
 } from '../../data/serviceAreaMatrix';
 import type { ServiceAreaHub } from '../../data/serviceAreaMatrix';
+import { RealDelhiNCRMap } from './RealDelhiNCRMap';
 
 export interface LocationData {
   addressType: string;
@@ -425,31 +425,15 @@ export const LocationPicker: React.FC<LocationPickerProps> = ({ value, onChange,
           </span>
         </div>
 
-        <div className="relative h-36 bg-slate-200 rounded-xl overflow-hidden border border-border-default flex items-center justify-center">
-          {/* Subtle Grid Map Pattern Background */}
-          <div
-            className="absolute inset-0 opacity-25"
-            style={{
-              backgroundImage: 'radial-gradient(#0EA5A4 1px, transparent 1px)',
-              backgroundSize: '16px 16px'
-            }}
-          />
-
-          {/* Map Pin Marker */}
-          <div className="relative z-10 flex flex-col items-center animate-bounce">
-            <div className="w-9 h-9 rounded-full bg-brand-teal text-white flex items-center justify-center shadow-lg border-2 border-white">
-              <MapPin className="w-5 h-5" />
-            </div>
-            <span className="text-[10px] font-extrabold text-slate-900 bg-white/95 px-2.5 py-0.5 rounded-full shadow-xs border border-border-default mt-1">
-              {value.line1 || 'Care Destination'} ({value.city || 'Delhi NCR'})
-            </span>
-          </div>
-
-          {/* Proximity Indicator */}
-          <span className="absolute bottom-2 right-2 text-[10px] font-extrabold text-brand-teal bg-white px-2.5 py-1 rounded-full border border-border-default shadow-xs flex items-center gap-1">
-            <Building2 className="w-3 h-3 text-brand-teal" /> {activeHub.name} ({activeHub.avgDispatchTimeMinutes})
-          </span>
-        </div>
+        <RealDelhiNCRMap
+          selectedCity={value.city}
+          activeHubId={activeHub.id}
+          latitude={value.latitude}
+          longitude={value.longitude}
+          locationName={value.line1 || 'Care Destination'}
+          onSelectHub={(hub) => handleSelectHub(hub)}
+          height="340px"
+        />
 
         <div className="flex justify-between items-center pt-1">
           <span className="text-xs text-text-muted">

@@ -7,7 +7,7 @@ import { PersonalCareSection } from '../../components/domain/pulse-n-care/Person
 import { DailyChartPreview } from '../../components/domain/pulse-n-care/DailyChartPreview';
 import { ShiftHandoverSVG } from '../../components/domain/pulse-n-care/vectors/ShiftHandoverSVG';
 import { EmergencyEscalationSVG } from '../../components/domain/pulse-n-care/vectors/EmergencyEscalationSVG';
-import { DelhiNCRMapSVG } from '../../components/domain/pulse-n-care/vectors/DelhiNCRMapSVG';
+import { RealDelhiNCRMap } from '../../components/domain/RealDelhiNCRMap';
 import { CareDurationSelector } from '../../components/domain/pulse-n-care/CareDurationSelector';
 import { PulseNCareFAQ } from '../../components/domain/pulse-n-care/PulseNCareFAQ';
 import { StickyBookingBar } from '../../components/domain/pulse-n-care/StickyBookingBar';
@@ -181,8 +181,16 @@ export const HomeNursingServicePage: React.FC = () => {
             </p>
           </div>
 
-          {/* Custom Delhi NCR Vector Map Illustration */}
-          <DelhiNCRMapSVG className="w-full max-w-2xl mx-auto" />
+          {/* Real Leaflet Map of Delhi NCR with Lottie Radar Scan Overlay */}
+          <div className="space-y-4">
+            <RealDelhiNCRMap
+              selectedCity={locationData.city}
+              latitude={locationData.latitude}
+              longitude={locationData.longitude}
+              locationName={locationData.line1 || 'Care Destination'}
+              height="380px"
+            />
+          </div>
 
           <div className="bg-white p-6 rounded-3xl border border-border-default shadow-subtle">
             <LocationPicker

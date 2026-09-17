@@ -27,6 +27,7 @@ export const HomePage: React.FC = () => {
 
   const [locationInput, setLocationInput] = useState('');
   const [locationStatus, setLocationStatus] = useState<string | null>(null);
+  const [selectedHeroService, setSelectedHeroService] = useState('srv-nursing-post-op');
   const [callbackModalOpen, setCallbackModalOpen] = useState(false);
   const [callbackName, setCallbackName] = useState('');
   const [callbackPhone, setCallbackPhone] = useState('');
@@ -234,19 +235,17 @@ export const HomePage: React.FC = () => {
                 <Stethoscope className="w-4 h-4 text-brand-teal shrink-0" />
                 <select
                   className="w-full text-xs font-bold bg-transparent text-slate-900 focus:outline-none cursor-pointer whitespace-nowrap"
-                  onChange={(e) => {
-                    if (e.target.value) {
-                      navigate(`/client/booking/wizard?serviceId=${e.target.value}`);
-                    }
-                  }}
-                  defaultValue="srv-nursing-24x7"
+                  value={selectedHeroService}
+                  onChange={(e) => setSelectedHeroService(e.target.value)}
                 >
-                  <option value="srv-nursing-24x7">24×7 Home Nursing Care</option>
-                  <option value="srv-nursing-12h">12h Day / Night Nursing Shift</option>
                   <option value="srv-nursing-post-op">Post-Operative Sterile Care</option>
-                  <option value="srv-attendant-daily">Elderly Bedside Attendant</option>
-                  <option value="srv-physio-rehab">Home Physical Therapy</option>
-                  <option value="srv-doctor-visit">MBBS Doctor Home Visit</option>
+                  <option value="srv-nursing-elderly">Senior Skilled Nursing Visit</option>
+                  <option value="srv-caregiver-12hr">12-Hour Day / Night Caregiver</option>
+                  <option value="srv-caregiver-24hr">24-Hour Live-in Caregiver</option>
+                  <option value="srv-physio-ortho">Orthopedic & Joint Rehab Physio</option>
+                  <option value="srv-physio-neuro">Neuro-Rehabilitation Physio</option>
+                  <option value="srv-doc-general">General Physician Home Visit</option>
+                  <option value="srv-specialized-icu">Home ICU Critical Care Nurse</option>
                 </select>
               </div>
 
@@ -280,9 +279,8 @@ export const HomePage: React.FC = () => {
                 variant="primary"
                 size="sm"
                 onClick={() => {
-                  const selectedService = 'srv-nursing-24x7';
                   const loc = locationInput ? `&location=${encodeURIComponent(locationInput)}` : '';
-                  navigate(`/client/booking/wizard?serviceId=${selectedService}${loc}`);
+                  navigate(`/client/booking/wizard?serviceId=${selectedHeroService}${loc}`);
                 }}
                 rightIcon={<ArrowRight className="w-3.5 h-3.5" />}
                 className="w-full md:w-auto bg-brand-teal hover:bg-brand-teal-hover text-white font-black text-xs px-6 py-3 rounded-full cursor-pointer shadow-md shrink-0 justify-center h-10 whitespace-nowrap"

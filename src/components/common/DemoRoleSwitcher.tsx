@@ -1,20 +1,28 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import type { UserRole } from '../../types';
-import { ShieldAlert, User, Stethoscope, Building2, ShieldCheck } from 'lucide-react';
+import { ShieldAlert, User, Stethoscope, Building2, ShieldCheck, UserCheck } from 'lucide-react';
 import { clsx } from 'clsx';
 
 export const DemoRoleSwitcher: React.FC = () => {
   const { currentRole, switchRole, demoMode, currentUser } = useAuth();
+  const navigate = useNavigate();
 
   if (!demoMode) return null;
 
-  const roles: { role: UserRole; label: string; icon: React.ReactNode; badge: string }[] = [
-    { role: 'client', label: 'Client / Patient', icon: <User className="w-3.5 h-3.5" />, badge: 'Marketplace' },
-    { role: 'professional', label: 'Healthcare Pro', icon: <Stethoscope className="w-3.5 h-3.5" />, badge: 'Pro App' },
-    { role: 'admin', label: 'Ops Admin', icon: <ShieldCheck className="w-3.5 h-3.5" />, badge: 'Command Center' },
-    { role: 'organization', label: 'Hospital Partner', icon: <Building2 className="w-3.5 h-3.5" />, badge: 'B2B Portal' }
+  const roles: { role: UserRole; label: string; icon: React.ReactNode; badge: string; path: string }[] = [
+    { role: 'client', label: 'Client / Patient', icon: <User className="w-3.5 h-3.5" />, badge: 'Marketplace', path: '/' },
+    { role: 'professional', label: 'Healthcare Pro', icon: <Stethoscope className="w-3.5 h-3.5" />, badge: 'Pro App', path: '/pro/dashboard' },
+    { role: 'admin', label: 'Ops Admin', icon: <ShieldCheck className="w-3.5 h-3.5" />, badge: 'Command Center', path: '/admin/dashboard' },
+    { role: 'organization', label: 'Hospital Partner', icon: <Building2 className="w-3.5 h-3.5" />, badge: 'B2B Portal', path: '/organization/dashboard' },
+    { role: 'staff', label: 'Staff Duty Portal', icon: <UserCheck className="w-3.5 h-3.5" />, badge: 'Staff Portal', path: '/staff/dashboard' }
   ];
+
+  const handleRoleSwitch = (targetRole: UserRole, targetPath: string) => {
+    switchRole(targetRole);
+    navigate(targetPath);
+  };
 
   return (
     <div className="bg-amber-500/10 border-b border-amber-200/80 px-3 sm:px-6 py-1.5 text-xs font-medium text-amber-950 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-2 relative z-40 max-w-full overflow-hidden">
@@ -34,7 +42,8 @@ export const DemoRoleSwitcher: React.FC = () => {
           return (
             <button
               key={item.role}
-              onClick={() => switchRole(item.role)}
+              type="button"
+              onClick={() => handleRoleSwitch(item.role, item.path)}
               className={clsx(
                 'inline-flex items-center gap-1 px-2.5 py-1 rounded-md transition-all text-[11px] sm:text-xs cursor-pointer font-bold shrink-0 shadow-2xs',
                 isActive

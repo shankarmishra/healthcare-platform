@@ -34,8 +34,8 @@ export const ServiceDetailPage: React.FC = () => {
   // Find service by ID or slug
   const service: Service | undefined = services.find((s) => s.id === id || s.slug === id);
 
-  // If this is a home nursing service or home-nursing route, render the specialized Pulse n Care page
-  if (id === 'home-nursing' || id === 'home_nursing' || service?.category === 'home_nursing') {
+  // If this is the home nursing overview route, render the specialized Pulse n Care page
+  if (id === 'home-nursing' || id === 'home_nursing') {
     return <HomeNursingServicePage />;
   }
 

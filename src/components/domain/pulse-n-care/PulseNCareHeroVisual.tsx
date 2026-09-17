@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../../common/Button';
 import { HealthcareTexture } from '../../common/HealthcareTexture';
+import { LottieAnimation } from '../../common/LottieAnimation';
 import { PhoneCall, Calendar, Activity, Clock, CheckCircle2 } from 'lucide-react';
 
 interface HeroVisualProps {
@@ -101,11 +102,12 @@ export const PulseNCareHeroVisual: React.FC<HeroVisualProps> = ({ onOpenCallback
                 <span className="text-[10px] text-text-muted block">12h / 24h Rotational Shifts</span>
               </div>
 
-              {/* Floating Side Accent 2: Clinical Monitoring */}
-              <div className="absolute bottom-4 right-4 bg-white/95 backdrop-blur-md p-3 rounded-2xl shadow-subtle border border-border-default text-left max-w-[190px] space-y-1">
-                <span className="text-[10px] font-extrabold text-brand-teal uppercase tracking-wider block flex items-center gap-1">
-                  <Activity className="w-3 h-3 text-brand-teal" /> Clinical Vitals
+              {/* Floating Side Accent 2: Clinical Monitoring with Lottie ECG Waveform */}
+              <div className="absolute bottom-4 right-4 bg-white/95 backdrop-blur-md p-3 rounded-2xl shadow-subtle border border-border-default text-left max-w-[200px] space-y-1">
+                <span className="text-[10px] font-extrabold text-brand-teal uppercase tracking-wider flex items-center justify-between">
+                  <span className="flex items-center gap-1"><Activity className="w-3 h-3 text-brand-teal" /> Clinical Vitals</span>
                 </span>
+                <LottieAnimation type="vitals-heartbeat" className="w-full h-7" />
                 <div className="flex flex-wrap gap-1 text-[10px] font-bold text-slate-700">
                   <span className="bg-canvas-tertiary px-1.5 py-0.5 rounded">BP</span>
                   <span className="bg-canvas-tertiary px-1.5 py-0.5 rounded">SpO₂</span>
