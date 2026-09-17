@@ -25,11 +25,11 @@ export const Button: React.FC<ButtonProps> = ({
     'inline-flex items-center justify-center font-bold transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer select-none rounded-xl';
 
   const variantStyles = {
-    primary: 'bg-teal-600 text-white hover:bg-teal-700 active:scale-[0.99] shadow-xs',
-    secondary: 'bg-slate-100 text-slate-800 border border-slate-300 hover:bg-slate-200/80 hover:border-slate-400 active:scale-[0.99]',
-    ghost: 'bg-transparent text-slate-600 hover:bg-slate-100 hover:text-slate-900',
-    danger: 'bg-red-600 text-white hover:bg-red-700 active:scale-[0.99]',
-    outline: 'bg-transparent border border-teal-600 text-teal-700 hover:bg-teal-50 active:scale-[0.99]'
+    primary: 'bg-teal-600 text-white hover:bg-teal-700 active:scale-[0.97] shadow-xs',
+    secondary: 'bg-slate-100 text-slate-800 border border-slate-300 hover:bg-slate-200/80 hover:border-slate-400 active:scale-[0.97]',
+    ghost: 'bg-transparent text-slate-600 hover:bg-slate-100 hover:text-slate-900 active:scale-[0.97]',
+    danger: 'bg-red-600 text-white hover:bg-red-700 active:scale-[0.97]',
+    outline: 'bg-transparent border border-teal-600 text-teal-700 hover:bg-teal-50 active:scale-[0.97]'
   };
 
   const sizeStyles = {

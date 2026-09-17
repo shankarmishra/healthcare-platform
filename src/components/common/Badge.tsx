@@ -68,20 +68,20 @@ export const BookingStatusBadge: React.FC<{ status: BookingStatus; className?: s
   className
 }) => {
   const statusConfig: Record<BookingStatus, { label: string; variant: BadgeVariant }> = {
-    DRAFT: { label: 'Draft', variant: 'neutral' },
-    REQUESTED: { label: 'Requested', variant: 'warning' },
-    MATCHING: { label: 'Matching', variant: 'info' },
-    ASSIGNED: { label: 'Assigned', variant: 'info' },
-    ACCEPTED: { label: 'Accepted', variant: 'success' },
-    ON_THE_WAY: { label: 'On The Way', variant: 'info' },
-    CHECKED_IN: { label: 'Checked In', variant: 'teal' },
-    IN_PROGRESS: { label: 'In Progress', variant: 'teal' },
-    COMPLETED: { label: 'Completed', variant: 'success' },
+    DRAFT: { label: 'Draft Request', variant: 'neutral' },
+    REQUESTED: { label: 'Request Received', variant: 'warning' },
+    MATCHING: { label: 'Operations Reviewing', variant: 'info' },
+    ASSIGNED: { label: 'Care Team Assigned', variant: 'info' },
+    ACCEPTED: { label: 'Shift Confirmed', variant: 'success' },
+    ON_THE_WAY: { label: 'En Route', variant: 'info' },
+    CHECKED_IN: { label: 'Arrival Verified', variant: 'teal' },
+    IN_PROGRESS: { label: 'Care Active', variant: 'teal' },
+    COMPLETED: { label: 'Care Completed', variant: 'success' },
     PAYMENT_PENDING: { label: 'Payment Pending', variant: 'warning' },
     CLOSED: { label: 'Closed', variant: 'neutral' },
-    REJECTED: { label: 'Rejected', variant: 'danger' },
-    CANCELLED: { label: 'Cancelled', variant: 'danger' },
-    DISPUTED: { label: 'Disputed', variant: 'danger' }
+    REJECTED: { label: 'Unable to Fulfill', variant: 'danger' },
+    CANCELLED: { label: 'Request Cancelled', variant: 'danger' },
+    DISPUTED: { label: 'Support Review', variant: 'danger' }
   };
 
   const config = statusConfig[status] || { label: status, variant: 'neutral' };
