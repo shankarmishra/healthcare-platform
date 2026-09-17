@@ -12,7 +12,6 @@ import { NotificationProvider } from './context/NotificationContext';
 
 // Layouts
 import { PublicLayout } from './components/layout/PublicLayout';
-import { ProLayout } from './components/layout/ProLayout';
 import { AdminLayout } from './components/layout/AdminLayout';
 import { OrgLayout } from './components/layout/OrgLayout';
 import { StaffLayout } from './components/layout/StaffLayout';
@@ -24,6 +23,7 @@ import { ServiceDetailPage } from './pages/public/ServiceDetailPage';
 import { HomeNursingServicePage } from './pages/public/HomeNursingServicePage';
 import { OrgLandingPage } from './pages/public/OrgLandingPage';
 import { CareersPage } from './pages/public/CareersPage';
+import { LottieShowcasePage } from './pages/public/LottieShowcasePage';
 import { SearchPage } from './pages/client/SearchPage';
 import { ProProfileViewPage } from './pages/client/ProProfileViewPage';
 import { BookingWizardPage } from './pages/client/BookingWizardPage';
@@ -35,17 +35,6 @@ import { ClientNotificationsPage } from './pages/client/ClientNotificationsPage'
 import { SavedPatientsPage } from './pages/client/SavedPatientsPage';
 import { SavedAddressesPage } from './pages/client/SavedAddressesPage';
 import { ClientDashboardPage } from './pages/client/ClientDashboardPage';
-
-// Professional Pages
-import { ProDashboardPage } from './pages/pro/ProDashboardPage';
-import { ProJobsPage } from './pages/pro/ProJobsPage';
-import { ProSchedulePage } from './pages/pro/ProSchedulePage';
-import { ProEarningsPage } from './pages/pro/ProEarningsPage';
-import { ProKYCPage } from './pages/pro/ProKYCPage';
-import { ProProfileEditPage } from './pages/pro/ProProfileEditPage';
-import { ProReviewsPage } from './pages/pro/ProReviewsPage';
-import { ProNotificationsPage } from './pages/pro/ProNotificationsPage';
-import { ProSupportPage } from './pages/pro/ProSupportPage';
 
 // Admin Operations Command Center Pages
 import { AdminDashboardPage } from './pages/admin/AdminDashboardPage';
@@ -108,6 +97,8 @@ export const App: React.FC = () => {
                 <Route path="services/:id" element={<ServiceDetailPage />} />
                 <Route path="organizations" element={<OrgLandingPage />} />
                 <Route path="careers" element={<CareersPage />} />
+                <Route path="lottie-preview" element={<LottieShowcasePage />} />
+                <Route path="lottie-showcase" element={<LottieShowcasePage />} />
                 <Route path="search" element={<SearchPage />} />
                 <Route path="pros/:id" element={<ProProfileViewPage />} />
                 <Route path="book" element={<BookingWizardPage />} />
@@ -149,19 +140,8 @@ export const App: React.FC = () => {
                 <Route path="profile" element={<OrgProfilePage />} />
               </Route>
 
-              {/* Professional Portal Shell */}
-              <Route path="/pro" element={<ProLayout />}>
-                <Route index element={<Navigate to="/pro/dashboard" replace />} />
-                <Route path="dashboard" element={<ProDashboardPage />} />
-                <Route path="jobs" element={<ProJobsPage />} />
-                <Route path="schedule" element={<ProSchedulePage />} />
-                <Route path="earnings" element={<ProEarningsPage />} />
-                <Route path="kyc" element={<ProKYCPage />} />
-                <Route path="profile" element={<ProProfileEditPage />} />
-                <Route path="reviews" element={<ProReviewsPage />} />
-                <Route path="notifications" element={<ProNotificationsPage />} />
-                <Route path="support" element={<ProSupportPage />} />
-              </Route>
+              {/* Legacy Pro Route Redirect to In-House Staff Duty Portal */}
+              <Route path="/pro/*" element={<Navigate to="/staff/dashboard" replace />} />
 
               {/* Admin Operations Command Center Shell */}
               <Route path="/admin" element={<AdminLayout />}>
