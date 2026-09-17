@@ -4,6 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useNotifications } from '../../context/NotificationContext';
 import { DemoRoleSwitcher } from '../common/DemoRoleSwitcher';
 import { Button } from '../common/Button';
+import { Modal } from '../common/Modal';
 import {
   HeartPulse,
   Calendar,
@@ -11,14 +12,20 @@ import {
   ShieldCheck,
   Phone,
   Menu,
-  X
+  X,
+  MapPin,
+  ChevronDown,
+  Building2
 } from 'lucide-react';
+import { DELHI_NCR_SERVICE_HUBS } from '../../data/serviceAreaMatrix';
 
 export const PublicLayout: React.FC = () => {
   const { currentRole } = useAuth();
   const { unreadCount } = useNotifications();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+  const [locationModalOpen, setLocationModalOpen] = React.useState(false);
+  const [selectedHub, setSelectedHub] = React.useState(DELHI_NCR_SERVICE_HUBS[0]);
 
   const navLinks = [
     { label: 'Home', path: '/' },
@@ -37,20 +44,32 @@ export const PublicLayout: React.FC = () => {
       {/* Primary Public Header */}
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-border-default">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between gap-4">
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-2.5 group">
-            <div className="w-10 h-10 rounded-xl bg-brand-teal flex items-center justify-center text-white shadow-xs group-hover:scale-105 transition-transform">
-              <HeartPulse className="w-6 h-6" />
-            </div>
-            <div className="flex flex-col text-left">
-              <span className="text-xl font-extrabold tracking-tight text-text-primary leading-tight">
-                CareConnect
-              </span>
-              <span className="text-[10px] font-semibold text-brand-teal uppercase tracking-widest leading-none">
-                Healthcare Platform
-              </span>
-            </div>
-          </Link>
+          <div className="flex items-center gap-6">
+            {/* Logo */}
+            <Link to="/" className="flex items-center gap-2.5 group">
+              <div className="w-10 h-10 rounded-xl bg-brand-teal flex items-center justify-center text-white shadow-xs group-hover:scale-105 transition-transform">
+                <HeartPulse className="w-6 h-6" />
+              </div>
+              <div className="flex flex-col text-left">
+                <span className="text-xl font-extrabold tracking-tight text-text-primary leading-tight">
+                  CareConnect
+                </span>
+                <span className="text-[10px] font-semibold text-brand-teal uppercase tracking-widest leading-none">
+                  Healthcare Platform
+                </span>
+              </div>
+            </Link>
+
+            {/* Header Location Pill */}
+            <button
+              onClick={() => setLocationModalOpen(true)}
+              className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-canvas-teal border border-teal-200 text-xs font-extrabold text-brand-teal hover:bg-teal-100 transition-colors cursor-pointer"
+            >
+              <MapPin className="w-3.5 h-3.5 text-brand-teal" />
+              <span>{selectedHub.city} ({selectedHub.name})</span>
+              <ChevronDown className="w-3.5 h-3.5 text-brand-teal" />
+            </button>
+          </div>
 
           {/* Desktop Navigation Links */}
           <nav className="hidden md:flex items-center gap-6">
@@ -204,6 +223,65 @@ export const PublicLayout: React.FC = () => {
           </div>
         </div>
       </footer>
+
+      {/* Header Service Area Coverage Modal */}
+      <Modal
+        isOpen={locationModalOpen}
+        onClose={() => setLocationModalOpen(false)}
+        title="Delhi NCR Active Service Area Hubs"
+        maxWidth="md"
+      >
+        <div className="space-y-4 text-left">
+          <p className="text-xs text-text-secondary">
+            CareConnect operates an internal, managed healthcare workforce strictly within <strong>Delhi, Noida, Gurugram, and Faridabad (NCR)</strong>. Select your active locality hub below:
+          </p>
+
+          <div className="space-y-2.5">
+            {DELHI_NCR_SERVICE_HUBS.map((hub) => {
+              const isSelected = selectedHub.id === hub.id;
+              return (
+                <div
+                  key={hub.id}
+                  onClick={() => {
+                    setSelectedHub(hub);
+                    setLocationModalOpen(false);
+                  }}
+                  className={`p-3.5 rounded-2xl border cursor-pointer transition-all flex items-center justify-between ${
+                    isSelected
+                      ? 'border-brand-teal bg-canvas-teal ring-2 ring-brand-teal/20'
+                      : 'border-border-default bg-white hover:border-border-hover'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-xl bg-canvas-secondary text-brand-teal flex items-center justify-center shrink-0">
+                      <Building2 className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <span className="font-extrabold text-text-primary text-xs block">
+                        {hub.name} ({hub.city})
+                      </span>
+                      <span className="text-[11px] text-text-muted">{hub.hubAddress}</span>
+                    </div>
+                  </div>
+
+                  <div className="text-right shrink-0">
+                    <span className="text-xs font-extrabold text-brand-teal block">
+                      {hub.activeStaffCount} Staff Active
+                    </span>
+                    <span className="text-[10px] text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                      ETA {hub.avgDispatchTimeMinutes}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <p className="text-[11px] text-text-muted italic pt-1">
+            * All dispatch hubs strictly monitor background checks, clinical council registration, and emergency response times across Delhi NCR.
+          </p>
+        </div>
+      </Modal>
     </div>
   );
 };
