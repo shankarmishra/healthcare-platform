@@ -30,7 +30,7 @@ import type { Service, ProfessionalProfile } from '../../types';
 export const HomePage: React.FC = () => {
   const navigate = useNavigate();
   const { services, professionals } = useBookings();
-  const [searchLocation, setSearchLocation] = useState('Defence Colony, New Delhi');
+  const [searchLocation, setSearchLocation] = useState('Indiranagar, Bangalore');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedCareDate, setSelectedCareDate] = useState<string>('Today');
   const [openFaq, setOpenFaq] = useState<number | null>(0);
@@ -46,8 +46,8 @@ export const HomePage: React.FC = () => {
 
   const careJourneySteps = [
     { title: 'Requested', desc: 'Patient submits care requirements', icon: <Calendar className="w-4 h-4" /> },
-    { title: 'Reviewed', desc: 'Ops reviews clinical requirements', icon: <Activity className="w-4 h-4" /> },
-    { title: 'Assigned', desc: 'Credentialed in-house staff assigned', icon: <UserCheck className="w-4 h-4" /> },
+    { title: 'Matched', desc: '45s algorithmic provider scoring', icon: <Activity className="w-4 h-4" /> },
+    { title: 'Accepted', desc: 'Credentialed nurse confirms shift', icon: <UserCheck className="w-4 h-4" /> },
     { title: 'On the Way', desc: 'Real-time GPS transit monitoring', icon: <Navigation className="w-4 h-4" /> },
     { title: 'Checked In', desc: 'QR code arrival verification', icon: <FileCheck2 className="w-4 h-4" /> },
     { title: 'Care Active', desc: 'Clinical vitals & procedure logging', icon: <HeartPulse className="w-4 h-4" /> },
@@ -56,7 +56,7 @@ export const HomePage: React.FC = () => {
 
   const faqs = [
     {
-      q: 'How are healthcare staff members background verified?',
+      q: 'How are healthcare professionals background verified?',
       a: 'Every nurse and caregiver undergoes a 5-pillar verification audit: State Nursing Council active registration check, government photo ID verification, criminal background record check, 2 professional references validation, and infectious disease screening.'
     },
     {
@@ -68,8 +68,8 @@ export const HomePage: React.FC = () => {
       a: 'Yes. All prices are itemized up-front including base hourly rate, GST (18%), and platform fee before payment. No unexpected cash demands at home.'
     },
     {
-      q: 'Which geographic regions do you serve?',
-      a: 'We operate exclusively across Delhi NCR, including New Delhi, Noida, Gurugram (Gurgaon), and Faridabad.'
+      q: 'Can hospitals and clinics order emergency staffing?',
+      a: 'Yes! Healthcare facilities use our Organization Portal for 8h/12h ICU nurse ward coverage with digitized timesheet sign-offs.'
     }
   ];
 
@@ -85,7 +85,7 @@ export const HomePage: React.FC = () => {
             <div className="lg:col-span-7 space-y-6 text-left">
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-teal-50 text-teal-800 text-xs font-bold border border-teal-200 shadow-2xs">
                 <Sparkles className="w-3.5 h-3.5 text-teal-600" />
-                <span>Verified Home Healthcare & Managed Clinical Staffing • Delhi NCR</span>
+                <span>Verified Home Healthcare & Hospital Staffing Platform</span>
               </div>
 
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.1]">
@@ -93,7 +93,7 @@ export const HomePage: React.FC = () => {
               </h1>
 
               <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl font-medium">
-                Book licensed home nurses, physiotherapists, caregivers, and doctors in Delhi, Noida, Gurugram & Faridabad. 100% credential-verified in-house staff with transparent hourly pricing and real-time visit tracking.
+                Book licensed home nurses, physiotherapists, caregivers, and doctors in Bangalore. 100% credential-verified with transparent hourly pricing and real-time visit tracking.
               </p>
 
               {/* 02. Concierge Search Console: WHERE / WHAT CARE / WHEN */}
@@ -105,12 +105,12 @@ export const HomePage: React.FC = () => {
                 <div className="flex-1 flex items-center gap-3 px-3 w-full border-b sm:border-b-0 sm:border-r border-slate-200 pb-2 sm:pb-0">
                   <MapPin className="w-5 h-5 text-teal-600 shrink-0" />
                   <div className="w-full text-left">
-                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">1. Where (Delhi NCR)</label>
+                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">1. Where (Locality)</label>
                     <input
                       type="text"
                       value={searchLocation}
                       onChange={(e) => setSearchLocation(e.target.value)}
-                      placeholder="e.g. Defence Colony, New Delhi"
+                      placeholder="e.g. Indiranagar, Bangalore"
                       className="w-full text-xs sm:text-sm font-bold text-slate-900 focus:outline-none bg-transparent"
                     />
                   </div>
@@ -194,7 +194,7 @@ export const HomePage: React.FC = () => {
                     </div>
                     <div className="text-left">
                       <p className="text-xs font-bold text-slate-900">Active Care Visit</p>
-                      <p className="text-[11px] text-slate-500">Post-Op ICU Nursing • Defence Colony, Delhi</p>
+                      <p className="text-[11px] text-slate-500">Post-Op ICU Nursing • Indiranagar</p>
                     </div>
                   </div>
                   <span className="text-xs font-bold text-teal-700 bg-teal-50 px-2.5 py-1 rounded-full border border-teal-200">
