@@ -598,7 +598,10 @@ export interface ServiceArea {
   coveredRadiusKm: number;
 }
 
-// Re-export Staff Operations Data Models
+// Re-export Staff Operations Data Models & B2B/Careers Data Models
 export * from './staff';
+export * from './b2b';
+export * from './careers';
+
 
 

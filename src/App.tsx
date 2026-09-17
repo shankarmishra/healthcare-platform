@@ -46,12 +46,16 @@ import { ProReviewsPage } from './pages/pro/ProReviewsPage';
 import { ProNotificationsPage } from './pages/pro/ProNotificationsPage';
 import { ProSupportPage } from './pages/pro/ProSupportPage';
 
+import { CareersPage } from './pages/public/CareersPage';
+
 // Admin Operations Command Center Pages
 import { AdminDashboardPage } from './pages/admin/AdminDashboardPage';
 import { AdminProfessionalsPage } from './pages/admin/AdminProfessionalsPage';
 import { AdminStaffPage } from './pages/admin/AdminStaffPage';
 import { AdminAddStaffWizardPage } from './pages/admin/AdminAddStaffWizardPage';
 import { AdminStaffDetailPage } from './pages/admin/AdminStaffDetailPage';
+import { AdminCareersPage } from './pages/admin/AdminCareersPage';
+import { AdminOrganizationRequestsPage } from './pages/admin/AdminOrganizationRequestsPage';
 import { AdminKYCQueuePage } from './pages/admin/AdminKYCQueuePage';
 import { AdminClientsPage } from './pages/admin/AdminClientsPage';
 import { AdminOrganizationsPage } from './pages/admin/AdminOrganizationsPage';
@@ -100,6 +104,7 @@ export const App: React.FC = () => {
                 <Route path="services/home-nursing" element={<HomeNursingServicePage />} />
                 <Route path="services/:id" element={<ServiceDetailPage />} />
                 <Route path="organizations" element={<OrgLandingPage />} />
+                <Route path="careers" element={<CareersPage />} />
                 <Route path="search" element={<SearchPage />} />
                 <Route path="pros/:id" element={<ProProfileViewPage />} />
                 <Route path="book" element={<BookingWizardPage />} />
@@ -149,6 +154,8 @@ export const App: React.FC = () => {
                 <Route path="staff" element={<AdminStaffPage />} />
                 <Route path="staff/new" element={<AdminAddStaffWizardPage />} />
                 <Route path="staff/:staffId" element={<AdminStaffDetailPage />} />
+                <Route path="careers" element={<AdminCareersPage />} />
+                <Route path="organization-requests" element={<AdminOrganizationRequestsPage />} />
                 <Route path="professionals" element={<AdminProfessionalsPage />} />
                 <Route path="kyc" element={<AdminKYCQueuePage />} />
                 <Route path="clients" element={<AdminClientsPage />} />

@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { DemoRoleSwitcher } from '../common/DemoRoleSwitcher';
-import { Building2, LayoutDashboard, FileSpreadsheet, Users, Receipt } from 'lucide-react';
+import { Building2, LayoutDashboard, FileSpreadsheet, Users, Receipt, Menu, X } from 'lucide-react';
 import { clsx } from 'clsx';
 
 export const OrgLayout: React.FC = () => {
   const location = useLocation();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const orgMenu = [
     { label: 'Dashboard', path: '/organization/dashboard', icon: <LayoutDashboard className="w-4 h-4" /> },
@@ -15,25 +16,26 @@ export const OrgLayout: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-canvas-secondary text-text-primary">
+    <div className="min-h-screen flex flex-col bg-canvas-secondary text-text-primary pb-16 md:pb-0">
       <DemoRoleSwitcher />
 
       <header className="bg-white border-b border-border-default sticky top-0 z-30 shadow-subtle">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-brand-blue flex items-center justify-center text-white">
+            <div className="w-9 h-9 rounded-xl bg-brand-blue flex items-center justify-center text-white shrink-0 shadow-xs">
               <Building2 className="w-5 h-5" />
             </div>
             <div className="flex flex-col">
-              <span className="text-sm font-extrabold text-text-primary leading-tight">
+              <span className="text-xs sm:text-sm font-extrabold text-text-primary leading-tight truncate max-w-[200px] sm:max-w-none">
                 Manipal Specialty Hospital
               </span>
-              <span className="text-[10px] font-semibold text-brand-blue uppercase tracking-wider">
+              <span className="text-[10px] font-bold text-brand-blue uppercase tracking-wider">
                 B2B Staffing Portal
               </span>
             </div>
           </div>
 
+          {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-1 bg-canvas-secondary p-1 rounded-xl border border-border-default">
             {orgMenu.map((item) => {
               const isActive = location.pathname === item.path;
@@ -44,7 +46,7 @@ export const OrgLayout: React.FC = () => {
                   className={clsx(
                     'flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all',
                     isActive
-                      ? 'bg-white text-brand-blue shadow-xs'
+                      ? 'bg-white text-brand-blue shadow-xs font-bold'
                       : 'text-text-secondary hover:text-text-primary'
                   )}
                 >
@@ -56,16 +58,74 @@ export const OrgLayout: React.FC = () => {
           </nav>
 
           <div className="flex items-center gap-2">
-            <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
+            <span className="hidden sm:inline-flex text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
               Contract Active
             </span>
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 text-text-secondary hover:text-text-primary rounded-lg hover:bg-canvas-tertiary"
+              aria-label="Toggle Menu"
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
           </div>
         </div>
+
+        {/* Mobile Slide-down Drawer */}
+        {mobileMenuOpen && (
+          <div className="md:hidden border-t border-border-default bg-white p-4 space-y-2 shadow-lg">
+            <div className="flex items-center justify-between px-2 pb-2 mb-2 border-b border-border-default">
+              <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                Contract Active
+              </span>
+              <span className="text-[11px] text-text-muted">B2B ID: HOSP-KA-88192</span>
+            </div>
+            {orgMenu.map((item) => {
+              const isActive = location.pathname === item.path;
+              return (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={clsx(
+                    'flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all',
+                    isActive
+                      ? 'bg-blue-50 text-brand-blue font-bold border border-blue-200'
+                      : 'text-text-secondary hover:bg-canvas-secondary'
+                  )}
+                >
+                  {item.icon}
+                  <span>{item.label}</span>
+                </Link>
+              );
+            })}
+          </div>
+        )}
       </header>
 
       <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
         <Outlet />
       </main>
+
+      {/* Mobile Bottom Tab Navigation */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-border-default z-40 flex items-center justify-around h-16 px-1 shadow-floating">
+        {orgMenu.map((item) => {
+          const isActive = location.pathname === item.path;
+          return (
+            <Link
+              key={item.path}
+              to={item.path}
+              className={clsx(
+                'flex flex-col items-center justify-center w-full h-full text-[10px] font-bold gap-1 transition-colors px-1 text-center',
+                isActive ? 'text-brand-blue font-extrabold' : 'text-text-muted hover:text-text-primary'
+              )}
+            >
+              {item.icon}
+              <span className="truncate max-w-[80px]">{item.label.split(' ')[0]}</span>
+            </Link>
+          );
+        })}
+      </nav>
     </div>
   );
 };
