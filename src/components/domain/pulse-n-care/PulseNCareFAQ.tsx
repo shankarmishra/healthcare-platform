@@ -50,6 +50,10 @@ export const PulseNCareFAQ: React.FC = () => {
     {
       q: 'Are the nurses council-verified?',
       a: 'Yes. All Pulse n Care nurses hold B.Sc Nursing or GNM qualifications and are registered with state nursing councils with verified background checks.'
+    },
+    {
+      q: 'What is the cancellation and rescheduling policy?',
+      a: 'Bookings are 100% refundable if cancelled up to 2 hours before the scheduled shift start time. You can also reschedule your visit directly from your client dashboard.'
     }
   ];
 
@@ -88,7 +92,7 @@ export const PulseNCareFAQ: React.FC = () => {
                 </div>
 
                 {isOpen && (
-                  <p className="text-xs text-text-secondary mt-3 pt-3 border-t border-border-light leading-relaxed">
+                  <p className="text-xs text-text-secondary mt-3 pt-3 border-t border-border-light leading-relaxed font-medium">
                     {faq.a}
                   </p>
                 )}

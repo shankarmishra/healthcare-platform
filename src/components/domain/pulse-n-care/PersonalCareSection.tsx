@@ -1,5 +1,7 @@
 import React from 'react';
 import { Card } from '../../common/Card';
+import { PersonalCareSVG } from './vectors/PersonalCareSVG';
+import { MobilitySupportSVG } from './vectors/MobilitySupportSVG';
 import { Heart, ShieldAlert, Activity } from 'lucide-react';
 
 export const PersonalCareSection: React.FC = () => {
@@ -20,36 +22,53 @@ export const PersonalCareSection: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Bedridden Care & Positioning */}
-          <Card className="p-5 space-y-3 border-border-default bg-canvas-secondary shadow-subtle">
-            <div className="w-10 h-10 rounded-xl bg-canvas-teal text-brand-teal flex items-center justify-center font-bold">
-              <ShieldAlert className="w-5 h-5" />
+          <Card className="p-5 space-y-3 border-border-default bg-canvas-secondary shadow-subtle flex flex-col justify-between">
+            <div className="space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-canvas-teal text-brand-teal flex items-center justify-center font-bold">
+                <ShieldAlert className="w-5 h-5" />
+              </div>
+              <h3 className="font-extrabold text-text-primary text-sm">Bedridden Care & Positioning</h3>
+              <p className="text-xs text-text-muted leading-relaxed">
+                Repositioning scheduled at clinically appropriate intervals (including 2-hour repositioning routines where prescribed), pressure injury prevention, and circulation support.
+              </p>
             </div>
-            <h3 className="font-extrabold text-text-primary text-sm">Bedridden Care & Positioning</h3>
-            <p className="text-xs text-text-muted leading-relaxed">
-              Repositioning scheduled at clinically appropriate intervals (including 2-hour repositioning routines where prescribed), pressure injury prevention, and circulation support.
-            </p>
+            <div className="rounded-xl overflow-hidden h-36 border border-border-default mt-2">
+              <img src="/assets/services/home-nursing/pulse-n-care-bedside-support.webp" alt="Bedside Support" className="w-full h-full object-cover" />
+            </div>
+            <PersonalCareSVG className="mt-2" />
           </Card>
 
           {/* Personal Grooming */}
-          <Card className="p-5 space-y-3 border-border-default bg-canvas-secondary shadow-subtle">
-            <div className="w-10 h-10 rounded-xl bg-canvas-teal text-brand-teal flex items-center justify-center font-bold">
-              <Heart className="w-5 h-5" />
+          <Card className="p-5 space-y-3 border-border-default bg-canvas-secondary shadow-subtle flex flex-col justify-between">
+            <div className="space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-canvas-teal text-brand-teal flex items-center justify-center font-bold">
+                <Heart className="w-5 h-5" />
+              </div>
+              <h3 className="font-extrabold text-text-primary text-sm">Personal Grooming & Hygiene</h3>
+              <p className="text-xs text-text-muted leading-relaxed">
+                Sponge / bed bath support, oral hygiene, hair care, diaper changes, and fresh clothing maintenance with full respect for patient dignity.
+              </p>
             </div>
-            <h3 className="font-extrabold text-text-primary text-sm">Personal Grooming</h3>
-            <p className="text-xs text-text-muted leading-relaxed">
-              Sponge / bed bath support, oral hygiene, hair care, diaper changes, and fresh clothing maintenance with full respect for patient dignity.
-            </p>
+            <div className="rounded-xl overflow-hidden h-36 border border-border-default mt-2">
+              <img src="/assets/services/home-nursing/pulse-n-care-nurse-portrait.webp" alt="Grooming & Hygiene Support" className="w-full h-full object-cover" />
+            </div>
           </Card>
 
           {/* Mobility & Exercise Assistance */}
-          <Card className="p-5 space-y-3 border-border-default bg-canvas-secondary shadow-subtle">
-            <div className="w-10 h-10 rounded-xl bg-canvas-teal text-brand-teal flex items-center justify-center font-bold">
-              <Activity className="w-5 h-5" />
+          <Card className="p-5 space-y-3 border-border-default bg-canvas-secondary shadow-subtle flex flex-col justify-between">
+            <div className="space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-canvas-teal text-brand-teal flex items-center justify-center font-bold">
+                <Activity className="w-5 h-5" />
+              </div>
+              <h3 className="font-extrabold text-text-primary text-sm">Mobility & Exercise Assistance</h3>
+              <p className="text-xs text-text-muted leading-relaxed">
+                Walking support, bed-to-wheelchair transfers, and coordination with prescribed physiotherapy care plans to ensure safe movement.
+              </p>
             </div>
-            <h3 className="font-extrabold text-text-primary text-sm">Mobility & Exercise Assistance</h3>
-            <p className="text-xs text-text-muted leading-relaxed">
-              Walking support, bed-to-wheelchair transfers, and coordination with prescribed physiotherapy care plans to ensure safe movement.
-            </p>
+            <div className="rounded-xl overflow-hidden h-36 border border-border-default mt-2">
+              <img src="/assets/services/home-nursing/pulse-n-care-mobility.webp" alt="Mobility Support" className="w-full h-full object-cover" />
+            </div>
+            <MobilitySupportSVG className="mt-2" />
           </Card>
         </div>
       </div>

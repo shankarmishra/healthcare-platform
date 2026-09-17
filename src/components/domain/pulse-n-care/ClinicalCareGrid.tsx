@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { Card } from '../../common/Card';
 import { VitalsWaveformSVG } from './vectors/VitalsWaveformSVG';
+import { MedicationTraySVG } from './vectors/MedicationTraySVG';
+import { WoundCareSVG } from './vectors/WoundCareSVG';
+import { TubeFeedingSVG } from './vectors/TubeFeedingSVG';
+import { CatheterStomaSVG } from './vectors/CatheterStomaSVG';
+import { RespiratoryEquipmentSVG } from './vectors/RespiratoryEquipmentSVG';
 import { Activity, Pill, ShieldCheck, Stethoscope, Droplet, Wind, ChevronDown, ChevronUp } from 'lucide-react';
 import { clsx } from 'clsx';
 
@@ -21,7 +26,7 @@ export const ClinicalCareGrid: React.FC = () => {
         'Blood Glucose (GRBS) monitoring via glucometer'
       ],
       microUI: <VitalsWaveformSVG className="mt-3" />,
-      image: '/assets/services/home-nursing/pulse-n-care-vitals.jpg'
+      image: '/assets/services/home-nursing/pulse-n-care-vitals.webp'
     },
     {
       id: 'medication',
@@ -34,7 +39,8 @@ export const ClinicalCareGrid: React.FC = () => {
         'Intramuscular (IM) injection administration',
         'Intravenous (IV) fluids & IV medication management as prescribed'
       ],
-      image: null
+      microUI: <MedicationTraySVG className="mt-3" />,
+      image: '/assets/services/home-nursing/pulse-n-care-medication.webp'
     },
     {
       id: 'wound',
@@ -47,7 +53,8 @@ export const ClinicalCareGrid: React.FC = () => {
         'Diabetic foot ulcer cleaning & protective care',
         'Aseptic technique adherence for infection prevention'
       ],
-      image: '/assets/services/home-nursing/pulse-n-care-wound-care.jpg'
+      microUI: <WoundCareSVG className="mt-3" />,
+      image: '/assets/services/home-nursing/pulse-n-care-wound-care.webp'
     },
     {
       id: 'tube',
@@ -60,7 +67,8 @@ export const ClinicalCareGrid: React.FC = () => {
         'Tube flushing & blockage prevention routines',
         'Sanitization of feeding equipment & posture positioning'
       ],
-      image: null
+      microUI: <TubeFeedingSVG className="mt-3" />,
+      image: '/assets/services/home-nursing/pulse-n-care-tube-feeding.webp'
     },
     {
       id: 'catheter',
@@ -73,7 +81,8 @@ export const ClinicalCareGrid: React.FC = () => {
         'Stoma-site hygiene & infection monitoring',
         'Perineal hygiene routines'
       ],
-      image: null
+      microUI: <CatheterStomaSVG className="mt-3" />,
+      image: '/assets/services/home-nursing/pulse-n-care-catheter-stoma.webp'
     },
     {
       id: 'respiratory',
@@ -86,7 +95,8 @@ export const ClinicalCareGrid: React.FC = () => {
         'CPAP / BiPAP mask fitting & compliance',
         'Home ventilator monitoring & alarm awareness'
       ],
-      image: null
+      microUI: <RespiratoryEquipmentSVG className="mt-3" />,
+      image: '/assets/services/home-nursing/pulse-n-care-equipment.webp'
     }
   ];
 
@@ -140,12 +150,12 @@ export const ClinicalCareGrid: React.FC = () => {
 
                 {/* Optional Image Header */}
                 {cap.image && isExpanded && (
-                  <div className="rounded-xl overflow-hidden h-40 border border-border-default">
+                  <div className="rounded-xl overflow-hidden h-44 border border-border-default">
                     <img src={cap.image} alt={cap.title} className="w-full h-full object-cover" />
                   </div>
                 )}
 
-                {/* Micro Numerical Dashboard UI for Vitals */}
+                {/* Dedicated Animated Vector SVG Component */}
                 {cap.microUI}
 
                 {/* Detailed Capability Checklist */}

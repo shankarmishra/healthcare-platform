@@ -7,6 +7,7 @@ import { PersonalCareSection } from '../../components/domain/pulse-n-care/Person
 import { DailyChartPreview } from '../../components/domain/pulse-n-care/DailyChartPreview';
 import { ShiftHandoverSVG } from '../../components/domain/pulse-n-care/vectors/ShiftHandoverSVG';
 import { EmergencyEscalationSVG } from '../../components/domain/pulse-n-care/vectors/EmergencyEscalationSVG';
+import { DelhiNCRMapSVG } from '../../components/domain/pulse-n-care/vectors/DelhiNCRMapSVG';
 import { CareDurationSelector } from '../../components/domain/pulse-n-care/CareDurationSelector';
 import { PulseNCareFAQ } from '../../components/domain/pulse-n-care/PulseNCareFAQ';
 import { StickyBookingBar } from '../../components/domain/pulse-n-care/StickyBookingBar';
@@ -68,13 +69,13 @@ export const HomeNursingServicePage: React.FC = () => {
     <div className="min-h-screen bg-white text-text-primary text-left relative pb-20">
       <HealthcareTexture type="clinical-wave" opacity={0.02} />
 
-      {/* Pulse n Care Header */}
+      {/* 01. Pulse n Care Header */}
       <PulseNCareHeader />
 
-      {/* Hero Experience */}
+      {/* 02. Hero Experience */}
       <PulseNCareHeroVisual onOpenCallback={() => setCallbackModalOpen(true)} />
 
-      {/* Section: Service Introduction & Shift Modes */}
+      {/* 03. Service Introduction & Shift Modes */}
       <section className="py-10 bg-white border-b border-border-default">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4 text-left">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-canvas-teal text-brand-teal text-xs font-extrabold border border-teal-200 uppercase tracking-widest">
@@ -83,22 +84,22 @@ export const HomeNursingServicePage: React.FC = () => {
           <h2 className="text-2xl sm:text-3xl font-black text-text-primary tracking-tight max-w-3xl">
             Professional nursing support delivered at the patient's home.
           </h2>
-          <p className="text-sm text-text-secondary max-w-3xl leading-relaxed">
+          <p className="text-sm text-text-secondary max-w-3xl leading-relaxed font-medium">
             Pulse n Care provides home nursing for patients requiring continuous or scheduled care at home. Services include 12-hour day/night shifts, 24-hour rotational care, short clinical visits, post-operative recovery, and long-term care management.
           </p>
         </div>
       </section>
 
-      {/* Section: Clinical & Medical Care (2-Column Editorial Grid) */}
+      {/* 04. Clinical & Medical Care (With 6 Domain SVGs & Photography) */}
       <ClinicalCareGrid />
 
-      {/* Section: Patient Support & Hygiene */}
+      {/* 05. Patient Support & Hygiene (With 2 Domain SVGs & Photography) */}
       <PersonalCareSection />
 
-      {/* Section: Daily Charting Preview */}
+      {/* 06. Daily Charting Preview (With ClinicalDocumentationSVG) */}
       <DailyChartPreview />
 
-      {/* Section: Emergency Escalation & Shift Handover Protocol */}
+      {/* 07 & 08. Safety Escalation & 24×7 Shift Handover Protocol */}
       <section className="py-12 bg-white border-b border-border-default">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 text-left">
           {/* Emergency Escalation */}
@@ -135,7 +136,7 @@ export const HomeNursingServicePage: React.FC = () => {
         </div>
       </section>
 
-      {/* Section: Care Journey (8-Step Timeline) */}
+      {/* 09. Care Journey (8-Step Timeline) */}
       <section className="py-12 bg-canvas-secondary border-b border-border-default">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 text-left">
           <div className="max-w-3xl space-y-2">
@@ -162,12 +163,12 @@ export const HomeNursingServicePage: React.FC = () => {
         </div>
       </section>
 
-      {/* Section: Duration Selector & Overnight Date Rollover */}
+      {/* 10. Duration Selector & Overnight Date Rollover */}
       <CareDurationSelector />
 
-      {/* Section: Delhi NCR Location Availability Checker */}
+      {/* 11 & 12. Delhi NCR Service Area Verification & Vector Map */}
       <section className="py-12 bg-canvas-secondary border-b border-border-default">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 text-left">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 text-left">
           <div className="text-center space-y-2">
             <span className="text-xs font-extrabold text-brand-teal uppercase tracking-widest block">
               Service Area Verification
@@ -180,6 +181,9 @@ export const HomeNursingServicePage: React.FC = () => {
             </p>
           </div>
 
+          {/* Custom Delhi NCR Vector Map Illustration */}
+          <DelhiNCRMapSVG className="w-full max-w-2xl mx-auto" />
+
           <div className="bg-white p-6 rounded-3xl border border-border-default shadow-subtle">
             <LocationPicker
               value={locationData}
@@ -189,10 +193,10 @@ export const HomeNursingServicePage: React.FC = () => {
         </div>
       </section>
 
-      {/* Section: Clinical & Service FAQ */}
+      {/* 13. Clinical & Service FAQ */}
       <PulseNCareFAQ />
 
-      {/* Final Call to Action */}
+      {/* 14. Final Call to Action */}
       <section className="py-16 bg-gradient-to-r from-teal-900 via-brand-teal to-teal-800 text-white border-b border-border-default relative overflow-hidden text-center">
         <HealthcareTexture type="care-pathway" opacity={0.1} />
         <div className="max-w-3xl mx-auto px-4 space-y-6 relative z-10">
@@ -230,10 +234,10 @@ export const HomeNursingServicePage: React.FC = () => {
         </div>
       </section>
 
-      {/* Desktop Sticky Booking Bar */}
+      {/* 15. Desktop & Mobile Sticky Booking Bar */}
       <StickyBookingBar onOpenCallback={() => setCallbackModalOpen(true)} />
 
-      {/* Callback Modal */}
+      {/* Operations Callback Modal */}
       <Modal
         isOpen={callbackModalOpen}
         onClose={() => setCallbackModalOpen(false)}

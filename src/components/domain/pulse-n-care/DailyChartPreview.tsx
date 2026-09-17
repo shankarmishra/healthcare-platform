@@ -1,5 +1,6 @@
 import React from 'react';
 import { Card } from '../../common/Card';
+import { ClinicalDocumentationSVG } from './vectors/ClinicalDocumentationSVG';
 import { FileText, ShieldCheck } from 'lucide-react';
 
 export const DailyChartPreview: React.FC = () => {
@@ -26,53 +27,64 @@ export const DailyChartPreview: React.FC = () => {
           </p>
         </div>
 
-        {/* Illustrative Nursing Chart Table Card */}
-        <Card className="p-6 border-border-default shadow-subtle bg-white space-y-4">
-          <div className="flex items-center justify-between border-b border-border-light pb-3">
-            <div className="flex items-center gap-2">
-              <FileText className="w-5 h-5 text-brand-teal" />
-              <h3 className="font-extrabold text-text-primary text-sm">Daily Nursing Chart & Vitals Log</h3>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <div className="lg:col-span-8">
+            {/* Illustrative Nursing Chart Table Card */}
+            <Card className="p-6 border-border-default shadow-subtle bg-white space-y-4">
+              <div className="flex items-center justify-between border-b border-border-light pb-3">
+                <div className="flex items-center gap-2">
+                  <FileText className="w-5 h-5 text-brand-teal" />
+                  <h3 className="font-extrabold text-text-primary text-sm">Daily Nursing Chart & Vitals Log</h3>
+                </div>
+                <span className="text-[10px] font-mono font-bold bg-amber-50 text-amber-900 border border-amber-200 px-2.5 py-1 rounded-full uppercase">
+                  Illustrative Care-Chart Example
+                </span>
+              </div>
+
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs border-collapse">
+                  <thead>
+                    <tr className="border-b border-border-default bg-canvas-secondary text-text-secondary font-bold uppercase text-[10px]">
+                      <th className="p-3">Time</th>
+                      <th className="p-3">Blood Pressure</th>
+                      <th className="p-3">Pulse</th>
+                      <th className="p-3">SpO₂</th>
+                      <th className="p-3">Temp</th>
+                      <th className="p-3">Nursing Intervention Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border-light">
+                    {chartRows.map((row, idx) => (
+                      <tr key={idx} className="hover:bg-canvas-teal/10 transition-colors">
+                        <td className="p-3 font-mono font-extrabold text-brand-teal">{row.time}</td>
+                        <td className="p-3 font-semibold text-text-primary">{row.bp}</td>
+                        <td className="p-3 font-semibold text-text-primary">{row.pulse}</td>
+                        <td className="p-3 font-semibold text-emerald-700">{row.spo2}</td>
+                        <td className="p-3 font-semibold text-text-primary">{row.temp}</td>
+                        <td className="p-3 text-text-secondary italic">{row.notes}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <div className="p-3 bg-canvas-teal rounded-xl border border-teal-200 text-xs text-teal-900 flex items-center justify-between font-medium">
+                <span className="flex items-center gap-2">
+                  <ShieldCheck className="w-4 h-4 text-brand-teal shrink-0" />
+                  <span>Attending physician can review logs during follow-up visits.</span>
+                </span>
+                <span className="text-[10px] font-bold text-brand-teal uppercase">Care Governance</span>
+              </div>
+            </Card>
+          </div>
+
+          <div className="lg:col-span-4 space-y-4">
+            <div className="rounded-2xl overflow-hidden h-52 border border-border-default shadow-card">
+              <img src="/assets/services/home-nursing/pulse-n-care-documentation.webp" alt="Shift Documentation" className="w-full h-full object-cover" />
             </div>
-            <span className="text-[10px] font-mono font-bold bg-amber-50 text-amber-900 border border-amber-200 px-2.5 py-1 rounded-full uppercase">
-              Illustrative Care-Chart Example
-            </span>
+            <ClinicalDocumentationSVG />
           </div>
-
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs border-collapse">
-              <thead>
-                <tr className="border-b border-border-default bg-canvas-secondary text-text-secondary font-bold uppercase text-[10px]">
-                  <th className="p-3">Time</th>
-                  <th className="p-3">Blood Pressure</th>
-                  <th className="p-3">Pulse</th>
-                  <th className="p-3">SpO₂</th>
-                  <th className="p-3">Temp</th>
-                  <th className="p-3">Nursing Intervention Notes</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border-light">
-                {chartRows.map((row, idx) => (
-                  <tr key={idx} className="hover:bg-canvas-teal/10 transition-colors">
-                    <td className="p-3 font-mono font-extrabold text-brand-teal">{row.time}</td>
-                    <td className="p-3 font-semibold text-text-primary">{row.bp}</td>
-                    <td className="p-3 font-semibold text-text-primary">{row.pulse}</td>
-                    <td className="p-3 font-semibold text-emerald-700">{row.spo2}</td>
-                    <td className="p-3 font-semibold text-text-primary">{row.temp}</td>
-                    <td className="p-3 text-text-secondary italic">{row.notes}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          <div className="p-3 bg-canvas-teal rounded-xl border border-teal-200 text-xs text-teal-900 flex items-center justify-between font-medium">
-            <span className="flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-brand-teal shrink-0" />
-              <span>Attending physician can review logs during follow-up visits.</span>
-            </span>
-            <span className="text-[10px] font-bold text-brand-teal uppercase">Care Governance</span>
-          </div>
-        </Card>
+        </div>
       </div>
     </section>
   );
