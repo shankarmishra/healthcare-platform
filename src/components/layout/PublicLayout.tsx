@@ -102,8 +102,8 @@ export const PublicLayout: React.FC = () => {
       <header
         className={`sticky top-0 z-50 transition-all duration-300 relative ${
           isScrolled
-            ? 'bg-white/90 backdrop-blur-xl shadow-md border-b border-slate-200/80 h-16 flex items-center'
-            : 'bg-white/95 backdrop-blur-lg border-b border-slate-100 h-20 flex items-center'
+            ? 'bg-white/95 backdrop-blur-2xl shadow-md border-b border-slate-200/90 h-16 flex items-center'
+            : 'bg-white/95 backdrop-blur-xl border-b border-slate-100 h-20 flex items-center'
         }`}
       >
         <HealthcareTexture type="micro-dot-mesh" opacity={0.03} />
@@ -116,29 +116,29 @@ export const PublicLayout: React.FC = () => {
               <img
                 src="/assets/brand/pulse-n-care/pulse-n-care-logo.svg"
                 alt="Pulse n Care"
-                className="h-9 sm:h-11 w-auto group-hover:scale-102 transition-transform"
+                className="h-9 sm:h-11 w-auto group-hover:scale-102 transition-transform drop-shadow-2xs"
               />
             </Link>
 
             {/* Delhi NCR Coverage Hub Pill */}
             <button
               onClick={() => setLocationModalOpen(true)}
-              className="hidden lg:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-canvas-teal/80 border border-teal-200 text-xs font-extrabold text-brand-teal hover:bg-teal-100/80 transition-all cursor-pointer shadow-2xs whitespace-nowrap"
+              className="hidden lg:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-100/90 border border-slate-200 text-xs font-extrabold text-slate-800 hover:bg-teal-50 hover:border-teal-300 hover:text-brand-teal transition-all cursor-pointer shadow-2xs whitespace-nowrap"
             >
               <MapPin className="w-3.5 h-3.5 text-brand-teal shrink-0" />
-              <span className="whitespace-nowrap">Delhi NCR Care Hubs</span>
+              <span className="whitespace-nowrap">Delhi NCR Hubs</span>
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
-              <ChevronDown className="w-3.5 h-3.5 text-brand-teal shrink-0" />
+              <ChevronDown className="w-3.5 h-3.5 text-slate-400 shrink-0" />
             </button>
           </div>
 
           {/* Center Navigation Links (with Mega-Menus) */}
-          <nav className="hidden md:flex items-center gap-1 lg:gap-2 relative shrink-0">
+          <nav className="hidden md:flex items-center gap-1.5 lg:gap-2 relative shrink-0">
             
             <Link
               to="/"
-              className={`px-3.5 py-2 text-sm font-bold rounded-xl transition-all relative whitespace-nowrap ${
-                location.pathname === '/' ? 'text-brand-teal bg-canvas-teal/60 font-extrabold' : 'text-text-secondary hover:text-text-primary hover:bg-slate-50'
+              className={`px-4 py-2 text-xs lg:text-sm font-extrabold rounded-full transition-all relative whitespace-nowrap ${
+                location.pathname === '/' ? 'text-white bg-brand-teal shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/80'
               }`}
             >
               Home
@@ -152,25 +152,26 @@ export const PublicLayout: React.FC = () => {
             >
               <button
                 onClick={() => navigate('/services')}
-                className={`flex items-center gap-1.5 px-3.5 py-2 text-sm font-bold rounded-xl transition-all cursor-pointer whitespace-nowrap ${
-                  location.pathname.startsWith('/services') ? 'text-brand-teal bg-canvas-teal/60 font-extrabold' : 'text-text-secondary hover:text-text-primary hover:bg-slate-50'
+                className={`flex items-center gap-1.5 px-4 py-2 text-xs lg:text-sm font-extrabold rounded-full transition-all cursor-pointer whitespace-nowrap ${
+                  location.pathname.startsWith('/services') ? 'text-white bg-brand-teal shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/80'
                 }`}
               >
                 <span className="whitespace-nowrap">Services</span>
-                <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${servicesDropdownOpen ? 'rotate-180 text-brand-teal' : 'text-slate-400'}`} />
+                <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${servicesDropdownOpen ? 'rotate-180 text-brand-teal' : 'text-slate-400'}`} />
               </button>
 
               {/* Mega-Menu Panel */}
               {servicesDropdownOpen && (
-                <div className="absolute top-full left-0 w-[640px] bg-white rounded-3xl shadow-card border border-border-default p-6 grid grid-cols-12 gap-6 mt-1.5 z-50 animate-fadeIn">
-                  
+                <div className="absolute top-full left-0 w-[640px] bg-white rounded-3xl shadow-2xl border border-slate-200/90 p-6 grid grid-cols-12 gap-6 mt-2 z-50 animate-fadeIn relative overflow-hidden">
+                  <HealthcareTexture type="micro-dot-mesh" opacity={0.03} />
+
                   {/* Left Column: Care Services List */}
-                  <div className="col-span-7 space-y-2">
+                  <div className="col-span-7 space-y-2 relative z-10">
                     <div className="flex items-center justify-between pb-2 border-b border-slate-100">
                       <span className="text-[11px] font-extrabold text-brand-teal uppercase tracking-widest whitespace-nowrap">
                         Care Services Ecosystem
                       </span>
-                      <Link to="/services" className="text-[11px] font-bold text-text-muted hover:text-brand-teal whitespace-nowrap">
+                      <Link to="/services" className="text-[11px] font-bold text-slate-500 hover:text-brand-teal whitespace-nowrap">
                         View All (11) →
                       </Link>
                     </div>
@@ -180,14 +181,14 @@ export const PublicLayout: React.FC = () => {
                         <Link
                           key={item.title}
                           to={item.path}
-                          className="flex items-start gap-3 p-2.5 rounded-2xl hover:bg-canvas-teal/50 transition-colors group"
+                          className="flex items-start gap-3 p-2.5 rounded-2xl hover:bg-teal-50/60 transition-colors group"
                         >
                           <div className="p-2 rounded-xl bg-canvas-teal border border-teal-200 group-hover:scale-105 transition-transform shrink-0">
                             {item.icon}
                           </div>
                           <div>
                             <div className="flex items-center gap-2">
-                              <p className="text-xs font-extrabold text-text-primary group-hover:text-brand-teal whitespace-nowrap">
+                              <p className="text-xs font-extrabold text-slate-900 group-hover:text-brand-teal whitespace-nowrap">
                                 {item.title}
                               </p>
                               {item.badge && (
@@ -196,7 +197,7 @@ export const PublicLayout: React.FC = () => {
                                 </span>
                               )}
                             </div>
-                            <p className="text-[11px] text-text-muted leading-tight mt-0.5">
+                            <p className="text-[11px] text-slate-500 leading-tight mt-0.5">
                               {item.desc}
                             </p>
                           </div>
@@ -236,7 +237,7 @@ export const PublicLayout: React.FC = () => {
 
             <a
               href="/#how-it-works"
-              className="px-3.5 py-2 text-sm font-bold text-text-secondary hover:text-text-primary hover:bg-slate-50 rounded-xl transition-all whitespace-nowrap"
+              className="px-4 py-2 text-xs lg:text-sm font-extrabold text-slate-600 hover:text-slate-900 hover:bg-slate-100/80 rounded-full transition-all whitespace-nowrap"
             >
               How It Works
             </a>
@@ -249,19 +250,19 @@ export const PublicLayout: React.FC = () => {
             >
               <button
                 onClick={() => navigate('/organizations')}
-                className={`flex items-center gap-1.5 px-3.5 py-2 text-sm font-bold rounded-xl transition-all cursor-pointer whitespace-nowrap ${
-                  location.pathname === '/organizations' ? 'text-brand-teal bg-canvas-teal/60 font-extrabold' : 'text-text-secondary hover:text-text-primary hover:bg-slate-50'
+                className={`flex items-center gap-1.5 px-4 py-2 text-xs lg:text-sm font-extrabold rounded-full transition-all cursor-pointer whitespace-nowrap ${
+                  location.pathname === '/organizations' ? 'text-white bg-brand-teal shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/80'
                 }`}
               >
                 <span className="whitespace-nowrap">For Organizations</span>
-                <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${orgDropdownOpen ? 'rotate-180 text-brand-teal' : 'text-slate-400'}`} />
+                <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${orgDropdownOpen ? 'rotate-180 text-brand-teal' : 'text-slate-400'}`} />
               </button>
 
               {orgDropdownOpen && (
-                <div className="absolute top-full left-0 w-80 bg-white rounded-3xl shadow-card border border-border-default p-4 space-y-3 mt-1.5 z-50 animate-fadeIn">
+                <div className="absolute top-full left-0 w-80 bg-white rounded-3xl shadow-2xl border border-slate-200/90 p-4 space-y-3 mt-2 z-50 animate-fadeIn">
                   <div className="flex items-center gap-2 px-2 pb-2 border-b border-slate-100">
                     <Building2 className="w-4 h-4 text-brand-teal" />
-                    <span className="text-xs font-extrabold text-text-primary whitespace-nowrap">B2B Facility Staffing</span>
+                    <span className="text-xs font-extrabold text-slate-900 whitespace-nowrap">B2B Facility Staffing</span>
                   </div>
 
                   <div className="space-y-1">
@@ -269,10 +270,10 @@ export const PublicLayout: React.FC = () => {
                       <Link
                         key={org.name}
                         to="/organizations"
-                        className="block p-2.5 rounded-xl hover:bg-canvas-teal/50 transition-colors"
+                        className="block p-2.5 rounded-xl hover:bg-teal-50/60 transition-colors"
                       >
-                        <p className="text-xs font-extrabold text-text-primary whitespace-nowrap">{org.name}</p>
-                        <p className="text-[11px] text-text-muted">{org.desc}</p>
+                        <p className="text-xs font-extrabold text-slate-900 whitespace-nowrap">{org.name}</p>
+                        <p className="text-[11px] text-slate-500">{org.desc}</p>
                       </Link>
                     ))}
                   </div>
@@ -290,8 +291,8 @@ export const PublicLayout: React.FC = () => {
 
             <Link
               to="/client/support"
-              className={`px-3.5 py-2 text-sm font-bold rounded-xl transition-all whitespace-nowrap ${
-                location.pathname === '/client/support' ? 'text-brand-teal bg-canvas-teal/60 font-extrabold' : 'text-text-secondary hover:text-text-primary hover:bg-slate-50'
+              className={`px-4 py-2 text-xs lg:text-sm font-extrabold rounded-full transition-all whitespace-nowrap ${
+                location.pathname === '/client/support' ? 'text-white bg-brand-teal shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/80'
               }`}
             >
               Support
@@ -299,38 +300,46 @@ export const PublicLayout: React.FC = () => {
           </nav>
 
           {/* Right Action Section */}
-          <div className="hidden md:flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-3 shrink-0">
+            
+            {/* 24×7 Hotline Pill */}
+            <a
+              href="tel:+919876543210"
+              className="hidden xl:flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-50 border border-teal-200 text-xs font-extrabold text-brand-teal hover:bg-teal-100 transition-all cursor-pointer whitespace-nowrap shadow-2xs"
+            >
+              <Phone className="w-3.5 h-3.5 text-brand-teal animate-pulse" />
+              <span>24×7 Hotline: +91 98765 43210</span>
+            </a>
+
             {currentRole === 'client' ? (
               <>
-                <Link to="/client/notifications" className="relative p-2 text-text-muted hover:text-text-primary rounded-full hover:bg-canvas-tertiary">
+                <Link to="/client/notifications" className="relative p-2 text-slate-500 hover:text-slate-900 rounded-full hover:bg-slate-100">
                   <Bell className="w-5 h-5" />
                   {unreadCount > 0 && (
-                    <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-status-danger rounded-full ring-2 ring-white" />
+                    <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-rose-500 rounded-full ring-2 ring-white" />
                   )}
                 </Link>
-                <Link to="/client/bookings">
-                  <Button variant="ghost" size="sm" className="font-bold text-xs">
-                    My Bookings
-                  </Button>
-                </Link>
-                <Link to="/client/booking/wizard">
-                  <Button variant="primary" size="sm" className="bg-brand-teal text-white font-extrabold text-xs px-5 py-2.5 rounded-xl shadow-xs">
-                    Book a Service
-                  </Button>
-                </Link>
+
+                <Button
+                  variant="primary"
+                  size="sm"
+                  onClick={() => navigate('/client/booking/wizard')}
+                  rightIcon={<ArrowRight className="w-3.5 h-3.5" />}
+                  className="bg-brand-teal hover:bg-brand-teal-hover text-white font-black text-xs px-5 py-2.5 rounded-full shadow-md whitespace-nowrap cursor-pointer h-10"
+                >
+                  Book Care Now
+                </Button>
               </>
             ) : (
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-text-muted font-medium">Portal Active:</span>
-                <span className="text-xs font-extrabold text-brand-teal bg-canvas-teal px-3 py-1 rounded-full border border-teal-200 uppercase">
-                  {currentRole}
-                </span>
-                <Link to="/client/booking/wizard">
-                  <Button variant="primary" size="sm" className="bg-brand-teal text-white font-extrabold text-xs px-5 py-2.5 rounded-xl ml-1">
-                    Book a Service
-                  </Button>
-                </Link>
-              </div>
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={() => navigate('/client/booking/wizard')}
+                rightIcon={<ArrowRight className="w-3.5 h-3.5" />}
+                className="bg-brand-teal hover:bg-brand-teal-hover text-white font-black text-xs px-5 py-2.5 rounded-full shadow-md whitespace-nowrap cursor-pointer h-10"
+              >
+                Book Care Now
+              </Button>
             )}
           </div>
 
