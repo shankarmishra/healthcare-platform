@@ -100,15 +100,16 @@ export const PublicLayout: React.FC = () => {
 
       {/* Primary Public Navigation Header — Rafly / Framer Style Floating Glass Pill Navbar */}
       <header
-        className={`sticky top-3 sm:top-4 z-50 px-3 sm:px-6 max-w-6xl mx-auto w-full transition-all duration-300 relative`}
+        className="sticky top-3 sm:top-4 z-50 px-3 sm:px-6 max-w-6xl mx-auto w-full transition-all duration-300 relative"
       >
+        {/* Floating Pill Header Capsule - Strict Fixed Height (h-13 sm:h-14) */}
         <div
-          className={`w-full rounded-full transition-all duration-300 relative overflow-visible ${
+          className={`w-full h-13 sm:h-14 rounded-full transition-all duration-300 flex items-center justify-between px-3.5 sm:px-6 relative z-30 ${
             isScrolled
-              ? 'bg-white/90 backdrop-blur-2xl shadow-[0_12px_40px_rgba(15,23,42,0.12)] border border-slate-200/90 py-2 px-3 sm:px-5'
-              : 'bg-white/80 backdrop-blur-xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-white/80 py-2.5 px-3.5 sm:px-6'
+              ? 'bg-white/92 backdrop-blur-2xl shadow-[0_12px_36px_rgba(15,23,42,0.12)] border border-slate-200/90'
+              : 'bg-white/85 backdrop-blur-xl shadow-[0_8px_24px_rgba(0,0,0,0.06)] border border-white/80'
           }`}
-          style={{ backdropFilter: 'blur(24px) saturate(190%)' }}
+          style={{ backdropFilter: 'blur(20px) saturate(180%)' }}
         >
           <HealthcareTexture type="micro-dot-mesh" opacity={0.02} />
 
@@ -170,7 +171,7 @@ export const PublicLayout: React.FC = () => {
 
                 {/* Mega-Menu Panel */}
                 {servicesDropdownOpen && (
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 w-[660px] bg-white/95 backdrop-blur-2xl rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.15)] border border-slate-200/90 p-5 grid grid-cols-12 gap-5 mt-3 z-50 animate-fadeIn relative overflow-hidden">
+                  <div className="absolute top-[calc(100%+12px)] left-1/2 -translate-x-1/2 w-[660px] bg-white rounded-3xl shadow-[0_24px_60px_rgba(15,23,42,0.18)] border border-slate-200/90 p-5 grid grid-cols-12 gap-5 z-50 animate-fadeIn relative overflow-hidden">
                     <HealthcareTexture type="micro-dot-mesh" opacity={0.03} />
 
                     {/* Left Column: Care Services List */}
@@ -269,7 +270,7 @@ export const PublicLayout: React.FC = () => {
                 </button>
 
                 {orgDropdownOpen && (
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 w-80 bg-white/95 backdrop-blur-2xl rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.15)] border border-slate-200/90 p-4 space-y-3 mt-3 z-50 animate-fadeIn">
+                  <div className="absolute top-[calc(100%+12px)] left-1/2 -translate-x-1/2 w-80 bg-white rounded-3xl shadow-[0_24px_60px_rgba(15,23,42,0.18)] border border-slate-200/90 p-4 space-y-3 z-50 animate-fadeIn">
                     <div className="flex items-center gap-2 px-2 pb-2 border-b border-slate-100">
                       <Building2 className="w-4 h-4 text-brand-teal" />
                       <span className="text-xs font-extrabold text-slate-900 whitespace-nowrap">B2B Facility Staffing</span>
@@ -364,70 +365,70 @@ export const PublicLayout: React.FC = () => {
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
-
-          {/* Mobile Slide-down Drawer */}
-          {mobileMenuOpen && (
-            <div className="md:hidden border-t border-slate-200/80 bg-white/95 backdrop-blur-2xl p-4 mt-2 rounded-3xl space-y-4 shadow-xl">
-              <div className="space-y-1">
-                <Link
-                  to="/"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block text-sm font-bold text-slate-900 hover:text-brand-teal py-2 border-b border-slate-100"
-                >
-                  Home
-                </Link>
-                <Link
-                  to="/services"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block text-sm font-bold text-slate-900 hover:text-brand-teal py-2 border-b border-slate-100"
-                >
-                  Services Catalog (11 Services)
-                </Link>
-                <Link
-                  to="/services/home-nursing"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block text-xs font-semibold text-brand-teal pl-4 py-1.5"
-                >
-                  ↳ 24×7 Home Nursing
-                </Link>
-                <a
-                  href="/#how-it-works"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block text-sm font-bold text-slate-900 hover:text-brand-teal py-2 border-b border-slate-100"
-                >
-                  How It Works
-                </a>
-                <Link
-                  to="/organizations"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block text-sm font-bold text-slate-900 hover:text-brand-teal py-2 border-b border-slate-100"
-                >
-                  For Organizations (B2B Staffing)
-                </Link>
-                <Link
-                  to="/client/support"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block text-sm font-bold text-slate-900 hover:text-brand-teal py-2 border-b border-slate-100"
-                >
-                  Support Hub
-                </Link>
-              </div>
-
-              <div className="pt-2 space-y-2">
-                <Link to="/client/booking/wizard" onClick={() => setMobileMenuOpen(false)}>
-                  <Button variant="primary" className="w-full bg-brand-teal text-white font-extrabold h-10 rounded-full">
-                    Book a Service Now
-                  </Button>
-                </Link>
-                <Link to="/client/bookings" onClick={() => setMobileMenuOpen(false)}>
-                  <Button variant="outline" className="w-full font-bold h-10 rounded-full">
-                    My Bookings
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          )}
         </div>
+
+        {/* Mobile Slide-down Drawer */}
+        {mobileMenuOpen && (
+          <div className="md:hidden border border-slate-200/90 bg-white/98 backdrop-blur-2xl p-4 mt-2 rounded-3xl space-y-4 shadow-2xl relative z-40">
+            <div className="space-y-1">
+              <Link
+                to="/"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block text-sm font-bold text-slate-900 hover:text-brand-teal py-2 border-b border-slate-100"
+              >
+                Home
+              </Link>
+              <Link
+                to="/services"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block text-sm font-bold text-slate-900 hover:text-brand-teal py-2 border-b border-slate-100"
+              >
+                Services Catalog (11 Services)
+              </Link>
+              <Link
+                to="/services/home-nursing"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block text-xs font-semibold text-brand-teal pl-4 py-1.5"
+              >
+                ↳ 24×7 Home Nursing
+              </Link>
+              <a
+                href="/#how-it-works"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block text-sm font-bold text-slate-900 hover:text-brand-teal py-2 border-b border-slate-100"
+              >
+                How It Works
+              </a>
+              <Link
+                to="/organizations"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block text-sm font-bold text-slate-900 hover:text-brand-teal py-2 border-b border-slate-100"
+              >
+                For Organizations (B2B Staffing)
+              </Link>
+              <Link
+                to="/client/support"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block text-sm font-bold text-slate-900 hover:text-brand-teal py-2 border-b border-slate-100"
+              >
+                Support Hub
+              </Link>
+            </div>
+
+            <div className="pt-2 space-y-2">
+              <Link to="/client/booking/wizard" onClick={() => setMobileMenuOpen(false)}>
+                <Button variant="primary" className="w-full bg-brand-teal text-white font-extrabold h-10 rounded-full">
+                  Book a Service Now
+                </Button>
+              </Link>
+              <Link to="/client/bookings" onClick={() => setMobileMenuOpen(false)}>
+                <Button variant="outline" className="w-full font-bold h-10 rounded-full">
+                  My Bookings
+                </Button>
+              </Link>
+            </div>
+          </div>
+        )}
       </header>
 
       {/* Main Page Body */}
