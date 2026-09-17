@@ -32,13 +32,6 @@ export const DemoRoleSwitcher: React.FC = () => {
         <span className="text-slate-700 text-[11px] sm:text-xs truncate">
           Viewing as: <strong className="text-slate-900 font-bold">{currentUser?.firstName || 'User'} {currentUser?.lastName || ''}</strong>
         </span>
-        <button
-          type="button"
-          onClick={() => navigate('/lottie-preview')}
-          className="px-2 py-0.5 rounded-full bg-teal-800 text-white font-black text-[10px] hover:bg-teal-900 cursor-pointer shrink-0 shadow-2xs border border-teal-600"
-        >
-          🎬 Lottie Gallery UI
-        </button>
       </div>
 
       <div className="flex items-center gap-1.5 overflow-x-auto max-w-full min-w-0 py-0.5 shrink-0 no-scrollbar">

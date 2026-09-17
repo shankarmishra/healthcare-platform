@@ -290,3 +290,41 @@ export const MOCK_FACILITY_TIMESHEETS: FacilityTimesheet[] = [
     submittedAt: '2026-09-18T20:10:00Z',
   },
 ];
+
+export const MOCK_B2B_CLARIFICATIONS = [
+  {
+    id: 'clar-001',
+    requestId: 'req-b2b-001',
+    question: 'Please confirm whether ACLS certification is mandatory for all 4 ICU Night Shift nurses or if BLS with min 3 years experience is acceptable for 2 slots.',
+    askedBy: 'Operations Manager (Rohan Mehta)',
+    askedAt: '2026-09-17T11:20:00Z',
+    status: 'pending_response',
+  },
+];
+
+export const MOCK_B2B_SUPPORT_TICKETS = [
+  {
+    id: 'tkt-b2b-101',
+    ticketNumber: 'TKT-2026-9901',
+    organizationId: 'org-max-saket',
+    category: 'staffing',
+    subject: 'Request for additional ICU ventilator nurse for Ward 4',
+    description: 'We have an upcoming surge in Cardiac ICU admissions and need 1 extra ICU Nurse starting 22 Sep.',
+    status: 'in_progress',
+    priority: 'high',
+    createdAt: '2026-09-16T14:30:00Z',
+    updatedAt: '2026-09-17T09:15:00Z',
+  },
+  {
+    id: 'tkt-b2b-102',
+    ticketNumber: 'TKT-2026-9902',
+    organizationId: 'org-max-saket',
+    category: 'billing',
+    subject: 'Monthly Retainer Tax Breakdown Query for Aug Invoice',
+    description: 'Please provide detailed GST breakdown for August 2026 retainer invoice INV-2026-8801.',
+    status: 'resolved',
+    priority: 'medium',
+    createdAt: '2026-09-10T10:00:00Z',
+    updatedAt: '2026-09-11T16:00:00Z',
+  },
+];

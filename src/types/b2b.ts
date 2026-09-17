@@ -136,3 +136,27 @@ export interface FacilityTimesheet {
   submittedAt: string;
   approvedAt?: string;
 }
+
+export interface ClarificationPrompt {
+  id: string;
+  requestId: string;
+  question: string;
+  askedBy: string;
+  askedAt: string;
+  answer?: string;
+  answeredAt?: string;
+  status: 'pending_response' | 'resolved';
+}
+
+export interface B2BSupportTicket {
+  id: string;
+  ticketNumber: string;
+  organizationId: string;
+  category: 'staffing' | 'roster' | 'timesheet' | 'billing' | 'facility' | 'urgent_issue' | 'other';
+  subject: string;
+  description: string;
+  status: 'open' | 'in_progress' | 'waiting_for_org' | 'resolved' | 'closed';
+  priority: 'low' | 'medium' | 'high' | 'urgent';
+  createdAt: string;
+  updatedAt: string;
+}

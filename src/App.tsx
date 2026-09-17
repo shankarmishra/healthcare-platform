@@ -23,7 +23,6 @@ import { ServiceDetailPage } from './pages/public/ServiceDetailPage';
 import { HomeNursingServicePage } from './pages/public/HomeNursingServicePage';
 import { OrgLandingPage } from './pages/public/OrgLandingPage';
 import { CareersPage } from './pages/public/CareersPage';
-import { LottieShowcasePage } from './pages/public/LottieShowcasePage';
 import { SearchPage } from './pages/client/SearchPage';
 import { ProProfileViewPage } from './pages/client/ProProfileViewPage';
 import { BookingWizardPage } from './pages/client/BookingWizardPage';
@@ -74,9 +73,12 @@ import { OrgDashboardPage } from './pages/organization/OrgDashboardPage';
 import { OrgRequestsListPage } from './pages/organization/OrgRequestsListPage';
 import { OrgRequestBuilderPage } from './pages/organization/OrgRequestBuilderPage';
 import { OrgRosterPage } from './pages/organization/OrgRosterPage';
+import { OrgSchedulePage } from './pages/organization/OrgSchedulePage';
+import { OrgRequestDetailPage } from './pages/organization/OrgRequestDetailPage';
 import { OrgTimesheetsPage } from './pages/organization/OrgTimesheetsPage';
 import { OrgInvoicesPage } from './pages/organization/OrgInvoicesPage';
 import { OrgProfilePage } from './pages/organization/OrgProfilePage';
+import { OrgSupportPage } from './pages/organization/OrgSupportPage';
 
 // Utility Pages
 import { NotFoundPage } from './pages/utility/NotFoundPage';
@@ -97,8 +99,6 @@ export const App: React.FC = () => {
                 <Route path="services/:id" element={<ServiceDetailPage />} />
                 <Route path="organizations" element={<OrgLandingPage />} />
                 <Route path="careers" element={<CareersPage />} />
-                <Route path="lottie-preview" element={<LottieShowcasePage />} />
-                <Route path="lottie-showcase" element={<LottieShowcasePage />} />
                 <Route path="search" element={<SearchPage />} />
                 <Route path="pros/:id" element={<ProProfileViewPage />} />
                 <Route path="book" element={<BookingWizardPage />} />
@@ -134,10 +134,13 @@ export const App: React.FC = () => {
                 <Route path="dashboard" element={<OrgDashboardPage />} />
                 <Route path="requests" element={<OrgRequestsListPage />} />
                 <Route path="requests/new" element={<OrgRequestBuilderPage />} />
+                <Route path="requests/:id" element={<OrgRequestDetailPage />} />
                 <Route path="roster" element={<OrgRosterPage />} />
+                <Route path="schedule" element={<OrgSchedulePage />} />
                 <Route path="timesheets" element={<OrgTimesheetsPage />} />
                 <Route path="invoices" element={<OrgInvoicesPage />} />
                 <Route path="profile" element={<OrgProfilePage />} />
+                <Route path="support" element={<OrgSupportPage />} />
               </Route>
 
               {/* Legacy Pro Route Redirect to In-House Staff Duty Portal */}
