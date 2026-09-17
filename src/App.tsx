@@ -29,6 +29,8 @@ import { BookingDetailPage } from './pages/client/BookingDetailPage';
 import { ClientSupportPage } from './pages/client/ClientSupportPage';
 import { ClientProfilePage } from './pages/client/ClientProfilePage';
 import { ClientNotificationsPage } from './pages/client/ClientNotificationsPage';
+import { SavedPatientsPage } from './pages/client/SavedPatientsPage';
+import { SavedAddressesPage } from './pages/client/SavedAddressesPage';
 
 // Professional Pages
 import { ProDashboardPage } from './pages/pro/ProDashboardPage';
@@ -91,6 +93,8 @@ export const App: React.FC = () => {
                 <Route path="client/support" element={<ClientSupportPage />} />
                 <Route path="client/profile" element={<ClientProfilePage />} />
                 <Route path="client/notifications" element={<ClientNotificationsPage />} />
+                <Route path="client/patients" element={<SavedPatientsPage />} />
+                <Route path="client/addresses" element={<SavedAddressesPage />} />
               </Route>
 
               {/* Professional Portal Shell */}
