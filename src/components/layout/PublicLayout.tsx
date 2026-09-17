@@ -98,47 +98,48 @@ export const PublicLayout: React.FC = () => {
       {/* Top Demo Role Bar */}
       <DemoRoleSwitcher />
 
-      {/* Primary Public Navigation Header — iOS Ultra-Premium Glassmorphism */}
+      {/* Primary Public Navigation Header — Apple.com Style Ultra-Sleek Translucent Glass */}
       <header
         className={`sticky top-0 z-50 transition-all duration-300 relative ${
           isScrolled
-            ? 'bg-white/95 backdrop-blur-2xl shadow-md border-b border-slate-200/90 h-16 flex items-center'
-            : 'bg-white/95 backdrop-blur-xl border-b border-slate-100 h-20 flex items-center'
+            ? 'bg-white/85 backdrop-blur-xl shadow-xs border-b border-slate-200/70 h-13 flex items-center'
+            : 'bg-white/80 backdrop-blur-md border-b border-slate-200/50 h-15 flex items-center'
         }`}
+        style={{ backdropFilter: 'blur(20px) saturate(180%)' }}
       >
-        <HealthcareTexture type="micro-dot-mesh" opacity={0.03} />
+        <HealthcareTexture type="micro-dot-mesh" opacity={0.02} />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex items-center justify-between gap-4 relative z-10">
           
           {/* Left: Master Logo & Location Hub Selector */}
-          <div className="flex items-center gap-4 sm:gap-6 shrink-0">
-            <Link to="/" className="flex items-center gap-2.5 group shrink-0">
+          <div className="flex items-center gap-4 sm:gap-5 shrink-0">
+            <Link to="/" className="flex items-center gap-2 group shrink-0">
               <img
                 src="/assets/brand/pulse-n-care/pulse-n-care-logo.svg"
                 alt="Pulse n Care"
-                className="h-9 sm:h-11 w-auto group-hover:scale-102 transition-transform drop-shadow-2xs"
+                className="h-8 sm:h-9 w-auto group-hover:opacity-90 transition-opacity"
               />
             </Link>
 
             {/* Delhi NCR Coverage Hub Pill */}
             <button
               onClick={() => setLocationModalOpen(true)}
-              className="hidden lg:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-100/90 border border-slate-200 text-xs font-extrabold text-slate-800 hover:bg-teal-50 hover:border-teal-300 hover:text-brand-teal transition-all cursor-pointer shadow-2xs whitespace-nowrap"
+              className="hidden lg:flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100/80 border border-slate-200/60 text-[11px] font-medium text-slate-700 hover:bg-slate-200/80 transition-all cursor-pointer whitespace-nowrap"
             >
-              <MapPin className="w-3.5 h-3.5 text-brand-teal shrink-0" />
-              <span className="whitespace-nowrap">Delhi NCR Hubs</span>
+              <MapPin className="w-3 h-3 text-brand-teal shrink-0" />
+              <span className="whitespace-nowrap">Delhi NCR</span>
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
-              <ChevronDown className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+              <ChevronDown className="w-3 h-3 text-slate-400 shrink-0" />
             </button>
           </div>
 
-          {/* Center Navigation Links (with Mega-Menus) */}
-          <nav className="hidden md:flex items-center gap-1.5 lg:gap-2 relative shrink-0">
+          {/* Center Navigation Links (Minimalist Apple Typography) */}
+          <nav className="hidden md:flex items-center gap-1 lg:gap-1.5 relative shrink-0">
             
             <Link
               to="/"
-              className={`px-4 py-2 text-xs lg:text-sm font-extrabold rounded-full transition-all relative whitespace-nowrap ${
-                location.pathname === '/' ? 'text-white bg-brand-teal shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/80'
+              className={`px-3 py-1.5 text-[12px] lg:text-[13px] tracking-tight font-medium rounded-full transition-all relative whitespace-nowrap ${
+                location.pathname === '/' ? 'text-slate-900 bg-slate-100 font-semibold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/60'
               }`}
             >
               Home
@@ -152,8 +153,8 @@ export const PublicLayout: React.FC = () => {
             >
               <button
                 onClick={() => navigate('/services')}
-                className={`flex items-center gap-1.5 px-4 py-2 text-xs lg:text-sm font-extrabold rounded-full transition-all cursor-pointer whitespace-nowrap ${
-                  location.pathname.startsWith('/services') ? 'text-white bg-brand-teal shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/80'
+                className={`flex items-center gap-1 px-3 py-1.5 text-[12px] lg:text-[13px] tracking-tight font-medium rounded-full transition-all cursor-pointer whitespace-nowrap ${
+                  location.pathname.startsWith('/services') ? 'text-slate-900 bg-slate-100 font-semibold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/60'
                 }`}
               >
                 <span className="whitespace-nowrap">Services</span>
@@ -237,7 +238,7 @@ export const PublicLayout: React.FC = () => {
 
             <a
               href="/#how-it-works"
-              className="px-4 py-2 text-xs lg:text-sm font-extrabold text-slate-600 hover:text-slate-900 hover:bg-slate-100/80 rounded-full transition-all whitespace-nowrap"
+              className="px-3 py-1.5 text-[12px] lg:text-[13px] tracking-tight font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100/60 rounded-full transition-all whitespace-nowrap"
             >
               How It Works
             </a>
@@ -250,8 +251,8 @@ export const PublicLayout: React.FC = () => {
             >
               <button
                 onClick={() => navigate('/organizations')}
-                className={`flex items-center gap-1.5 px-4 py-2 text-xs lg:text-sm font-extrabold rounded-full transition-all cursor-pointer whitespace-nowrap ${
-                  location.pathname === '/organizations' ? 'text-white bg-brand-teal shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/80'
+                className={`flex items-center gap-1 px-3 py-1.5 text-[12px] lg:text-[13px] tracking-tight font-medium rounded-full transition-all cursor-pointer whitespace-nowrap ${
+                  location.pathname === '/organizations' ? 'text-slate-900 bg-slate-100 font-semibold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/60'
                 }`}
               >
                 <span className="whitespace-nowrap">For Organizations</span>
@@ -291,8 +292,8 @@ export const PublicLayout: React.FC = () => {
 
             <Link
               to="/client/support"
-              className={`px-4 py-2 text-xs lg:text-sm font-extrabold rounded-full transition-all whitespace-nowrap ${
-                location.pathname === '/client/support' ? 'text-white bg-brand-teal shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/80'
+              className={`px-3 py-1.5 text-[12px] lg:text-[13px] tracking-tight font-medium rounded-full transition-all whitespace-nowrap ${
+                location.pathname === '/client/support' ? 'text-slate-900 bg-slate-100 font-semibold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/60'
               }`}
             >
               Support
