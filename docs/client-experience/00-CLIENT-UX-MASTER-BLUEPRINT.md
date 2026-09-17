@@ -34,30 +34,60 @@ Every screen should subtly reinforce this promise, taking the burden off the cli
 
 ---
 
-## 2. Business Model Summary & UX Implications
+## 2. Business Model & Service Area Model
 
 CareConnect operates as an **in-house managed workforce**, not a peer-to-peer marketplace. This fundamental business model choice dictates the entire booking flow.
 
+### Service Geography & Configurable Service Area Matrix
+*   **Operating Scope:** Delhi, Noida, Gurugram (Gurgaon), Faridabad, and nearby configured service zones.
+*   **No Broad Nationwide Promise:** The platform does NOT offer or promise nationwide or unverified coverage.
+*   **Admin-Configured Service Matrix:** Service availability is evaluated per `City + Locality + Pincode + Service Category`. Services are NOT assumed to be universally active across all areas.
+
+| City | Locality / Pincode Zone | Home Nursing | Caregiver Attendant | Physiotherapy | Doctor Home Visit | Specialized ICU |
+|---|---|---|---|---|---|---|
+| **Delhi** | Central / South (110001 - 110024) | **ACTIVE** | **ACTIVE** | **ACTIVE** | **ACTIVE** | **ACTIVE** |
+| **Noida** | Sector 15-128 (201301 - 201304) | **ACTIVE** | **ACTIVE** | **ACTIVE** | **ACTIVE** | **INACTIVE** |
+| **Gurugram** | DLF Ph 1-5, Sec 42-56 (122001 - 122011) | **ACTIVE** | **ACTIVE** | **ACTIVE** | **ACTIVE** | **ACTIVE** |
+| **Faridabad** | Sector 14-21 (121001 - 121003) | **ACTIVE** | **ACTIVE** | **INACTIVE** | **ACTIVE** | **INACTIVE** |
+
+*   **UI Enforcement:** The UI only exposes valid `Service + Service Area` combinations. If a client attempts to book an `INACTIVE` service for their pincode, the platform gently explains the limitation and offers alternate available services or callback registration.
+
 ### The Booking Flow (Client Perspective)
-1.  **Service Selection:** Client chooses the broad category (e.g., Home Nursing, Physiotherapy).
-2.  **Requirement Detail:** Client specifies the exact need within that category.
-3.  **Patient Selection:** Client selects or adds the individual receiving care.
-4.  **Location Selection:** Client selects or adds the service address (within Delhi NCR).
-5.  **Date & Time:** Client selects the start date and duration.
-6.  **Shift Preferences:** Client chooses shift types (e.g., 12-hour day, 12-hour night, 24-hour live-in, per visit).
-7.  **Preferences & Special Requirements:** Gender preference for caregiver, specific language requirements, or medical equipment needed.
-8.  **Pricing Review:** Client views the estimated cost based on the configured requirements.
-9.  **Submission:** Client submits a **booking request**. (Crucially, they are not 'buying a caregiver instantly').
+1.  **Service Selection:** Client chooses an active service category.
+2.  **Requirement Detail:** Client specifies exact clinical needs via contextual questions.
+3.  **Patient Selection:** Client picks or creates a family patient profile (`SavedPatientSelector`).
+4.  **Location Selection:** Client selects or detects a service address (`LocationPicker`).
+5.  **Service Area Validation:** System validates pincode against the active service matrix.
+6.  **Date & Recurrence:** Client selects start date, duration, or recurring schedule.
+7.  **Shift Timing:** Client chooses shift types (e.g., 12-hour day, 10-hour night with date rollover, 24-hour live-in).
+8.  **Staff Preferences:** Gender preference, language, or clinical role level.
+9.  **Special Requirements:** Free-text clinical notes & equipment instructions.
+10. **Price Review:** Transparent itemized price ledger (Base + Night Surcharge + 18% GST).
+11. **Submission:** Client submits a **care booking request** for Operations review.
 
-### Operations Interaction
-*   Once submitted, the request goes to the CareConnect Operations team.
-*   Operations reviews the request and assigns an internal staff member who matches the requirements.
-*   The client receives a confirmation notification once the assignment is complete.
-*   **UX Implication:** The UI must clearly communicate that the submission is a *request for assignment*, subject to confirmation. We use statuses like "Request Received," "Reviewing," and "Confirmed."
+---
 
-### Language & Terminology Emphasis
-*   **Use:** Service, care plan, care delivery, availability, booking request, care professional, assigned caregiver, operations team.
-*   **Do NOT Use:** Marketplace, hire, freelancer, provider discovery, independent contractor, search results, gig worker.
+## 2.1 Client Language & Staff Visibility Rules
+
+### Client Language vs. Internal Admin Language
+To maintain a reassuring Care Concierge experience, internal operational jargon is strictly segregated from client-facing UI text.
+
+| Client-Facing Language (ALWAYS USE) | Internal Admin Language (NEVER EXPOSE) |
+|---|---|
+| "We're arranging your care team." | "Dispatch queue processing." |
+| "We've received your care request." | "Unassigned booking in operational queue." |
+| "Your care has been confirmed." | "Staff assignment locked." |
+| "Your assigned care professional..." | "Resource allocated." |
+| "Those timings aren't currently available." | "No staff available / conflict detected." |
+| "In-house clinical staff" | "Workforce capacity / candidate pool." |
+
+### Client Staff Visibility Rules
+*   **BEFORE ASSIGNMENT:**
+    *   Client sees: *"We're arranging your care team. Our Central Operations Desk is reviewing your clinical requirements."*
+    *   Client does **NOT** see: Internal staff directory, marketplace caregiver cards, match scores, unassigned employee profiles, or bidding lists.
+*   **AFTER ASSIGNMENT:**
+    *   Client sees approved client-facing profile: Name (e.g. Priya Sharma, RN), Profile photo, Qualification (e.g. B.Sc Nursing, State Nursing Council Verified), Relevant clinical experience, Languages spoken, and Scheduled visit time.
+    *   Client NEVER sees: Staff private phone number (calls routed via masked hotline), staff home address, internal employee ID (unless approved format), internal performance ratings, internal workload, private background check documents, or internal admin notes.
 
 ---
 

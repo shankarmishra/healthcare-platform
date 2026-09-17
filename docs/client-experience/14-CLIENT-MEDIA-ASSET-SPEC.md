@@ -137,10 +137,26 @@ Motion is used sparingly to reinforce actions, guide attention, and provide feed
   - Sizes: 16px (button inline), 24px (component level), 48px (page level).
 - **Progress Bar**: An indeterminate loading bar fixed to the top of the viewport during route transitions. Height: 3px. Color: `brand-teal`.
 
-### 5.3 Delight Animations
-- **Booking Confirmation**: A subtle, elegant confetti burst (using `canvas-confetti` library) limited to brand colors (Teal, Blue, White). Triggered only on the final "Booking Confirmed" success screen.
+## 6. Controlled SVG Vector Library (12 Essential Illustrations)
 
-## 6. Asset Naming Convention
+Every custom SVG vector asset in the CareConnect library follows a unified design language (Stroke width: 1.5px / 2px, Colors: `#0EA5A4` brand teal, `#2563EB` medical blue, `#F8FAFC` canvas, reduced-motion friendly):
+
+| Asset ID | Asset Name | Purpose & Usage | Color Palette | Animation Behavior | Reduced-Motion Fallback |
+|---|---|---|---|---|---|
+| **SVG-01** | `svg-location-detect` | Radar sweep animation during GPS location detection in `LocationPicker`. | Teal `#0EA5A4`, Slate `#64748B` | Pulse radar 1.2s | Static location pin |
+| **SVG-02** | `svg-care-pathway` | Flowing connected milestones for 'How It Works' & Care Journey timeline. | Teal `#0EA5A4`, Blue `#2563EB` | Dash offset draw 2s | Static pathway |
+| **SVG-03** | `svg-booking-success` | Celebration illustration for Step 10 booking confirmation reveal. | Emerald `#16A3A4`, Gold `#D97706` | Checkmark scale & bounce | Static checkmark |
+| **SVG-04** | `svg-no-bookings` | Empty state illustration for client dashboard when no bookings exist. | Slate `#94A3B8`, Teal tint | Static | Static illustration |
+| **SVG-05** | `svg-no-patient` | Empty state graphic when client has no saved family patients. | Blue `#2563EB`, Slate `#CBD5E1` | Static | Static illustration |
+| **SVG-06** | `svg-no-address` | Empty state graphic when client has no saved addresses in NCR. | Teal `#0EA5A4`, Amber `#D97706` | Static | Static illustration |
+| **SVG-07** | `svg-service-unavailable` | Graphic for unsupported pincodes or inactive service area matrix zones. | Amber `#D97706`, Slate `#64748B` | Subtle pulse | Static warning |
+| **SVG-08** | `svg-network-error` | Technical error fallback graphic when network or server API fails. | Danger Red `#DC2626`, Slate | Red shake cycle | Static warning |
+| **SVG-09** | `svg-payment-success` | Official receipt badge illustration for payment confirmation page. | Emerald `#16A3A4`, Teal `#0EA5A4` | Checkmark draw | Static receipt |
+| **SVG-10** | `svg-payment-failure` | Payment retry illustration for declined card or UPI transaction timeout. | Red `#DC2626`, Amber `#D97706` | Shake 300ms | Static cross |
+| **SVG-11** | `svg-support-desk` | 24/7 Operations Desk help center illustration. | Teal `#0EA5A4`, Blue `#2563EB` | Pulse beacon | Static headset |
+| **SVG-12** | `svg-notification-empty` | Empty state graphic for notification feed when no alerts match. | Slate `#64748B`, Teal tint | Static | Static illustration |
+
+## 7. Asset Naming Convention
 
 Strict adherence to this naming convention is required for all static files in the `/public` directory.
 
