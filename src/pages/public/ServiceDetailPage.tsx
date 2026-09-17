@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useBookings } from '../../context/BookingContext';
 import { Button } from '../../components/common/Button';
 import { Card } from '../../components/common/Card';
+import { Modal } from '../../components/common/Modal';
+import { Input } from '../../components/common/Input';
 import { HealthcareTexture } from '../../components/common/HealthcareTexture';
+import { EmptyState } from '../../components/common/EmptyState';
 import {
   ShieldCheck,
   CheckCircle2,
@@ -11,32 +14,81 @@ import {
   ArrowRight,
   ChevronDown,
   ChevronUp,
-  UserCheck,
   PhoneCall,
-  HeartPulse
+  Clock,
+  MapPin,
+  AlertCircle,
+  Activity,
+  HelpCircle,
+  ChevronRight
 } from 'lucide-react';
-import type { Service } from '../../types';
+import type { Service, ServiceShiftOption } from '../../types';
+import { clsx } from 'clsx';
 
 export const ServiceDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { services } = useBookings();
+
+  // Find service by ID or slug
+  const service: Service | undefined = services.find((s) => s.id === id || s.slug === id);
+
+  const [selectedShift, setSelectedShift] = useState<ServiceShiftOption | null>(
+    service?.shiftOptions?.[0] || null
+  );
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [isCallbackModalOpen, setIsCallbackModalOpen] = useState(false);
+  const [callbackName, setCallbackName] = useState('');
+  const [callbackPhone, setCallbackPhone] = useState('');
+  const [callbackNotes, setCallbackNotes] = useState('');
+  const [callbackSubmitted, setCallbackSubmitted] = useState(false);
 
-  const service: Service = services.find((s) => s.id === id) || services[0];
+  // 404 Fallback if service not found
+  if (!service) {
+    return (
+      <div className="max-w-4xl mx-auto px-4 py-20 text-center space-y-6">
+        <EmptyState
+          icon={<AlertCircle className="w-12 h-12 text-rose-500" />}
+          title="Service Not Found"
+          description="We couldn't find the care service you were looking for. It may have been renamed or relocated."
+          actionLabel="Browse All Services"
+          onAction={() => navigate('/services')}
+        />
+      </div>
+    );
+  }
 
-  const faqs = [
+  // Active shift duration & price calculation
+  const activeShift = selectedShift || service.shiftOptions?.[0] || {
+    id: 'default',
+    label: 'Standard Visit',
+    durationLabel: service.estimatedDuration,
+    hours: 2,
+    priceMultiplier: 1.0
+  };
+
+  const calculatedPrice = Math.round(service.pricing.basePrice * activeShift.priceMultiplier);
+
+  const handleCallbackSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setCallbackSubmitted(true);
+    setTimeout(() => {
+      setIsCallbackModalOpen(false);
+      setCallbackSubmitted(false);
+      setCallbackName('');
+      setCallbackPhone('');
+      setCallbackNotes('');
+    }, 2000);
+  };
+
+  const defaultFaqs = service.faqList || [
     {
       q: 'How does staff assignment work for this service?',
       a: 'Once you submit your booking requirements, our Central Operations Desk matches and assigns a qualified in-house staff member based on your clinical needs, location proximity, and requested time slot.'
     },
     {
       q: 'What equipment do I need to prepare at home?',
-      a: 'Our staff bring standard clinical consumables (sterile gloves, BP monitor, pulse oximeter). For specialized procedures (e.g. PICC dressings or tracheostomy suctioning), surgeon discharge summary notes and prescribed medications should be available at home.'
-    },
-    {
-      q: 'Can I request night shifts or 24-hour live-in care?',
-      a: 'Yes. Night shifts (10:00 PM to 08:00 AM) and 24-hour live-in caregiver options are fully supported with transparent night surcharges included at checkout.'
+      a: 'Our staff bring standard clinical consumables (sterile gloves, BP monitor, pulse oximeter). For specialized procedures, surgeon discharge summary notes and prescribed medications should be available at home.'
     },
     {
       q: 'What is the cancellation policy?',
@@ -45,15 +97,24 @@ export const ServiceDetailPage: React.FC = () => {
   ];
 
   return (
-    <div className="space-y-16 pb-20 text-left relative bg-white">
+    <div className="space-y-16 pb-28 text-left relative bg-white overflow-hidden">
       <HealthcareTexture type="care-pathway" opacity={0.03} />
 
-      {/* Hero Header */}
-      <section className="bg-canvas-secondary border-b border-border-default pt-12 pb-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* 01. Breadcrumb & Top Hero Header */}
+      <section className="bg-gradient-to-b from-slate-50 via-teal-50/20 to-white border-b border-border-default pt-8 pb-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+          {/* Breadcrumb Navigation */}
+          <nav className="flex items-center gap-2 text-xs font-semibold text-text-muted">
+            <Link to="/" className="hover:text-brand-teal transition-colors">Home</Link>
+            <ChevronRight className="w-3.5 h-3.5" />
+            <Link to="/services" className="hover:text-brand-teal transition-colors">Services</Link>
+            <ChevronRight className="w-3.5 h-3.5" />
+            <span className="text-brand-teal font-extrabold">{service.name}</span>
+          </nav>
+
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             <div className="lg:col-span-7 space-y-6">
-              <div className="inline-flex items-center gap-2 bg-canvas-teal text-brand-teal px-3.5 py-1.5 rounded-full text-xs font-extrabold border border-teal-200 uppercase tracking-widest">
+              <div className="inline-flex items-center gap-2 bg-canvas-teal text-brand-teal px-3.5 py-1.5 rounded-full text-xs font-extrabold border border-teal-200 uppercase tracking-widest shadow-2xs">
                 <ShieldCheck className="w-4 h-4 text-brand-teal" /> Verified In-House Clinical Service
               </div>
 
@@ -65,49 +126,68 @@ export const ServiceDetailPage: React.FC = () => {
                 {service.fullDescription}
               </p>
 
-              <div className="flex flex-wrap items-center gap-4 pt-2">
+              {/* Ideal for Tags */}
+              {service.idealFor && (
+                <div className="flex flex-wrap items-center gap-2 pt-1">
+                  <span className="text-xs font-bold text-text-muted uppercase tracking-wider block w-full">Recommended For:</span>
+                  {service.idealFor.map((tag, idx) => (
+                    <span key={idx} className="bg-white text-brand-teal px-3 py-1 rounded-lg text-xs font-bold border border-teal-200 shadow-2xs">
+                      ✓ {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              <div className="flex flex-wrap items-center gap-4 pt-4">
                 <Button
                   size="lg"
                   variant="primary"
-                  onClick={() => navigate(`/client/booking/wizard?serviceId=${service.id}`)}
+                  onClick={() => navigate(`/client/booking/wizard?serviceId=${service.id}&shiftId=${activeShift.id}`)}
                   rightIcon={<ArrowRight className="w-5 h-5" />}
                   className="bg-brand-teal hover:bg-brand-teal-hover font-bold text-white px-8 py-4 text-base cursor-pointer shadow-subtle"
                 >
-                  Book This Service
+                  Book {service.name}
                 </Button>
                 <Button
                   size="lg"
                   variant="outline"
-                  onClick={() => navigate('/client/support')}
+                  onClick={() => setIsCallbackModalOpen(true)}
                   leftIcon={<PhoneCall className="w-4 h-4 text-brand-teal" />}
-                  className="font-bold border-border-default cursor-pointer text-text-primary"
+                  className="font-bold border-border-default cursor-pointer text-text-primary bg-white"
                 >
                   Talk To Our Care Team
                 </Button>
               </div>
             </div>
 
+            {/* Right Media Display Card */}
             <div className="lg:col-span-5">
-              <div className="bg-white p-6 rounded-3xl border border-border-default shadow-subtle space-y-4">
+              <div className="bg-white p-6 rounded-3xl border border-border-default shadow-card space-y-4">
                 <div className="aspect-video rounded-2xl bg-canvas-teal flex items-center justify-center border border-teal-200 overflow-hidden relative">
                   <img
-                    src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80"
+                    src={service.heroMedia || service.cardMedia || 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80'}
                     alt={service.name}
                     className="w-full h-full object-cover"
                   />
-                  <span className="absolute bottom-3 left-3 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-extrabold text-brand-teal border border-teal-200">
-                    ₹{service.pricing.basePrice} / unit
+                  <span className="absolute bottom-3 left-3 bg-white/95 backdrop-blur-md px-3 py-1 rounded-full text-xs font-extrabold text-brand-teal border border-teal-200 shadow-2xs">
+                    Starting ₹{service.pricing.basePrice} / {service.pricing.priceUnit.replace('per_', '')}
                   </span>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3 text-xs">
-                  <div className="p-3 bg-canvas-secondary rounded-xl border border-border-default space-y-0.5">
-                    <span className="text-text-muted font-semibold block">Duration</span>
-                    <span className="font-extrabold text-text-primary block">{service.estimatedDuration}</span>
+                <div className="space-y-2 text-xs text-text-secondary pt-2">
+                  <div className="flex items-center justify-between border-b border-border-light pb-2">
+                    <span className="font-bold text-text-muted">Qualifications:</span>
+                    <span className="font-extrabold text-text-primary">{service.requiredQualifications.join(', ')}</span>
                   </div>
-                  <div className="p-3 bg-canvas-secondary rounded-xl border border-border-default space-y-0.5">
-                    <span className="text-text-muted font-semibold block">Staff License</span>
-                    <span className="font-extrabold text-brand-teal block">{service.requiredQualifications.join(', ')}</span>
+                  <div className="flex items-center justify-between border-b border-border-light pb-2">
+                    <span className="font-bold text-text-muted">Estimated Duration:</span>
+                    <span className="font-extrabold text-brand-teal">{service.estimatedDuration}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-text-muted">Service Region:</span>
+                    <span className="font-extrabold text-emerald-600 flex items-center gap-1">
+                      <MapPin className="w-3.5 h-3.5" /> Delhi NCR Hubs
+                    </span>
                   </div>
                 </div>
               </div>
@@ -116,187 +196,247 @@ export const ServiceDetailPage: React.FC = () => {
         </div>
       </section>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
-        {/* WHO IS IT FOR? */}
-        <section className="space-y-6">
-          <div>
-            <span className="text-xs font-extrabold text-brand-teal uppercase tracking-widest">Clinical Care Scope</span>
-            <h2 className="text-2xl font-extrabold text-text-primary mt-1">Who Is This Service For?</h2>
+      {/* 02. Who This Service Is For (Scenario Cards) */}
+      {service.whoItsForList && (
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+          <div className="space-y-2">
+            <span className="text-xs font-extrabold text-brand-teal uppercase tracking-widest">Clinical Scenarios</span>
+            <h2 className="text-2xl font-extrabold text-text-primary">Who This Care Service Is For</h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {[
-              { title: 'Post-Surgery Recovery', desc: 'Patients discharged after knee replacement, cardiac, or abdominal surgery requiring sterile wound dressing & IV care.' },
-              { title: 'Elderly & Senior Citizens', desc: 'Seniors with chronic conditions (hypertension, diabetes, dementia) needing daily vital monitoring and medication management.' },
-              { title: 'Bedridden Patients', desc: 'Patients needing total assistance for bathing, diaper changes, bedsore prevention, and frequent bed rotations.' },
-              { title: 'Long-Term Rehab', desc: 'Patients recovering from stroke or physical trauma requiring structured daily clinical oversight at home.' }
-            ].map((item) => (
-              <Card key={item.title} className="p-5 border-border-default shadow-subtle space-y-2">
-                <div className="w-10 h-10 rounded-xl bg-canvas-teal text-brand-teal flex items-center justify-center font-extrabold">
-                  <HeartPulse className="w-5 h-5" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {service.whoItsForList.map((item, idx) => (
+              <Card key={idx} className="p-6 border-border-default shadow-2xs space-y-3 bg-white">
+                <div className="w-10 h-10 rounded-xl bg-teal-50 text-brand-teal flex items-center justify-center font-bold border border-teal-200">
+                  <Activity className="w-5 h-5" />
                 </div>
-                <h3 className="font-extrabold text-text-primary text-sm">{item.title}</h3>
-                <p className="text-xs text-text-secondary leading-relaxed">{item.desc}</p>
+                <h3 className="font-extrabold text-text-primary text-base">{item.title}</h3>
+                <p className="text-xs text-text-muted leading-relaxed font-medium">{item.desc}</p>
               </Card>
             ))}
           </div>
         </section>
+      )}
 
-        {/* WHAT WE PROVIDE VS WHAT WE DON'T PROVIDE */}
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="bg-canvas-teal p-6 rounded-3xl border border-teal-200 space-y-4">
-            <h3 className="font-extrabold text-teal-900 text-lg flex items-center gap-2">
-              <CheckCircle2 className="w-6 h-6 text-brand-teal" /> What We Provide
-            </h3>
-            <ul className="space-y-3 text-xs text-teal-950 font-semibold">
-              {service.keyInclusions.map((inc) => (
-                <li key={inc} className="flex items-start gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-brand-teal shrink-0 mt-0.5" />
-                  <span>{inc}</span>
-                </li>
+      {/* 03. What We Provide (Categorized Inclusions) vs. What We Do NOT Provide */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          {/* What We Provide */}
+          <div className="lg:col-span-7 space-y-6">
+            <div className="space-y-2">
+              <span className="text-xs font-extrabold text-brand-teal uppercase tracking-widest">Clinical Scope</span>
+              <h2 className="text-2xl font-extrabold text-text-primary">What We Provide</h2>
+            </div>
+
+            <Card className="p-6 border-border-default shadow-subtle space-y-4 bg-white">
+              {service.keyInclusions.map((inclusion, idx) => (
+                <div key={idx} className="flex items-start gap-3 text-sm text-text-primary font-semibold">
+                  <CheckCircle2 className="w-5 h-5 text-brand-teal shrink-0 mt-0.5" />
+                  <span>{inclusion}</span>
+                </div>
               ))}
-            </ul>
+            </Card>
           </div>
 
-          <div className="bg-rose-50/60 p-6 rounded-3xl border border-rose-200 space-y-4">
-            <h3 className="font-extrabold text-rose-900 text-lg flex items-center gap-2">
-              <XCircle className="w-6 h-6 text-rose-600" /> What We Don't Provide
-            </h3>
-            <ul className="space-y-3 text-xs text-rose-950 font-semibold">
-              <li className="flex items-start gap-2">
-                <XCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
-                <span>Emergency surgical room interventions or ambulance transport</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <XCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
-                <span>Prescription medication sales (prescriptions must be filled at licensed pharmacies)</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <XCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
-                <span>Domestic household cleaning unrelated to patient hygiene</span>
-              </li>
-            </ul>
-          </div>
-        </section>
+          {/* What We Do NOT Provide (Factual Exclusions) */}
+          <div className="lg:col-span-5 space-y-6">
+            <div className="space-y-2">
+              <span className="text-xs font-extrabold text-slate-400 uppercase tracking-widest">Exclusions & Boundaries</span>
+              <h2 className="text-2xl font-extrabold text-text-primary">What We Do Not Provide</h2>
+            </div>
 
-        {/* CARE OPTIONS & SHIFTS */}
-        <section className="space-y-6">
-          <div>
-            <span className="text-xs font-extrabold text-brand-teal uppercase tracking-widest">Flexible Duty Schedules</span>
-            <h2 className="text-2xl font-extrabold text-text-primary mt-1">Available Shift & Duration Options</h2>
+            <Card className="p-6 border-border-default shadow-subtle space-y-4 bg-slate-50/70">
+              {(service.exclusions || [
+                'Operating room surgical procedures',
+                'General domestic maid work or family cooking',
+                'Emergency ambulance transport without prior booking'
+              ]).map((exclusion, idx) => (
+                <div key={idx} className="flex items-start gap-3 text-xs text-text-muted font-medium">
+                  <XCircle className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
+                  <span>{exclusion}</span>
+                </div>
+              ))}
+            </Card>
           </div>
+        </div>
+      </section>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            {[
-              { duration: '2 Hours', label: 'Short Visit', desc: 'Procedure or dressing' },
-              { duration: '6 Hours', label: 'Half Day', desc: 'Morning or evening shift' },
-              { duration: '12 Hours', label: 'Day / Night Shift', desc: 'Full continuous care' },
-              { duration: '24 Hours', label: 'Live-In Care', desc: 'Round-the-clock support' }
-            ].map((opt) => (
-              <div key={opt.duration} className="p-4 rounded-2xl border border-border-default bg-white space-y-1 text-left">
-                <span className="text-xs font-extrabold text-brand-teal block">{opt.duration}</span>
-                <span className="text-sm font-bold text-text-primary block">{opt.label}</span>
-                <span className="text-[11px] text-text-muted block">{opt.desc}</span>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* WHAT TO EXPECT TIMELINE */}
-        <section className="space-y-6">
-          <div>
-            <span className="text-xs font-extrabold text-brand-teal uppercase tracking-widest">Care Delivery Process</span>
-            <h2 className="text-2xl font-extrabold text-text-primary mt-1">What To Expect</h2>
+      {/* 04. Selectable Shift & Duration Options Cards */}
+      {service.shiftOptions && service.shiftOptions.length > 0 && (
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+          <div className="space-y-2">
+            <span className="text-xs font-extrabold text-brand-teal uppercase tracking-widest">Schedule Options</span>
+            <h2 className="text-2xl font-extrabold text-text-primary">Select Available Shift Timing</h2>
+            <p className="text-xs text-text-muted">Choose your preferred shift duration to calculate updated price estimates.</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-6 gap-4 text-left">
-            {[
-              { step: '01', title: 'Request', desc: 'Specify care requirements' },
-              { step: '02', title: 'Review', desc: 'Ops desk evaluates needs' },
-              { step: '03', title: 'Assign', desc: 'Verified staff assigned' },
-              { step: '04', title: 'Confirm', desc: 'Staff details & time sent' },
-              { step: '05', title: 'Check-In', desc: 'QR code arrival verification' },
-              { step: '06', title: 'Care & Log', desc: 'Clinical summary logged' }
-            ].map((t) => (
-              <div key={t.step} className="p-4 bg-canvas-secondary rounded-2xl border border-border-default space-y-1">
-                <span className="text-xs font-mono font-extrabold text-brand-teal block">{t.step}</span>
-                <h4 className="font-extrabold text-text-primary text-sm">{t.title}</h4>
-                <p className="text-[11px] text-text-muted leading-tight">{t.desc}</p>
-              </div>
-            ))}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {service.shiftOptions.map((opt) => {
+              const isSelected = activeShift.id === opt.id;
+              const shiftPrice = Math.round(service.pricing.basePrice * opt.priceMultiplier);
+
+              return (
+                <Card
+                  key={opt.id}
+                  onClick={() => setSelectedShift(opt)}
+                  className={clsx(
+                    'p-5 border cursor-pointer transition-all space-y-3 relative',
+                    isSelected
+                      ? 'border-brand-teal ring-2 ring-brand-teal/20 bg-canvas-teal/20 shadow-md'
+                      : 'border-border-default bg-white hover:border-teal-200 shadow-2xs'
+                  )}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-extrabold text-brand-teal flex items-center gap-1.5">
+                      <Clock className="w-4 h-4" /> {opt.durationLabel}
+                    </span>
+                    {isSelected && <CheckCircle2 className="w-5 h-5 text-brand-teal" />}
+                  </div>
+
+                  <h3 className="font-extrabold text-text-primary text-base">{opt.label}</h3>
+
+                  <div className="pt-2 border-t border-border-light flex items-center justify-between">
+                    <span className="text-[10px] font-bold text-text-muted uppercase">Estimated Rate</span>
+                    <span className="text-base font-extrabold text-brand-teal">₹{shiftPrice}</span>
+                  </div>
+                </Card>
+              );
+            })}
           </div>
         </section>
+      )}
 
-        {/* STAFF REQUIREMENT GUARANTEE */}
-        <section className="bg-canvas-teal p-6 rounded-3xl border border-teal-200 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-brand-teal text-white flex items-center justify-center shrink-0">
-              <UserCheck className="w-6 h-6" />
+      {/* 05. Operational Service Area Badge */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-canvas-teal/50 p-6 rounded-3xl border border-teal-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3 text-left">
+            <div className="w-10 h-10 rounded-xl bg-white text-brand-teal flex items-center justify-center font-bold border border-teal-200 shrink-0">
+              <MapPin className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="font-extrabold text-teal-950 text-base">Internal Operations Assignment Guarantee</h3>
-              <p className="text-xs text-teal-800 font-medium">
-                Assigned by our central operations team based on care requirements, location proximity, and license qualification.
-              </p>
+              <h4 className="text-sm font-extrabold text-text-primary">Service Availability Notice</h4>
+              <p className="text-xs text-text-secondary">Available across Delhi, Noida, Gurugram, and Faridabad active care hubs.</p>
             </div>
           </div>
-          <Button
-            variant="primary"
-            onClick={() => navigate(`/client/booking/wizard?serviceId=${service.id}`)}
-            className="bg-brand-teal text-white font-bold text-xs px-6 py-3 shrink-0 cursor-pointer"
-          >
-            Book Service Now
-          </Button>
-        </section>
+          <span className="text-xs font-extrabold text-brand-teal bg-white px-3 py-1.5 rounded-full border border-teal-200 shrink-0">
+            Pincode Check at Checkout
+          </span>
+        </div>
+      </section>
 
-        {/* SERVICE FAQs */}
-        <section className="space-y-6">
-          <div>
-            <span className="text-xs font-extrabold text-brand-teal uppercase tracking-widest">Frequently Asked Questions</span>
-            <h2 className="text-2xl font-extrabold text-text-primary mt-1">Service FAQs</h2>
-          </div>
+      {/* 06. Service-Specific FAQ Accordion */}
+      <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+        <div className="text-center space-y-2">
+          <h2 className="text-2xl font-extrabold text-text-primary">Service FAQs</h2>
+          <p className="text-xs text-text-muted">Questions regarding {service.name}</p>
+        </div>
 
-          <div className="space-y-3">
-            {faqs.map((faq, idx) => (
-              <div
-                key={faq.q}
-                onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
-                className="p-4 rounded-2xl border border-border-default bg-white cursor-pointer transition-all space-y-2 text-left"
+        <div className="space-y-3">
+          {defaultFaqs.map((faq, idx) => {
+            const isOpen = openFaq === idx;
+            return (
+              <Card
+                key={idx}
+                onClick={() => setOpenFaq(isOpen ? null : idx)}
+                className="p-5 border-border-default shadow-2xs cursor-pointer space-y-2 hover:border-teal-300 transition-colors bg-white"
               >
-                <div className="flex justify-between items-center font-extrabold text-text-primary text-sm">
-                  <span>{faq.q}</span>
-                  {openFaq === idx ? <ChevronUp className="w-4 h-4 text-brand-teal" /> : <ChevronDown className="w-4 h-4 text-text-muted" />}
+                <div className="flex items-center justify-between gap-4">
+                  <h4 className="font-extrabold text-text-primary text-sm sm:text-base flex items-center gap-2">
+                    <HelpCircle className="w-4 h-4 text-brand-teal shrink-0" /> {faq.q}
+                  </h4>
+                  {isOpen ? (
+                    <ChevronUp className="w-5 h-5 text-brand-teal shrink-0" />
+                  ) : (
+                    <ChevronDown className="w-5 h-5 text-text-muted shrink-0" />
+                  )}
                 </div>
-                {openFaq === idx && (
-                  <p className="text-xs text-text-secondary leading-relaxed pt-2 border-t border-border-light">
+                {isOpen && (
+                  <p className="text-xs sm:text-sm text-text-secondary leading-relaxed pt-2 border-t border-border-light font-medium">
                     {faq.a}
                   </p>
                 )}
-              </div>
-            ))}
-          </div>
-        </section>
-      </div>
+              </Card>
+            );
+          })}
+        </div>
+      </section>
 
-      {/* Sticky Bottom Action Bar on Desktop */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-border-default p-4 z-40 shadow-2xl">
-        <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
-          <div>
-            <span className="text-xs text-text-muted block font-semibold">{service.name}</span>
-            <span className="text-base font-extrabold text-brand-teal">₹{service.pricing.basePrice} / unit</span>
+      {/* 07. Sticky Action Bar (Fixed Bottom Bar on Mobile/Desktop) */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-border-default p-4 shadow-floating">
+        <div className="max-w-7xl mx-auto px-4 flex items-center justify-between gap-4">
+          <div className="text-left">
+            <span className="text-[10px] font-bold text-text-muted uppercase tracking-wider block">Selected Service & Shift</span>
+            <p className="text-sm sm:text-base font-extrabold text-text-primary truncate max-w-xs sm:max-w-md">
+              {service.name} • <span className="text-brand-teal">{activeShift.label}</span>
+            </p>
           </div>
 
-          <Button
-            size="lg"
-            variant="primary"
-            onClick={() => navigate(`/client/booking/wizard?serviceId=${service.id}`)}
-            rightIcon={<ArrowRight className="w-5 h-5" />}
-            className="bg-brand-teal hover:bg-brand-teal-hover font-bold text-white px-8 cursor-pointer shadow-subtle"
-          >
-            Book This Service
-          </Button>
+          <div className="flex items-center gap-3">
+            <div className="text-right hidden sm:block">
+              <span className="text-[10px] font-bold text-text-muted uppercase tracking-wider block">Est. Cost</span>
+              <p className="text-lg font-extrabold text-brand-teal">₹{calculatedPrice}</p>
+            </div>
+            <Button
+              size="lg"
+              variant="primary"
+              onClick={() => navigate(`/client/booking/wizard?serviceId=${service.id}&shiftId=${activeShift.id}`)}
+              rightIcon={<ArrowRight className="w-4 h-4" />}
+              className="bg-brand-teal hover:bg-brand-teal-hover font-bold text-white px-6 sm:px-8 cursor-pointer"
+            >
+              Book This Service
+            </Button>
+          </div>
         </div>
       </div>
+
+      {/* 08. Callback Modal ("Talk to Care Team") */}
+      <Modal
+        isOpen={isCallbackModalOpen}
+        onClose={() => setIsCallbackModalOpen(false)}
+        title="Talk to Our Care Team"
+        subtitle={`Request a call from our Central Operations Desk regarding ${service.name}`}
+      >
+        {callbackSubmitted ? (
+          <div className="py-8 text-center space-y-3">
+            <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
+              <CheckCircle2 className="w-6 h-6" />
+            </div>
+            <h4 className="text-lg font-extrabold text-text-primary">Callback Request Received!</h4>
+            <p className="text-xs text-text-muted">Our Care Concierge team will call you at {callbackPhone} within 15 minutes.</p>
+          </div>
+        ) : (
+          <form onSubmit={handleCallbackSubmit} className="space-y-4">
+            <Input
+              label="Your Full Name"
+              placeholder="e.g. Rahul Mehta"
+              required
+              value={callbackName}
+              onChange={(e) => setCallbackName(e.target.value)}
+            />
+            <Input
+              label="Phone Number (+91)"
+              placeholder="e.g. 9876543210"
+              required
+              type="tel"
+              value={callbackPhone}
+              onChange={(e) => setCallbackPhone(e.target.value)}
+            />
+            <div className="space-y-1.5 text-left">
+              <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Care Requirement Notes</label>
+              <textarea
+                rows={3}
+                placeholder="Briefly describe what assistance or timing you need..."
+                value={callbackNotes}
+                onChange={(e) => setCallbackNotes(e.target.value)}
+                className="w-full p-3 text-xs font-medium text-slate-900 border border-border-default rounded-xl focus:outline-none focus:border-brand-teal"
+              />
+            </div>
+            <Button type="submit" variant="primary" className="w-full font-bold cursor-pointer">
+              Submit Callback Request
+            </Button>
+          </form>
+        )}
+      </Modal>
     </div>
   );
 };

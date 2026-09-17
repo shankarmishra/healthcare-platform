@@ -31,11 +31,15 @@ export const MOCK_SERVICES: Service[] = [
   // Home Nursing
   {
     id: 'srv-nursing-post-op',
+    slug: 'post-operative-nursing-care',
     category: 'home_nursing',
     name: 'Post-Operative Nursing Care',
     shortDescription: 'Dedicated wound care, vital monitoring, and IV administration following surgery.',
     fullDescription: 'Comprehensive post-surgical care provided by registered B.Sc Nurses. Includes sterile surgical dressing changes, medication administration, pain management monitoring, catheter care, and coordination with operating surgeon notes.',
     iconName: 'Activity',
+    cardMedia: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80',
+    heroMedia: 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=1600&q=80',
+    featured: true,
     pricing: {
       basePrice: 1200,
       priceUnit: 'per_visit',
@@ -45,12 +49,39 @@ export const MOCK_SERVICES: Service[] = [
     },
     estimatedDuration: '2 - 4 Hours',
     requiredQualifications: ['B.Sc Nursing', 'RN License'],
+    idealFor: ['Post-surgery recovery', 'Wound & drain management', 'Orthopedic / Cardiac post-discharge'],
     keyInclusions: [
       'Aseptic wound dressing',
       'Vital signs monitoring & logging',
       'IV / IM injections administration',
       'Drain & catheter care',
       'Post-op recovery progress report'
+    ],
+    whoItsForList: [
+      { title: 'Post-Surgical Patients', desc: 'Patients recovering at home after cardiac, orthopedic, or abdominal surgery.', iconName: 'Activity' },
+      { title: 'Wound Care Cases', desc: 'Surgical incisions requiring daily sterile dressing and infection control.', iconName: 'ShieldPlus' },
+      { title: 'Catheter & Drain Support', desc: 'Patients needing ongoing urinary catheter or surgical drain hygiene.', iconName: 'HeartPulse' }
+    ],
+    categorizedInclusions: [
+      { category: 'Clinical Procedures', items: ['Aseptic wound dressing & suture care', 'IV fluid & antibiotic administration', 'Catheter insertion & bag flushing'] },
+      { category: 'Vital Signs & Monitoring', items: ['BP, Pulse, Temperature, SpO2 charting', 'Pain score observation', 'Surgeon progress report logging'] }
+    ],
+    exclusions: [
+      'Operating room surgical procedures',
+      'Intensive diagnostic imaging at home',
+      'Direct emergency ambulance transport (referral provided)'
+    ],
+    shiftOptions: [
+      { id: 'sh-short', label: 'Short Visit', durationLabel: '2 Hours', hours: 2, priceMultiplier: 1.0 },
+      { id: 'sh-half', label: 'Half Day Shift', durationLabel: '6 Hours', hours: 6, priceMultiplier: 2.2 },
+      { id: 'sh-day', label: '12-Hour Day Shift', durationLabel: '12 Hours', hours: 12, priceMultiplier: 3.5 },
+      { id: 'sh-night', label: '10-Hour Night Shift', durationLabel: '10 Hours (10 PM - 8 AM)', hours: 10, priceMultiplier: 3.2 }
+    ],
+    serviceAreas: ['Delhi', 'Noida', 'Gurugram', 'Faridabad'],
+    faqList: [
+      { q: 'How quickly can a nurse arrive post-discharge?', a: 'Once your request is received, Central Operations verifies clinical requirements and dispatches an assigned in-house nurse within 2-4 hours in Delhi NCR.' },
+      { q: 'Do nurses bring dressing materials?', a: 'Nurses bring basic clinical consumables (sterile gloves, BP monitor, oximeter). Specific surgical dressing kits prescribed by your doctor should be kept ready at home.' },
+      { q: 'Can I book night shifts?', a: 'Yes, 10-hour night shifts (10:00 PM to 08:00 AM) are available with transparent night surcharge calculation at checkout.' }
     ],
     preparationInstructions: [
       'Keep hospital discharge summary ready',
@@ -61,11 +92,15 @@ export const MOCK_SERVICES: Service[] = [
   },
   {
     id: 'srv-nursing-elderly',
+    slug: 'senior-skilled-nursing-visit',
     category: 'home_nursing',
     name: 'Senior Skilled Nursing Visit',
     shortDescription: 'Routine clinical checkup, medication management, and chronic care for seniors.',
     fullDescription: 'Tailored home nursing for elderly patients managing hypertension, diabetes, COPD, or dementia. Covers daily injections (e.g., insulin), sugar monitoring, bedridden patient hygiene support, and tube feeding.',
     iconName: 'HeartPulse',
+    cardMedia: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?w=800&q=80',
+    heroMedia: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1600&q=80',
+    featured: false,
     pricing: {
       basePrice: 800,
       priceUnit: 'per_visit',
@@ -75,11 +110,28 @@ export const MOCK_SERVICES: Service[] = [
     },
     estimatedDuration: '1 - 2 Hours',
     requiredQualifications: ['GNM', 'B.Sc Nursing'],
+    idealFor: ['Elderly care', 'Diabetes & BP management', 'Insulin & injection therapy'],
     keyInclusions: [
       'Blood glucose & BP check',
       'Insulin administration',
       'Ryle tube / PEG feeding assistance',
       'Bedsores preventative dressing'
+    ],
+    whoItsForList: [
+      { title: 'Geriatric Patients', desc: 'Elderly individuals managing age-related chronic conditions at home.', iconName: 'HeartPulse' },
+      { title: 'Insulin Dependent Seniors', desc: 'Daily subcutaneous insulin administration & blood sugar tracking.', iconName: 'Activity' }
+    ],
+    categorizedInclusions: [
+      { category: 'Geriatric Nursing', items: ['Insulin & daily medication administration', 'Ryle tube & PEG tube feeding', 'Bedsores staging & preventative dressing'] }
+    ],
+    exclusions: ['Full-time maid work or house cleaning', 'Medication purchasing without prescription'],
+    shiftOptions: [
+      { id: 'sh-visit-1', label: 'Single Clinical Visit', durationLabel: '1 Hour', hours: 1, priceMultiplier: 1.0 },
+      { id: 'sh-visit-2', label: 'Extended Nursing Visit', durationLabel: '2 Hours', hours: 2, priceMultiplier: 1.6 }
+    ],
+    serviceAreas: ['Delhi', 'Noida', 'Gurugram', 'Faridabad'],
+    faqList: [
+      { q: 'Is this suitable for daily insulin visits?', a: 'Yes, seniors can set up daily or weekly recurring nursing visits at discounted bundle rates.' }
     ],
     isActive: true,
   },
@@ -87,11 +139,15 @@ export const MOCK_SERVICES: Service[] = [
   // Caregiver / Attendant
   {
     id: 'srv-caregiver-12hr',
+    slug: '12-hour-caregiver-attendant',
     category: 'caregiver_attendant',
     name: '12-Hour Day / Night Caregiver',
     shortDescription: 'Continuous compassionate daily living support for elderly or recovering patients.',
-    fullDescription: 'Experienced bedside caregiver for 12-hour shifts. Assists with personal hygiene, bathing, diaper changes, mobilty/transfer assistance, feeding, medication reminders, and companionship.',
+    fullDescription: 'Experienced bedside caregiver for 12-hour shifts. Assists with personal hygiene, bathing, diaper changes, mobility/transfer assistance, feeding, medication reminders, and companionship.',
     iconName: 'UserCheck',
+    cardMedia: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=800&q=80',
+    heroMedia: 'https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?w=1600&q=80',
+    featured: true,
     pricing: {
       basePrice: 1800,
       priceUnit: 'per_day',
@@ -101,6 +157,7 @@ export const MOCK_SERVICES: Service[] = [
     },
     estimatedDuration: '12 Hours',
     requiredQualifications: ['Certified Caregiver', 'First Aid Certified'],
+    idealFor: ['Bedridden patient care', 'Elderly assistance', 'Post-stroke mobility support'],
     keyInclusions: [
       'Bathing & oral hygiene care',
       'Mobility & wheelchair transfer',
@@ -108,15 +165,36 @@ export const MOCK_SERVICES: Service[] = [
       'Medication timely reminders',
       'Vitals recording (BP, Temp, SpO2)'
     ],
+    whoItsForList: [
+      { title: 'Elderly Family Members', desc: 'Seniors who require dedicated bedside support for daily living.', iconName: 'UserCheck' },
+      { title: 'Bedridden & Recovery Patients', desc: 'Assistance with diaper changes, position rotation, and grooming.', iconName: 'Clock' }
+    ],
+    categorizedInclusions: [
+      { category: 'Daily Living Support', items: ['Sponge bath & hair wash', 'Oral care & diaper changing', 'Feeding & liquid intake tracking'] },
+      { category: 'Mobility & Safety', items: ['Bed to wheelchair transfer', 'Walk support & fall prevention', 'Bed position shift every 2h'] }
+    ],
+    exclusions: ['Clinical IV injections (handled by Nursing service)', 'Heavy domestic housework or cooking for whole family'],
+    shiftOptions: [
+      { id: 'sh-cg-day', label: '12-Hour Day Shift', durationLabel: '08:00 AM - 08:00 PM', hours: 12, priceMultiplier: 1.0 },
+      { id: 'sh-cg-night', label: '10-Hour Night Shift', durationLabel: '10:00 PM - 08:00 AM (Overnight)', hours: 10, priceMultiplier: 1.1 }
+    ],
+    serviceAreas: ['Delhi', 'Noida', 'Gurugram', 'Faridabad'],
+    faqList: [
+      { q: 'Will the caregiver help with bathing?', a: 'Yes, daily sponge baths, hair washing, oral care, and diaper changes are core caregiver responsibilities.' }
+    ],
     isActive: true,
   },
   {
     id: 'srv-caregiver-24hr',
+    slug: '24-hour-live-in-caregiver',
     category: 'caregiver_attendant',
     name: '24-Hour Live-in Caregiver',
     shortDescription: 'Full 24-hour round-the-clock personal care for bedridden or elderly family members.',
     fullDescription: 'Uninterrupted 24-hour live-in support for total assistance cases. Ensures patient safety overnight, frequent position shifts to prevent bedsores, hygiene management, and peace of mind for family.',
     iconName: 'Clock',
+    cardMedia: 'https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?w=800&q=80',
+    heroMedia: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?w=1600&q=80',
+    featured: false,
     pricing: {
       basePrice: 2800,
       priceUnit: 'per_day',
@@ -126,23 +204,32 @@ export const MOCK_SERVICES: Service[] = [
     },
     estimatedDuration: '24 Hours',
     requiredQualifications: ['Certified Caregiver', 'Geriatric Care Specialist'],
+    idealFor: ['24/7 Bedside support', 'Dementia patient supervision', 'Total dependency care'],
     keyInclusions: [
       '24-hour continuous care',
       'Overnight assistance',
       'Bed rotation every 2 hours',
       'Complete personal care'
     ],
+    shiftOptions: [
+      { id: 'sh-24hr', label: '24-Hour Live-In Shift', durationLabel: 'Round the Clock (24h)', hours: 24, priceMultiplier: 1.0 }
+    ],
+    serviceAreas: ['Delhi', 'Noida', 'Gurugram', 'Faridabad'],
     isActive: true,
   },
 
   // Physiotherapy
   {
     id: 'srv-physio-ortho',
+    slug: 'orthopedic-joint-rehab-physio',
     category: 'physiotherapy',
     name: 'Orthopedic & Joint Rehab Physio',
     shortDescription: 'Specialized physiotherapy for knee replacement, fractures, back pain, and arthritis.',
     fullDescription: 'Evidence-based physical therapy performed at home by certified BPT/MPT physiotherapists. Focuses on joint mobilization, gait training, muscle strengthening, and pain relief exercises.',
     iconName: 'Activity',
+    cardMedia: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80',
+    heroMedia: 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=1600&q=80',
+    featured: false,
     pricing: {
       basePrice: 950,
       priceUnit: 'per_session',
@@ -151,6 +238,7 @@ export const MOCK_SERVICES: Service[] = [
     },
     estimatedDuration: '45 - 60 Mins',
     requiredQualifications: ['BPT', 'MPT (Orthopedics)'],
+    idealFor: ['Knee replacement rehab', 'Spine & back pain therapy', 'Post-fracture stiffness'],
     keyInclusions: [
       'Joint mobility assessment',
       'Targeted therapeutic exercises',
@@ -158,15 +246,23 @@ export const MOCK_SERVICES: Service[] = [
       'TENS / Ultrasound therapeutic session',
       'Home exercise chart'
     ],
+    shiftOptions: [
+      { id: 'sh-py-session', label: 'Single Therapy Session', durationLabel: '45-60 Mins', hours: 1, priceMultiplier: 1.0 }
+    ],
+    serviceAreas: ['Delhi', 'Noida', 'Gurugram', 'Faridabad'],
     isActive: true,
   },
   {
     id: 'srv-physio-neuro',
+    slug: 'neuro-rehabilitation-physio',
     category: 'physiotherapy',
     name: 'Neuro-Rehabilitation Physio',
     shortDescription: 'Specialized therapy for stroke recovery, Parkinson’s disease, and spinal injuries.',
     fullDescription: 'Advanced neurological physiotherapy aimed at neuromuscular re-education, motor recovery post-stroke, coordination improvement, and fall prevention.',
     iconName: 'Zap',
+    cardMedia: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?w=800&q=80',
+    heroMedia: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1600&q=80',
+    featured: false,
     pricing: {
       basePrice: 1250,
       priceUnit: 'per_session',
@@ -175,23 +271,32 @@ export const MOCK_SERVICES: Service[] = [
     },
     estimatedDuration: '60 Mins',
     requiredQualifications: ['MPT (Neurology)', 'BPT'],
+    idealFor: ['Post-stroke recovery', 'Parkinson’s mobility rehab', 'Paraplegia / Quadriplegia care'],
     keyInclusions: [
       'Stroke motor retraining',
       'Balance & equilibrium exercises',
       'Spasticity management',
       'Functional independence training'
     ],
+    shiftOptions: [
+      { id: 'sh-py-neuro', label: 'Neuro Rehab Session', durationLabel: '60 Mins', hours: 1, priceMultiplier: 1.0 }
+    ],
+    serviceAreas: ['Delhi', 'Noida', 'Gurugram', 'Faridabad'],
     isActive: true,
   },
 
   // Doctor Visit
   {
     id: 'srv-doc-general',
+    slug: 'general-physician-home-visit',
     category: 'doctor_visit',
     name: 'General Physician Home Visit',
     shortDescription: 'In-home clinical consultation, physical exam, and prescription writing by MBBS Doctor.',
     fullDescription: 'Comprehensive home consultation for acute illnesses, chronic disease management, post-discharge review, or bedridden elders unable to visit clinics.',
     iconName: 'Stethoscope',
+    cardMedia: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=800&q=80',
+    heroMedia: 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=1600&q=80',
+    featured: false,
     pricing: {
       basePrice: 1500,
       priceUnit: 'per_visit',
@@ -200,6 +305,7 @@ export const MOCK_SERVICES: Service[] = [
     },
     estimatedDuration: '30 - 45 Mins',
     requiredQualifications: ['MBBS', 'MCI / State Medical Council Registered'],
+    idealFor: ['Acute fever / infection assessment', 'Bedridden seniors', 'Post-discharge physician review'],
     keyInclusions: [
       'Full systemic physical examination',
       'Medical history evaluation',
@@ -207,63 +313,25 @@ export const MOCK_SERVICES: Service[] = [
       'Lab investigation orders',
       'Referral guidance if needed'
     ],
-    isActive: true,
-  },
-  {
-    id: 'srv-doc-geriatric',
-    category: 'doctor_visit',
-    name: 'Geriatric Specialist Consultation',
-    shortDescription: 'Specialized medical assessment for complex elderly health conditions at home.',
-    fullDescription: 'In-depth consultation by doctors experienced in elderly care. Focuses on multi-morbidity management, polypharmacy review, cognitive assessment, and palliative guidance.',
-    iconName: 'ShieldPlus',
-    pricing: {
-      basePrice: 2200,
-      priceUnit: 'per_visit',
-      minHours: 1,
-      platformCommissionPercent: 15,
-    },
-    estimatedDuration: '45 - 60 Mins',
-    requiredQualifications: ['MD Internal Medicine', 'Geriatric Care Specialist'],
-    keyInclusions: [
-      'Comprehensive geriatric assessment',
-      'Medication rationalization',
-      'Dementia / memory review',
-      'Family counseling'
+    shiftOptions: [
+      { id: 'sh-doc-visit', label: 'In-Home Doctor Consultation', durationLabel: '30-45 Mins', hours: 1, priceMultiplier: 1.0 }
     ],
+    serviceAreas: ['Delhi', 'Noida', 'Gurugram', 'Faridabad'],
     isActive: true,
   },
 
   // Specialized Care
   {
-    id: 'srv-specialized-chemo',
-    category: 'specialized_care',
-    name: 'Oncology & Palliative Care Nurse',
-    shortDescription: 'Gentle, expert palliative support and chemo side-effect management at home.',
-    fullDescription: 'Compassionate specialized nursing for cancer patients. Focuses on pain protocol monitoring, PICC line dressings, nausea management, nutritional assistance, and emotional support.',
-    iconName: 'Heart',
-    pricing: {
-      basePrice: 1600,
-      priceUnit: 'per_visit',
-      minHours: 2,
-      platformCommissionPercent: 15,
-    },
-    estimatedDuration: '2 - 4 Hours',
-    requiredQualifications: ['B.Sc Nursing', 'Oncology Care Certification'],
-    keyInclusions: [
-      'PICC line / Port-a-cath dressing',
-      'Pain symptom management',
-      'Hydration & antiemetic therapy',
-      'End-of-life palliative comfort'
-    ],
-    isActive: true,
-  },
-  {
     id: 'srv-specialized-icu',
+    slug: 'home-icu-critical-care-nurse',
     category: 'specialized_care',
     name: 'Home ICU Critical Care Nurse',
     shortDescription: '24/7 or 12-hour high-dependency critical care nursing for ventilator/tracheostomy patients.',
     fullDescription: 'Hospital-level intensive nursing care delivered at home. Experienced with mechanical ventilators, tracheostomy suctioning, arterial lines, multipara monitoring, and emergency response.',
     iconName: 'Activity',
+    cardMedia: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80',
+    heroMedia: 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=1600&q=80',
+    featured: false,
     pricing: {
       basePrice: 2500,
       priceUnit: 'per_day',
@@ -273,35 +341,18 @@ export const MOCK_SERVICES: Service[] = [
     },
     estimatedDuration: '12 Hours',
     requiredQualifications: ['B.Sc Nursing', 'Critical Care / ICU Certification'],
+    idealFor: ['Ventilator patients', 'Tracheostomy suctioning', 'High-dependency ICU setup'],
     keyInclusions: [
       'Ventilator & oxygen management',
       'Tracheostomy care & suctioning',
       'Multipara monitor observation',
       'Critical drug administration'
     ],
-    isActive: true,
-  },
-  {
-    id: 'srv-specialized-maternal',
-    category: 'specialized_care',
-    name: 'Mother & Newborn Baby Care',
-    shortDescription: 'Postnatal care nurse for new mothers and infant care support.',
-    fullDescription: 'Support for new mothers post-delivery (C-section or normal). Includes lactation guidance, baby massage, bath technique, umbilical cord care, and maternal monitoring.',
-    iconName: 'Baby',
-    pricing: {
-      basePrice: 1400,
-      priceUnit: 'per_visit',
-      minHours: 3,
-      platformCommissionPercent: 15,
-    },
-    estimatedDuration: '3 - 4 Hours',
-    requiredQualifications: ['GNM / B.Sc Nursing', 'Pediatric / Neonatal Certification'],
-    keyInclusions: [
-      'Newborn sponge & hygiene',
-      'Umbilical cord care',
-      'Lactation counseling',
-      'C-section incision dressing'
+    shiftOptions: [
+      { id: 'sh-icu-12h', label: '12-Hour Critical Care Shift', durationLabel: '12 Hours', hours: 12, priceMultiplier: 1.0 },
+      { id: 'sh-icu-24h', label: '24-Hour ICU Care', durationLabel: '24 Hours', hours: 24, priceMultiplier: 1.9 }
     ],
+    serviceAreas: ['Delhi', 'Gurugram'], // Note: Configured active in Delhi & Gurugram
     isActive: true,
   }
 ];

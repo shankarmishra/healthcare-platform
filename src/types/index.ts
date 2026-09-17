@@ -260,20 +260,29 @@ export interface ServiceCareTaskOption {
 
 export interface Service {
   id: string;
+  slug?: string;
   category: ServiceCategory;
   name: string;
   shortDescription: string;
   fullDescription: string;
   iconName: string; // Lucide icon identifier
+  heroMedia?: string;
+  cardMedia?: string;
   pricing: ServicePricing;
   estimatedDuration: string; // e.g. "45 - 60 mins", "4 Hours", "12 Hours"
   requiredQualifications: string[];
   keyInclusions: string[];
+  idealFor?: string[];
   whoItsFor?: string;
+  whoItsForList?: { title: string; desc: string; iconName?: string }[];
+  categorizedInclusions?: { category: string; items: string[] }[];
   exclusions?: string[];
   shiftOptions?: ServiceShiftOption[];
   careTasksOptions?: ServiceCareTaskOption[];
   preparationInstructions?: string[];
+  serviceAreas?: string[];
+  faqList?: { q: string; a: string }[];
+  featured?: boolean;
   isActive: boolean;
 }
 
